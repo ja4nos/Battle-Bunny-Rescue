@@ -1,0 +1,17 @@
+{
+    "name": "Project.Camera.Prototype",
+    "rootNamespace": "BBR",
+    "references": [
+        "GUID:fb4370b293725ab44b389d38e7d69ba3",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
