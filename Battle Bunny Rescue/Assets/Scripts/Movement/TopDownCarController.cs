@@ -17,7 +17,6 @@ namespace BBR
 		private float _accelerationInput;
 		private float _steeringInput;
 		private float _rotationAngle;
-		private float _velocityVsUp;
 		private Rigidbody _rigidbody;
 
 		private void Start()
@@ -34,19 +33,7 @@ namespace BBR
 
 		private void ApplyEngineForce()
 		{
-			_velocityVsUp = Vector3.Dot(transform.up, _rigidbody.linearVelocity);
-
-			if(_velocityVsUp > _maxSpeed && _accelerationInput > 0)
-			{
-				return;
-			}
-
-			if(_velocityVsUp < -_maxSpeed * 0.5f && _accelerationInput < 0)
-			{
-				return;
-			}
-
-			if(_rigidbody.linearVelocity.sqrMagnitude > _maxSpeed * _maxSpeed && _accelerationInput > 0)
+			if(!ShouldApplyForce())
 			{
 				return;
 			}
@@ -57,6 +44,28 @@ namespace BBR
 
 			Vector3 engineForceVector = transform.forward * _accelerationInput * _accelerationMultiplier;
 			_rigidbody.AddForce(engineForceVector, ForceMode.Force);
+		}
+
+		private bool ShouldApplyForce()
+		{
+			float velocityVsForward = Vector3.Dot(transform.forward, _rigidbody.linearVelocity);
+
+			if(velocityVsForward > _maxSpeed && _accelerationInput > 0)
+			{
+				return false;
+			}
+
+			if(velocityVsForward < -_maxSpeed * 0.5f && _accelerationInput < 0)
+			{
+				return false;
+			}
+
+			if(_rigidbody.linearVelocity.sqrMagnitude > _maxSpeed * _maxSpeed && _accelerationInput > 0)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		private void ApplySteering()
