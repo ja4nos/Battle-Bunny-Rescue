@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 119391896844810224}
   m_Layer: 0
   m_Name: Spawn Player 04
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 8676969661024270772}
   m_Layer: 0
   m_Name: Spawn Player 03
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65
@@ -438,7 +438,7 @@ GameObject:
   - component: {fileID: 4395513585018566121}
   m_Layer: 0
   m_Name: Spawn Player 01
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65
@@ -550,7 +550,7 @@ GameObject:
   - component: {fileID: 493188861055517981}
   m_Layer: 0
   m_Name: Spawn Player 02
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65

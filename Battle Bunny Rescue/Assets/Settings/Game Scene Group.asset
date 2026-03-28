@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Project.Utilities::Project.Utilities.SceneGroup
   Scenes:
   - Battle Bunny Environment
-  - CameraScene
   - Pause Menu
