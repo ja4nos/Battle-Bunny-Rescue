@@ -412,8 +412,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44eb76e61fbc58a42a1d1f6e3aad3f5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Movement::BBR.TopDownCarController
-  _accelerationMultiplier: 30
+  _accelerationMultiplier: 500
   _turnMultiplier: 3.5
+  _driftMultiplier: 0.95
+  _inPlaceRotationDivider: 0
 --- !u!1 &1628677864
 GameObject:
   m_ObjectHideFlags: 0
