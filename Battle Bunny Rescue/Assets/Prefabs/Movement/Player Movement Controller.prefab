@@ -10,7 +10,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 67879766384610201, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       propertyPath: m_Name
-      value: Player Variant
+      value: Player Movement Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       propertyPath: m_LocalRotation.w
@@ -40,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -53,6 +69,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 67879766384610201, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6209270189943634198}
+    - targetCorrespondingSourceObject: {fileID: 67879766384610201, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6952463100564241188}
   m_SourcePrefab: {fileID: 100100000, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
 --- !u!1 &9053827826400253883 stripped
 GameObject:
@@ -81,11 +100,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &7178262084159674230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,12 +117,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44eb76e61fbc58a42a1d1f6e3aad3f5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Movement::BBR.TopDownCarController
-  _accelerationMultiplier: 30
+  _accelerationMultiplier: 0.05
   _turnMultiplier: 3.5
   _driftMultiplier: 0.95
   _inPlaceRotationDivider: 8
-  _dragMultiplier: 3
-  _maxSpeed: 20
+  _dragMultiplier: 1.5
+  _maxSpeed: 7
+  _jumpCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.5
+      outSlope: 2.5
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.603912
+    - serializedVersion: 3
+      time: 0.6
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2.5000002
+      outSlope: -2.5000002
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _jumpDuration: 0.2
+  _fallMultiplier: 10
 --- !u!114 &6209270189943634198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,3 +179,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d344fa89ee4a9db3e867b9632a216d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Movement::BBR.CarInputHandler
+--- !u!65 &6952463100564241188
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9053827826400253883}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 2, z: 3}
+  m_Center: {x: 0, y: 1, z: 0}

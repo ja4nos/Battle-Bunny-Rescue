@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,8 +7,8 @@ namespace BBR
 	public class CarInputHandler : MonoBehaviour
 	{
 		private TopDownCarController _carController;
-		
-		void Start()
+
+		private void Start()
 		{
 			_carController = GetComponent<TopDownCarController>();
 		}
@@ -24,6 +23,11 @@ namespace BBR
 			// inputVector.x = Input.GetAxis("Horizontal");
 			// inputVector.y = Input.GetAxis("Vertical");
 			_carController.SetInputVector(inputVector);
+
+			if(Keyboard.current.spaceKey.wasPressedThisFrame)
+			{
+				_carController.Jump(1f);
+			}
 		}
 	}
 }

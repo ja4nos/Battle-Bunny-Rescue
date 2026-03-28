@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace BBR
@@ -14,10 +15,17 @@ namespace BBR
 		[SerializeField] private float _dragMultiplier = 3.0f;
 		[SerializeField] private float _maxSpeed = 20f;
 
+		[Header("Jump settings")] [SerializeField]
+		private AnimationCurve _jumpCurve;
+
+		[SerializeField] [Min(0.1f)] private float _jumpDuration = 2.0f;
+		[SerializeField] private float _fallMultiplier = 25f;
+
 		private float _accelerationInput;
 		private float _steeringInput;
 		private float _rotationAngle;
 		private Rigidbody _rigidbody;
+		private bool _isJumping;
 
 		private void Start()
 		{
@@ -38,12 +46,12 @@ namespace BBR
 				return;
 			}
 
-			_rigidbody.linearDamping = _accelerationInput == 0
-				? Mathf.Lerp(_rigidbody.linearDamping, _dragMultiplier, Time.deltaTime * _dragMultiplier)
-				: 0;
+			if(!_isJumping && _accelerationInput != 0)
+			{
+				StartCoroutine(JumpCoroutine(1f));
+			}
 
-			Vector3 engineForceVector = transform.forward * _accelerationInput * _accelerationMultiplier;
-			_rigidbody.AddForce(engineForceVector, ForceMode.Force);
+			_rigidbody.linearDamping = Mathf.Lerp(_rigidbody.linearDamping, _dragMultiplier, Time.deltaTime * _dragMultiplier);
 		}
 
 		private bool ShouldApplyForce()
@@ -70,19 +78,13 @@ namespace BBR
 
 		private void ApplySteering()
 		{
-			_rotationAngle += _steeringInput * _turnMultiplier * GetInPlaceDivider();
-			_rigidbody.MoveRotation(Quaternion.AngleAxis(_rotationAngle, Vector3.up));
-		}
-
-		private float GetInPlaceDivider()
-		{
-			if(_inPlaceRotationDivider > 0)
+			if(!_isJumping && _steeringInput > 0)
 			{
-				//TODO: Not sure if we need it as bunnies can technically hop in place horizontally
-				float minSpeedTurn = _rigidbody.linearVelocity.magnitude / _inPlaceRotationDivider;
-				return Mathf.Clamp01(minSpeedTurn);
+				StartCoroutine(JumpCoroutine(1f));
 			}
-			return 1f;
+
+			_rotationAngle += _steeringInput * _turnMultiplier;
+			_rigidbody.MoveRotation(Quaternion.AngleAxis(_rotationAngle, Vector3.up));
 		}
 
 		private void KillOrthogonalVelocity()
@@ -93,10 +95,59 @@ namespace BBR
 			_rigidbody.linearVelocity = forwardVelocity + rightVelocity * _driftMultiplier;
 		}
 
+		private IEnumerator JumpCoroutine(float jumpHeight)
+		{
+			_isJumping = true;
+
+			float elapsed = 0f;
+			while(elapsed < _jumpDuration)
+			{
+				elapsed += Time.deltaTime;
+				float t = elapsed / _jumpDuration;
+				float forceFraction = _jumpCurve.Evaluate(t);
+				_rigidbody.AddForce(Vector3.up * (jumpHeight * 0.5f * forceFraction), ForceMode.Impulse);
+
+				Vector3 engineForceVector = transform.forward * (_accelerationInput * _accelerationMultiplier);
+				_rigidbody.AddForce(engineForceVector, ForceMode.Impulse);
+
+				yield return null;
+			}
+
+			yield return new WaitUntil(() => _rigidbody.linearVelocity.y < 0);
+
+			elapsed = 0f;
+
+			while(_isJumping)
+			{
+				elapsed += Time.deltaTime;
+				float t = elapsed / _jumpDuration;
+				_rigidbody.AddForce(Vector3.down * _fallMultiplier, ForceMode.Force);
+				yield return null;
+			}
+
+			_isJumping = false;
+		}
+
+		private void OnCollisionEnter(Collision collision)
+		{
+			if(collision.gameObject.CompareTag("Ground"))
+			{
+				_isJumping = false;
+			}
+		}
+
 		public void SetInputVector(Vector2 inputVector)
 		{
 			_steeringInput = inputVector.x;
 			_accelerationInput = inputVector.y;
+		}
+
+		public void Jump(float jumpHeight)
+		{
+			if(!_isJumping)
+			{
+				StartCoroutine(JumpCoroutine(jumpHeight));
+			}
 		}
 	}
 }
