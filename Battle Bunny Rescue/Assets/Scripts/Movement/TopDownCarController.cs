@@ -78,7 +78,12 @@ namespace BBR
 
 		private void ApplySteering()
 		{
-			if(!_isJumping && _steeringInput > 0)
+			if(_steeringInput == 0)
+			{
+				return;
+			}
+
+			if(!_isJumping)
 			{
 				StartCoroutine(JumpCoroutine(1f));
 			}
