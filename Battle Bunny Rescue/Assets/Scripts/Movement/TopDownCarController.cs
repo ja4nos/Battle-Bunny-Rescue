@@ -1,5 +1,9 @@
+using Project.Input;
+using Project.Input.Models;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Zenject;
 
 namespace BBR
 {
@@ -21,15 +25,30 @@ namespace BBR
 		[SerializeField] [Min(0.1f)] private float _jumpDuration = 2.0f;
 		[SerializeField] private float _fallMultiplier = 25f;
 
+		[Inject] private InputController _inputController;
+
 		private float _accelerationInput;
 		private float _steeringInput;
 		private float _rotationAngle;
 		private Rigidbody _rigidbody;
 		private bool _isJumping;
 
+		private InputAction _moveInput;
+		private InputCallback _jumpInput;
+
 		private void Start()
 		{
 			_rigidbody = GetComponent<Rigidbody>();
+			_rotationAngle = transform.rotation.eulerAngles.y;
+
+			_inputController.TryGetAction("Move", "Player", out _moveInput);
+			_jumpInput = new InputCallback { PlayerId = null, PerformedCallback = Jump };
+			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
+		}
+
+		private void Update()
+		{
+			SetInputVector();
 		}
 
 		private void FixedUpdate()
@@ -78,12 +97,7 @@ namespace BBR
 
 		private void ApplySteering()
 		{
-			if(_steeringInput == 0)
-			{
-				return;
-			}
-
-			if(!_isJumping)
+			if(!_isJumping && _steeringInput != 0)
 			{
 				StartCoroutine(JumpCoroutine(1f));
 			}
@@ -141,18 +155,27 @@ namespace BBR
 			}
 		}
 
-		public void SetInputVector(Vector2 inputVector)
+		public void SetInputVector()
 		{
-			_steeringInput = inputVector.x;
-			_accelerationInput = inputVector.y;
+			if(_moveInput != null)
+			{
+				Vector2 inputVector = _moveInput.ReadValue<Vector2>();
+				_steeringInput = inputVector.x;
+				_accelerationInput = inputVector.y;
+			}
 		}
 
-		public void Jump(float jumpHeight)
+		public void Jump(InputAction.CallbackContext context)
 		{
-			if(!_isJumping)
+			if(context.performed && !_isJumping)
 			{
-				StartCoroutine(JumpCoroutine(jumpHeight));
+				StartCoroutine(JumpCoroutine(1f));
 			}
+		}
+
+		private void OnDestroy()
+		{
+			_inputController.UnsubscribeAction("Jump", "Player", _jumpInput);
 		}
 	}
 }

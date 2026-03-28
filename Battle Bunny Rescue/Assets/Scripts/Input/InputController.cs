@@ -90,13 +90,8 @@ namespace Project.Input
 
 		public void SubscribeAction(string actionName, string actionMapName, InputCallback inputCallback)
 		{
-			InputAction action = actionMapName == null
-				? InputSystem.actions.FindAction(actionName)
-				: InputSystem.actions.FindActionMap(actionMapName).FindAction(actionName);
-
-			if(action == null)
+			if(!TryGetAction(actionName, actionMapName, out InputAction action))
 			{
-				Debug.LogError($"Action {actionName}{(actionMapName == null ? "" : $" in map {actionMapName}")} not found!");
 				return;
 			}
 
@@ -117,6 +112,21 @@ namespace Project.Input
 			}
 
 			deviceCallbackList.Add(inputCallback);
+		}
+
+		public bool TryGetAction(string actionName, string actionMapName, out InputAction action)
+		{
+			action = actionMapName == null
+				? InputSystem.actions.FindAction(actionName)
+				: InputSystem.actions.FindActionMap(actionMapName).FindAction(actionName);
+
+			if(action == null)
+			{
+				Debug.LogError($"Action {actionName}{(actionMapName == null ? "" : $" in map {actionMapName}")} not found!");
+				return false;
+			}
+
+			return true;
 		}
 
 		public void UnsubscribeAction(string actionName, InputCallback inputCallback)
