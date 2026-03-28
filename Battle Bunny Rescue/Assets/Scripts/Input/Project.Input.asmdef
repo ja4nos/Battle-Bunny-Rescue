@@ -1,9 +1,8 @@
 {
-    "name": "Project.Zenject",
-    "rootNamespace": "BBR",
+    "name": "Project.Input",
+    "rootNamespace": "Project",
     "references": [
-        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
-        "GUID:e3aa54461e04f764193302348230de6e"
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
