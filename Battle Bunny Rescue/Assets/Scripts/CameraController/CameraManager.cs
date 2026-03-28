@@ -45,7 +45,6 @@ namespace BBR.CameraController
 				Transform t = transformsToFollow[i];
 				_playerCameras[i] = Instantiate(_playerCameraPrefab, t.position, Quaternion.identity).GetComponent<PlayerCamera>();
 				_playerCameras[i].Setup(t, GetScaleFor(transformsToFollow.Length));
-				_rawImages[i].texture = _playerCameras[i].RenderTexture;
 			}
 
 			Vector2 scale = GetScaleFor(transformsToFollow.Length);
@@ -62,6 +61,7 @@ namespace BBR.CameraController
 				_rawImages[i].rectTransform.anchorMax = new Vector2(maxX, maxY);
 				_rawImages[i].rectTransform.sizeDelta = scale;
 				_rawImages[i].rectTransform.anchoredPosition = Vector2.zero;
+				_rawImages[i].texture = _playerCameras[i].RenderTexture;
 			}
 		}
 	}

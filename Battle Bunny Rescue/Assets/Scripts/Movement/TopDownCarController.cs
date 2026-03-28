@@ -32,9 +32,11 @@ namespace BBR
 		private float _rotationAngle;
 		private Rigidbody _rigidbody;
 		private bool _isJumping;
+		private bool _stopJumping;
 
 		private InputAction _moveInput;
 		private InputCallback _jumpInput;
+		private IEnumerator _jumpCoroutine;
 
 		private void Start()
 		{
@@ -65,11 +67,6 @@ namespace BBR
 				return;
 			}
 
-			if(!_isJumping && _accelerationInput != 0)
-			{
-				StartCoroutine(JumpCoroutine(1f));
-			}
-
 			_rigidbody.linearDamping = Mathf.Lerp(_rigidbody.linearDamping, _dragMultiplier, Time.deltaTime * _dragMultiplier);
 		}
 
@@ -97,11 +94,6 @@ namespace BBR
 
 		private void ApplySteering()
 		{
-			if(!_isJumping && _steeringInput != 0)
-			{
-				StartCoroutine(JumpCoroutine(1f));
-			}
-
 			_rotationAngle += _steeringInput * _turnMultiplier;
 			_rigidbody.MoveRotation(Quaternion.AngleAxis(_rotationAngle, Vector3.up));
 		}
@@ -136,7 +128,7 @@ namespace BBR
 
 			elapsed = 0f;
 
-			while(_isJumping)
+			while(!_stopJumping)
 			{
 				elapsed += Time.deltaTime;
 				float t = elapsed / _jumpDuration;
@@ -145,13 +137,34 @@ namespace BBR
 			}
 
 			_isJumping = false;
+			_jumpCoroutine = null;
 		}
 
 		private void OnCollisionEnter(Collision collision)
 		{
 			if(collision.gameObject.CompareTag("Ground"))
 			{
-				_isJumping = false;
+				_stopJumping = true;
+
+				if(!_isJumping && (_accelerationInput != 0 || _steeringInput != 0))
+				{
+					_stopJumping = false;
+					StartCoroutine(JumpCoroutine(1f));
+				}
+			}
+		}
+
+		private void OnCollisionStay(Collision collision)
+		{
+			if(collision.gameObject.CompareTag("Ground"))
+			{
+				_stopJumping = true;
+
+				if(!_isJumping && (_accelerationInput != 0 || _steeringInput != 0))
+				{
+					_stopJumping = false;
+					StartCoroutine(JumpCoroutine(1f));
+				}
 			}
 		}
 
