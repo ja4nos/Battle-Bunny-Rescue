@@ -7,8 +7,8 @@ namespace Project.Application
 	{
 		private void Awake()
 		{
-			SceneManager.LoadScene("Main Menu", LoadSceneMode.Additive);
-			SceneManager.LoadScene("InputScene", LoadSceneMode.Additive);
+			SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Additive);
+			SceneManager.LoadSceneAsync("InputScene", LoadSceneMode.Additive);
 		}
 	}
 }

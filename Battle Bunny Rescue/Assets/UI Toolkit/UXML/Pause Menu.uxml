@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="main-menu" style="flex-grow: 1;">
         <ui:VisualElement name="button-panel" style="flex-grow: 1;">
-            <ui:Button text="Play" name="play-button"/>
+            <ui:Button text="Resume" name="resume-button"/>
             <ui:Button text="Options" name="options-button" enabled="false"/>
             <ui:Button text="Exit" name="exit-button"/>
         </ui:VisualElement>

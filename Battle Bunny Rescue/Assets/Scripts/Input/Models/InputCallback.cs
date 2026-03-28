@@ -5,7 +5,7 @@ namespace Project.Input.Models
 {
 	public struct InputCallback : IEquatable<InputCallback>
 	{
-		public int PlayerId;
+		public int? PlayerId;
 		public Action<InputAction.CallbackContext> StartedCallback;
 		public Action<InputAction.CallbackContext> PerformedCallback;
 		public Action<InputAction.CallbackContext> CanceledCallback;
