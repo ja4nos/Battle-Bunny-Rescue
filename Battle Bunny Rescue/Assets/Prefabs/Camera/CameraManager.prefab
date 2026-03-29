@@ -69,10 +69,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7016617729651029864}
-  - component: {fileID: 1423207839275807417}
-  - component: {fileID: 2653156283000365456}
-  - component: {fileID: 538403358169555308}
   - component: {fileID: 5103790058862882543}
+  - component: {fileID: 1423207839275807417}
+  - component: {fileID: 538403358169555308}
+  - component: {fileID: 4397127129938852679}
   m_Layer: 0
   m_Name: CameraManager
   m_TagString: MainCamera
@@ -96,6 +96,21 @@ Transform:
   - {fileID: 2698509094322865070}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5103790058862882543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6346118460361170016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af4c7f90c10c448ea0394320f0a2836a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Project.Camera::BBR.CameraController.CameraManager
+  _playerCameraPrefab: {fileID: 3873402454661801999, guid: 87986b37bca2c2c4f86dd43f13def5f6, type: 3}
+  _outputTemplate: {fileID: 1561956998738645783, guid: dd1f35e3d869e804cb602cc359f1a8bb, type: 3}
+  _outputTransform: {fileID: 2698509094322865070}
 --- !u!20 &1423207839275807417
 Camera:
   m_ObjectHideFlags: 0
@@ -147,14 +162,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &2653156283000365456
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6346118460361170016}
-  m_Enabled: 1
 --- !u!114 &538403358169555308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,18 +301,11 @@ MonoBehaviour:
       data1: 0
       data2: 0
   defaultFrameSettings: 0
---- !u!114 &5103790058862882543
-MonoBehaviour:
+--- !u!81 &4397127129938852679
+AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6346118460361170016}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af4c7f90c10c448ea0394320f0a2836a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Project.Camera::BBR.CameraController.CameraManager
-  _playerCameraPrefab: {fileID: 3873402454661801999, guid: 87986b37bca2c2c4f86dd43f13def5f6, type: 3}
-  _outputTemplate: {fileID: 1561956998738645783, guid: dd1f35e3d869e804cb602cc359f1a8bb, type: 3}
-  _outputTransform: {fileID: 2698509094322865070}

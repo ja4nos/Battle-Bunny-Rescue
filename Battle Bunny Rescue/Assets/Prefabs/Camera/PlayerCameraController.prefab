@@ -44,7 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c55c4db05fa4b7a8b783d32d6b88b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Camera::BBR.CameraController.PlayerCamera
-  _followSpeed: 2
-  _cameraPrefab: {fileID: 7011078545699455136, guid: 56de44aa6ccaacc44b95bb9ada93e89d, type: 3}
-  _followOffset: {x: 0, y: 0.75, z: 0.75}
-  _followRotation: {x: 30, y: 180, z: 0}
+  _cameraPrefab: {fileID: 7470038859197598768, guid: 56de44aa6ccaacc44b95bb9ada93e89d, type: 3}
+  _cinemachineCameraPrefab: {fileID: 8137814742308602573, guid: f02cfb9c8d99d5b49aeafed57feadbad, type: 3}
