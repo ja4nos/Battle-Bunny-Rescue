@@ -151,8 +151,6 @@ namespace Project.Menu
 
 		private void BackToMenu()
 		{
-			Debug.Log("Back");
-
 			foreach(PlayerConnectionController controller in _playerConnections.Values)
 			{
 				if(controller.PlayerId.HasValue)
