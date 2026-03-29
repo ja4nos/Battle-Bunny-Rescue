@@ -1,4 +1,6 @@
-﻿using Project.Input;
+﻿using BBR;
+using Cysharp.Threading.Tasks;
+using Project.Input;
 using Project.Utilities;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,7 @@ namespace Project.Menu
 	{
 		[SerializeField] private UIDocument _menuUIDocument;
 		[SerializeField] private SceneGroup _gameSceneGroup;
+		[SerializeField] private GameObject _playerPrefab;
 
 		[Inject] private InputController _inputController;
 		[Inject] private DiContainer _diContainer;
@@ -113,13 +116,30 @@ namespace Project.Menu
 		{
 			if(ReadyToStart())
 			{
-				SceneManager.UnloadSceneAsync("Player Selection Menu");
-				SceneManager.UnloadSceneAsync("Menu Environment");
+				Transform[] players = _playerConnections.Values.Where(conn => conn.PlayerId.HasValue).Select(conn =>
+				{
+					BunnyMovementController player = _diContainer.InstantiatePrefab(_playerPrefab).GetComponent<BunnyMovementController>();
+					DontDestroyOnLoad(player);
+					player.Init(conn.PlayerId.Value);
+					return player.transform;
+				}).ToArray();
+
+				List<UniTask> tasks = new()
+				{
+					SceneManager.UnloadSceneAsync("Player Selection Menu").ToUniTask(),
+					SceneManager.UnloadSceneAsync("Menu Environment").ToUniTask()
+				};
 
 				foreach(string sceneName in _gameSceneGroup.Scenes)
 				{
-					SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+					tasks.Add(SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive).ToUniTask());
 				}
+
+				UniTask.WhenAll(tasks).ContinueWith(() =>
+				{
+					GameManager gameManager = FindAnyObjectByType<GameManager>();
+					gameManager.Init(players);
+				}).Forget();
 			}
 		}
 

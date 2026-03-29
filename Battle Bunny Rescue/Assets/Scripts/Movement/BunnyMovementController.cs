@@ -31,6 +31,7 @@ namespace BBR
 
 		[Inject] private InputController _inputController;
 
+		private int _playerId;
 		private float _accelerationInput;
 		private float _steeringInput;
 		private float _rotationAngle;
@@ -46,9 +47,14 @@ namespace BBR
 			_rigidbody = GetComponent<Rigidbody>();
 			_rotationAngle = transform.rotation.eulerAngles.y;
 			_groundMask = 1 << LayerMask.NameToLayer("Ground");
+		}
+
+		public void Init(int playerId)
+		{
+			_playerId = playerId;
 
 			InputController.TryGetAction("Move", "Player", out _moveInput);
-			_jumpInput = new InputCallback { PlayerId = null, PerformedCallback = Jump };
+			_jumpInput = new InputCallback { PlayerId = _playerId, PerformedCallback = Jump };
 			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
 		}
 

@@ -5,12 +5,16 @@ namespace BBR
 {
 	public class GameManager : MonoBehaviour
 	{
-		[SerializeField] private Transform[] _players;
 		[SerializeField] private CameraManager _cameraManager;
 
-		private void Start()
+		public void Init(Transform[] players)
 		{
-			_cameraManager.SetFor(_players);
+			_cameraManager.SetFor(players);
+
+			foreach(Transform player in players)
+			{
+				player.SetParent(transform);
+			}
 		}
 	}
 }
