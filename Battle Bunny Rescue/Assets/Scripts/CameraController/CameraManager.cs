@@ -7,16 +7,27 @@ namespace BBR.CameraController
 	{
 		[SerializeField] private GameObject _playerCameraPrefab;
 		[SerializeField] private GameObject _outputTemplate;
+		[SerializeField] private GameObject _eventCameraPrefab;
+		[SerializeField] private GameObject _eventOutputTemplate;
 		[SerializeField] private Transform _outputTransform;
 
-		private RawImage[] _rawImages;
+		private RectTransform[] _rawImages;
 		private PlayerCamera[] _playerCameras;
+		private EventCamera _eventCamera;
 
 		private static Vector2 GetScaleFor(int playerCount)
 		{
 			float x = playerCount > 1 ? 0.5f : 1f;
 			float y = playerCount > 2 ? 0.5f : 1f;
 			return new Vector2(x, y);
+		}
+
+		private void Start()
+		{
+			RectTransform rectTransform = Instantiate(_eventOutputTemplate, _outputTransform).transform as RectTransform;
+			_eventCamera = Instantiate(_eventCameraPrefab, transform).GetComponent<EventCamera>();
+			_eventCamera.Setup(rectTransform, Vector2.zero);
+			_eventCamera.Show(new Vector3(5, 0, 5), 10);
 		}
 
 		public void SetFor(Transform[] transformsToFollow)
@@ -31,14 +42,14 @@ namespace BBR.CameraController
 
 			if(_rawImages != null)
 			{
-				foreach(RawImage rawImage in _rawImages)
+				foreach(RectTransform rawImage in _rawImages)
 				{
 					Destroy(rawImage.gameObject);
 				}
 			}
 
 			_playerCameras = new PlayerCamera[transformsToFollow.Length];
-			_rawImages = new RawImage[transformsToFollow.Length];
+			_rawImages = new RectTransform[transformsToFollow.Length];
 
 			for(int i = 0; i < transformsToFollow.Length; i++)
 			{
@@ -56,12 +67,12 @@ namespace BBR.CameraController
 				float maxX = minX + scale.x;
 				float minY = maxY - scale.y;
 
-				_rawImages[i] = Instantiate(_outputTemplate, _outputTransform).GetComponent<RawImage>();
-				_rawImages[i].rectTransform.anchorMin = new Vector2(minX, minY);
-				_rawImages[i].rectTransform.anchorMax = new Vector2(maxX, maxY);
-				_rawImages[i].rectTransform.sizeDelta = scale;
-				_rawImages[i].rectTransform.anchoredPosition = Vector2.zero;
-				_rawImages[i].texture = _playerCameras[i].RenderTexture;
+				_rawImages[i] = Instantiate(_outputTemplate, _outputTransform).transform as RectTransform;
+				_rawImages[i].anchorMin = new Vector2(minX, minY);
+				_rawImages[i].anchorMax = new Vector2(maxX, maxY);
+				_rawImages[i].sizeDelta = scale;
+				_rawImages[i].anchoredPosition = Vector2.zero;
+				_rawImages[i].GetComponent<RawImage>().texture = _playerCameras[i].RenderTexture;
 			}
 		}
 	}
