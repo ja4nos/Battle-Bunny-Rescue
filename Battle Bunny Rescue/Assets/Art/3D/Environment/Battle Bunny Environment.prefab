@@ -66,9 +66,9 @@ GameObject:
   - component: {fileID: 7811971021278605923}
   - component: {fileID: 2221675437609873321}
   - component: {fileID: 119391896844810224}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spawn Player 04
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65
@@ -213,9 +213,9 @@ GameObject:
   - component: {fileID: 7124254901852489966}
   - component: {fileID: 8214021983523133981}
   - component: {fileID: 8676969661024270772}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spawn Player 03
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65
@@ -439,9 +439,9 @@ GameObject:
   - component: {fileID: 7538819656977633288}
   - component: {fileID: 9210172731275457057}
   - component: {fileID: 4395513585018566121}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spawn Player 01
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65
@@ -551,9 +551,9 @@ GameObject:
   - component: {fileID: 896055212584903104}
   - component: {fileID: 5612085662077151008}
   - component: {fileID: 493188861055517981}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spawn Player 02
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 65
@@ -662,7 +662,7 @@ GameObject:
   - component: {fileID: 243303638508183027}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1431,8 +1431,8 @@ PrefabInstance:
       value: Barrier
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 98c36b4a72d64c24c9303c65383f8d5d, type: 3}
-      propertyPath: m_TagString
-      value: Ground
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 98c36b4a72d64c24c9303c65383f8d5d, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1594,10 +1594,6 @@ PrefabInstance:
     - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
       propertyPath: m_Name
       value: SpawnHill 04
-      objectReference: {fileID: 0}
-    - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
-      propertyPath: m_TagString
-      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2007,10 +2003,6 @@ PrefabInstance:
     - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
       propertyPath: m_Name
       value: SpawnHill 02
-      objectReference: {fileID: 0}
-    - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
-      propertyPath: m_TagString
-      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -3016,10 +3008,6 @@ PrefabInstance:
     - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
       propertyPath: m_Name
       value: SpawnHill 01
-      objectReference: {fileID: 0}
-    - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
-      propertyPath: m_TagString
-      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -4075,10 +4063,6 @@ PrefabInstance:
     - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
       propertyPath: m_Name
       value: SpawnHill 03
-      objectReference: {fileID: 0}
-    - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
-      propertyPath: m_TagString
-      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 6546602754524481133, guid: edf6d304d476b25438660ad8df6df54b, type: 3}
       propertyPath: m_StaticEditorFlags
