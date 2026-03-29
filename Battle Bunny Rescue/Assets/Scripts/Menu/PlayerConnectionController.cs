@@ -12,10 +12,9 @@ namespace Project.Menu
 		public event Action<int> PlayerReady;
 		public event Action<int> PlayerStartRequest;
 		public event Action<int> PlayerDisconnected;
-		public event Action BackRequested;
 
 		public int? PlayerId { get; private set; }
-		public bool IsReady => _readied || !PlayerId.HasValue;
+		public bool IsReady { get; private set; }
 
 		[Inject] private InputController _inputController;
 
@@ -24,8 +23,6 @@ namespace Project.Menu
 
 		private InputCallback _disconnectCallback;
 		private InputCallback _readyCallback;
-
-		private bool _readied;
 
 		public PlayerConnectionController()
 		{
@@ -69,7 +66,7 @@ namespace Project.Menu
 
 		public void SetReady(bool ready)
 		{
-			_readied = ready;
+			IsReady = ready;
 			_root.EnableInClassList("ready", ready);
 			_readiedLabel.text = ready ? "Ready" : "Not Ready";
 		}
@@ -78,7 +75,7 @@ namespace Project.Menu
 		{
 			if(PlayerId.HasValue)
 			{
-				if(!_readied)
+				if(!IsReady)
 				{
 					PlayerReady?.Invoke(PlayerId.Value);
 				}
@@ -95,14 +92,7 @@ namespace Project.Menu
 			{
 				if(PlayerId.HasValue)
 				{
-					if(PlayerId == 0)
-					{
-						BackRequested?.Invoke();
-					}
-					else
-					{
-						PlayerDisconnected?.Invoke(PlayerId.Value);
-					}
+					PlayerDisconnected?.Invoke(PlayerId.Value);
 				}
 			});
 		}

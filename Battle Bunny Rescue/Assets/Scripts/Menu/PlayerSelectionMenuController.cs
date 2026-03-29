@@ -1,6 +1,5 @@
 ﻿using Project.Input;
 using Project.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -45,14 +44,20 @@ namespace Project.Menu
 				controller.PlayerReady += OnPlayerReady;
 				controller.PlayerStartRequest += OnPlayerStartRequested;
 				controller.PlayerDisconnected += OnPlayerDisconnected;
-				controller.BackRequested += OnBack;
 			}
 
 			OnEnable();
 
-			foreach((InputDevice device, int playerId) in _inputController.DeviceToPlayerLookup.ToList())
+			if(_inputController.DeviceToPlayerLookup.Count > 0)
 			{
-				ConnectWithDevice(device, playerId);
+				foreach((InputDevice device, int playerId) in _inputController.DeviceToPlayerLookup.ToList())
+				{
+					ConnectWithDevice(device, playerId);
+				}
+			}
+			else
+			{
+				UpdateStartEnabled();
 			}
 		}
 
@@ -64,20 +69,6 @@ namespace Project.Menu
 			_playerConnections[1].OnEnable(_menuUIDocument.rootVisualElement.Q(name: "player-2")[0]);
 			_playerConnections[2].OnEnable(_menuUIDocument.rootVisualElement.Q(name: "player-3")[0]);
 			_playerConnections[3].OnEnable(_menuUIDocument.rootVisualElement.Q(name: "player-4")[0]);
-		}
-
-		private static InputDevice GetLastUsedDevice()
-		{
-			double lastMouseUpdateTime = Mouse.current?.lastUpdateTime ?? -1;
-			double lastPCUpdateTime = Math.Max(Keyboard.current?.lastUpdateTime ?? -1, lastMouseUpdateTime);
-			double lastGamepadUpdateTime = Gamepad.current?.lastUpdateTime ?? -1;
-
-			if(lastPCUpdateTime > lastGamepadUpdateTime)
-			{
-				return Keyboard.current;
-			}
-
-			return Gamepad.current;
 		}
 
 		private void OnDeviceButtonPress(InputControl control)
@@ -104,6 +95,12 @@ namespace Project.Menu
 			_inputController.UnregisterDeviceForPlayer(playerId);
 			_playerConnections[playerId].SetConnection(null);
 			UpdateStartEnabled();
+
+			// If everyone disconnects, we go back to the menu
+			if(_playerConnections.All(kvp => kvp.Value.PlayerId == null))
+			{
+				BackToMenu();
+			}
 		}
 
 		private void OnPlayerReady(int playerId)
@@ -133,10 +130,26 @@ namespace Project.Menu
 
 		private bool ReadyToStart()
 		{
-			return _playerConnections.All(kvp => kvp.Value.IsReady);
+			int readyCount = 0;
+			int connectedCount = 0;
+
+			foreach(PlayerConnectionController controller in _playerConnections.Values)
+			{
+				if(controller.PlayerId.HasValue)
+				{
+					connectedCount++;
+				}
+
+				if(controller.IsReady)
+				{
+					readyCount++;
+				}
+			}
+
+			return connectedCount > 0 && readyCount == connectedCount;
 		}
 
-		private void OnBack()
+		private void BackToMenu()
 		{
 			Debug.Log("Back");
 
