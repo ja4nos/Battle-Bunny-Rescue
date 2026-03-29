@@ -1,17 +1,17 @@
 {
-  "name": "Project.Movement",
-  "rootNamespace": "BBR",
-  "references": [
-    "GUID:75469ad4d38634e559750d17036d5f7c",
-    "GUID:e3aa54461e04f764193302348230de6e"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [],
-  "noEngineReferences": false
+    "name": "Project.Movement",
+    "rootNamespace": "BBR",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:e3aa54461e04f764193302348230de6e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
