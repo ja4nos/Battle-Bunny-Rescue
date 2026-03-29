@@ -32,11 +32,10 @@ namespace Project.Menu
 
 			InputSystem.onAnyButtonPress.Call(OnDeviceButtonPress);
 
-			_startBindingVisuals = _menuUIDocument.rootVisualElement.Q(className: "binding", name: "ready-start");
-			_playerConnections.Add(0, new PlayerConnectionController(_menuUIDocument.rootVisualElement.Q(name: "player-1")));
-			_playerConnections.Add(1, new PlayerConnectionController(_menuUIDocument.rootVisualElement.Q(name: "player-2")));
-			_playerConnections.Add(2, new PlayerConnectionController(_menuUIDocument.rootVisualElement.Q(name: "player-3")));
-			_playerConnections.Add(3, new PlayerConnectionController(_menuUIDocument.rootVisualElement.Q(name: "player-4")));
+			_playerConnections.Add(0, new PlayerConnectionController());
+			_playerConnections.Add(1, new PlayerConnectionController());
+			_playerConnections.Add(2, new PlayerConnectionController());
+			_playerConnections.Add(3, new PlayerConnectionController());
 
 			foreach(PlayerConnectionController controller in _playerConnections.Values)
 			{
@@ -49,10 +48,22 @@ namespace Project.Menu
 				controller.BackRequested += OnBack;
 			}
 
-			InputDevice latestDevice = GetLastUsedDevice();
-			ConnectWithDevice(latestDevice, 0);
+			OnEnable();
 
-			UpdateStartEnabled();
+			foreach((InputDevice device, int playerId) in _inputController.DeviceToPlayerLookup.ToList())
+			{
+				ConnectWithDevice(device, playerId);
+			}
+		}
+
+		private void OnEnable()
+		{
+			_startBindingVisuals = _menuUIDocument.rootVisualElement.Q(className: "binding", name: "ready-start");
+
+			_playerConnections[0].OnEnable(_menuUIDocument.rootVisualElement.Q(name: "player-1")[0]);
+			_playerConnections[1].OnEnable(_menuUIDocument.rootVisualElement.Q(name: "player-2")[0]);
+			_playerConnections[2].OnEnable(_menuUIDocument.rootVisualElement.Q(name: "player-3")[0]);
+			_playerConnections[3].OnEnable(_menuUIDocument.rootVisualElement.Q(name: "player-4")[0]);
 		}
 
 		private static InputDevice GetLastUsedDevice()
@@ -82,7 +93,7 @@ namespace Project.Menu
 		private void ConnectWithDevice(InputDevice device, int playerId)
 		{
 			Debug.Log($"Connecting device {device.displayName} to player {playerId}");
-			_inputController.RegisterDevice(playerId, device);
+			_inputController.RegisterDeviceForPlayer(playerId, device);
 			_playerConnections[playerId].SetConnection(playerId);
 			UpdateStartEnabled();
 		}
@@ -90,7 +101,7 @@ namespace Project.Menu
 		private void OnPlayerDisconnected(int playerId)
 		{
 			Debug.Log($"Disconnecting player {playerId}");
-			_inputController.UnregisterDevice(playerId);
+			_inputController.UnregisterDeviceForPlayer(playerId);
 			_playerConnections[playerId].SetConnection(null);
 			UpdateStartEnabled();
 		}
@@ -106,6 +117,7 @@ namespace Project.Menu
 			if(ReadyToStart())
 			{
 				SceneManager.UnloadSceneAsync("Player Selection Menu");
+				SceneManager.UnloadSceneAsync("Menu Environment");
 
 				foreach(string sceneName in _gameSceneGroup.Scenes)
 				{
@@ -124,10 +136,28 @@ namespace Project.Menu
 			return _playerConnections.All(kvp => kvp.Value.IsReady);
 		}
 
-		private static void OnBack()
+		private void OnBack()
 		{
+			Debug.Log("Back");
+
+			foreach(PlayerConnectionController controller in _playerConnections.Values)
+			{
+				if(controller.PlayerId.HasValue)
+				{
+					_inputController.UnregisterDeviceForPlayer(controller.PlayerId.Value);
+				}
+			}
+
 			SceneManager.UnloadSceneAsync("Player Selection Menu");
 			SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Additive);
+		}
+
+		private void OnDestroy()
+		{
+			foreach(PlayerConnectionController controller in _playerConnections.Values)
+			{
+				controller.Dispose();
+			}
 		}
 	}
 }

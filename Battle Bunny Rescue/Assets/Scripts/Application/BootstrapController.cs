@@ -9,6 +9,7 @@ namespace Project.Application
 		{
 			SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Additive);
 			SceneManager.LoadSceneAsync("InputScene", LoadSceneMode.Additive);
+			SceneManager.LoadSceneAsync("Menu Environment", LoadSceneMode.Additive);
 		}
 	}
 }

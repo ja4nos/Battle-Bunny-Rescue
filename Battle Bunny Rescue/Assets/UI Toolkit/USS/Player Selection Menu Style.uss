@@ -76,6 +76,7 @@
 }
 
 #player-connection #connect-info {
+    display: flex;
     width: 100%;
     height: 100%;
     -unity-text-align: middle-center;
@@ -84,4 +85,31 @@
     -unity-font-style: bold;
     -unity-text-outline: 0.25px black;
     white-space: normal;
+}
+
+#player-connection.connected #connect-info {
+    display: none;
+}
+
+#player-connection #connected-info {
+    display: none;
+}
+
+#player-connection #player-render-image {
+    align-self: center;
+    width: 320px;
+    height: 500px;
+}
+
+#player-connection #readied {
+    -unity-text-align: middle-center;
+    color: #d8e1d9;
+    font-size: 44px;
+    -unity-font-style: bold;
+    -unity-text-outline: 0.25px black;
+    white-space: normal;
+}
+
+#player-connection.connected #connected-info {
+    display: flex;
 }

@@ -9,8 +9,10 @@ namespace Project.Input
 {
 	public class InputController
 	{
+		public IReadOnlyDictionary<int, InputDevice> PlayerToDeviceLookup => _playerToDeviceLookup;
 		public IReadOnlyDictionary<InputDevice, int> DeviceToPlayerLookup => _deviceToPlayerLookup;
 
+		private readonly Dictionary<int, InputDevice> _playerToDeviceLookup = new();
 		private readonly Dictionary<InputDevice, int> _deviceToPlayerLookup = new();
 		private readonly Dictionary<InputAction, Dictionary<int, HashSet<InputCallback>>> _subscribedCallbacks = new();
 
@@ -32,7 +34,7 @@ namespace Project.Input
 			InputDevice toSwap = null;
 			int swappedPlayerId = -1;
 
-			foreach((InputDevice boundDevice, int playerId) in _deviceToPlayerLookup)
+			foreach((int playerId, InputDevice boundDevice) in _playerToDeviceLookup)
 			{
 				if(!boundDevice.added || !boundDevice.enabled)
 				{
@@ -45,7 +47,7 @@ namespace Project.Input
 			if(toSwap != null)
 			{
 				Debug.Log($"Swapped player {swappedPlayerId} from device {toSwap.displayName} with Id {toSwap.deviceId} to new device {device.displayName} with Id {device.deviceId}");
-				_deviceToPlayerLookup.Remove(toSwap);
+				_playerToDeviceLookup[swappedPlayerId] = device;
 				_deviceToPlayerLookup[device] = swappedPlayerId;
 			}
 		}
@@ -54,7 +56,7 @@ namespace Project.Input
 		{
 			for(int i = 0; i < 4; ++i)
 			{
-				if(!_deviceToPlayerLookup.ContainsValue(i))
+				if(!_playerToDeviceLookup.ContainsKey(i))
 				{
 					playerId = i;
 					return true;
@@ -65,7 +67,7 @@ namespace Project.Input
 			return false;
 		}
 
-		public void RegisterDevice(int playerId, int deviceId)
+		public void RegisterDeviceForPlayer(int playerId, int deviceId)
 		{
 			InputDevice device = InputSystem.devices.FirstOrDefault(dev => dev.deviceId.Equals(deviceId));
 
@@ -75,34 +77,20 @@ namespace Project.Input
 				return;
 			}
 
-			RegisterDevice(playerId, device);
+			RegisterDeviceForPlayer(playerId, device);
 		}
 
-		public void RegisterDevice(int playerId, InputDevice device)
+		public void RegisterDeviceForPlayer(int playerId, InputDevice device)
 		{
+			_playerToDeviceLookup[playerId] = device;
 			_deviceToPlayerLookup[device] = playerId;
 		}
 
-		public void UnregisterDevice(int playerId)
+		public void UnregisterDeviceForPlayer(int playerId)
 		{
-			InputDevice toRemove = null;
-
-			foreach((InputDevice device, int player) in _deviceToPlayerLookup)
-			{
-				if(player.Equals(playerId))
-				{
-					toRemove = device;
-					break;
-				}
-			}
-
-			if(toRemove == null)
-			{
-				Debug.LogError($"No device was found for player '{playerId}'!");
-				return;
-			}
-
-			_deviceToPlayerLookup.Remove(toRemove);
+			InputDevice removedDevice = _playerToDeviceLookup[playerId];
+			_playerToDeviceLookup.Remove(playerId);
+			_deviceToPlayerLookup.Remove(removedDevice);
 		}
 
 		public void SubscribeAction(string actionName, InputCallback inputCallback)
@@ -168,15 +156,9 @@ namespace Project.Input
 				return;
 			}
 
-			if(!_subscribedCallbacks.TryGetValue(action, out Dictionary<int, HashSet<InputCallback>> callbacks))
+			if(!_subscribedCallbacks.TryGetValue(action, out Dictionary<int, HashSet<InputCallback>> callbacks)
+				|| !callbacks.TryGetValue(inputCallback.PlayerId ?? -1, out HashSet<InputCallback> deviceCallbackList))
 			{
-				Debug.LogWarning($"Action {actionName}{(actionMapName == null ? "" : $" in map {actionMapName}")} was never subscribed to!");
-				return;
-			}
-
-			if(!callbacks.TryGetValue(inputCallback.PlayerId ?? -1, out HashSet<InputCallback> deviceCallbackList))
-			{
-				Debug.LogWarning($"Action {actionName}{(actionMapName == null ? "" : $" in map {actionMapName}")} was never subscribed to for player {inputCallback.PlayerId}!");
 				return;
 			}
 
@@ -212,7 +194,6 @@ namespace Project.Input
 			{
 				if(!callbacks.TryGetValue(playerId, out HashSet<InputCallback> deviceCallbackList))
 				{
-					Debug.LogError($"Player with Id {playerId} and name '{context.control.device.displayName}' with action {context.action} not found inside subscribed callbacks!");
 					return;
 				}
 

@@ -14,20 +14,20 @@ namespace Project.Input
 		{
 			_inputController = inputController;
 		}
-		
+
 		private void Awake()
 		{
 			int? keyboardId = Keyboard.current?.deviceId;
 			int? gamepadId = Gamepad.current?.deviceId;
-			
+
 			if(keyboardId.HasValue)
 			{
-				_inputController.RegisterDevice(0, keyboardId.Value);
+				_inputController.RegisterDeviceForPlayer(0, keyboardId.Value);
 			}
 
 			if(gamepadId.HasValue)
 			{
-				_inputController.RegisterDevice(1, gamepadId.Value);
+				_inputController.RegisterDeviceForPlayer(1, gamepadId.Value);
 			}
 
 			_inputController.SubscribeAction("Move", "Player", new InputCallback
@@ -45,7 +45,7 @@ namespace Project.Input
 				PerformedCallback = Callback,
 				CanceledCallback = Callback
 			});
-			
+
 			Debug.Log($"Tester subscribed with keyboard {keyboardId?.ToString() ?? "Null"} and gamepad {gamepadId?.ToString() ?? "Null"}");
 		}
 

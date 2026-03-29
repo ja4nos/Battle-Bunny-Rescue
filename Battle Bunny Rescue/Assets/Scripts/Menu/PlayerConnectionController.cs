@@ -7,77 +7,110 @@ using Zenject;
 
 namespace Project.Menu
 {
-	public class PlayerConnectionController
+	public class PlayerConnectionController : IDisposable
 	{
 		public event Action<int> PlayerReady;
 		public event Action<int> PlayerStartRequest;
 		public event Action<int> PlayerDisconnected;
 		public event Action BackRequested;
 
-		public bool IsReady => _readied || !_playerId.HasValue;
+		public int? PlayerId { get; private set; }
+		public bool IsReady => _readied || !PlayerId.HasValue;
 
 		[Inject] private InputController _inputController;
 
-		private readonly VisualElement _root;
-		private readonly Label _connectInfoLabel;
+		private VisualElement _root;
+		private Label _readiedLabel;
 
-		private int? _playerId;
+		private InputCallback _disconnectCallback;
+		private InputCallback _readyCallback;
+
 		private bool _readied;
 
-		public PlayerConnectionController(VisualElement root)
+		public PlayerConnectionController()
+		{
+			_disconnectCallback = new InputCallback { PerformedCallback = OnDisconnect };
+			_readyCallback = new InputCallback { PerformedCallback = OnReady };
+		}
+
+		public void OnEnable(VisualElement root)
 		{
 			_root = root;
-			_connectInfoLabel = root.Q<Label>(name: "connect-info");
+			_readiedLabel = root.Q<Label>(name: "readied");
 		}
 
 		public void SetConnection(int? playerId)
 		{
-			_playerId = playerId;
-			_connectInfoLabel.style.display = playerId.HasValue ? DisplayStyle.None : DisplayStyle.Flex;
-
-			if(playerId.HasValue)
+			if(PlayerId != playerId)
 			{
-				_inputController.SubscribeAction("Disconnect", "UI", new InputCallback { PlayerId = playerId, PerformedCallback = OnDisconnect });
-				_inputController.SubscribeAction("Ready", "UI", new InputCallback { PlayerId = playerId, PerformedCallback = OnReady });
-			}
+				PlayerId = playerId;
 
-			SetReady(false);
+				if(playerId.HasValue)
+				{
+					_root.AddToClassList("connected");
+
+					_disconnectCallback.PlayerId = playerId.Value;
+					_readyCallback.PlayerId = playerId.Value;
+
+					_inputController.SubscribeAction("Disconnect", "UI", _disconnectCallback);
+					_inputController.SubscribeAction("Ready", "UI", _readyCallback);
+				}
+				else
+				{
+					_root.RemoveFromClassList("connected");
+
+					_inputController.UnsubscribeAction("Disconnect", "UI", _disconnectCallback);
+					_inputController.UnsubscribeAction("Ready", "UI", _readyCallback);
+				}
+
+				SetReady(false);
+			}
 		}
 
 		public void SetReady(bool ready)
 		{
 			_readied = ready;
 			_root.EnableInClassList("ready", ready);
+			_readiedLabel.text = ready ? "Ready" : "Not Ready";
 		}
 
 		private void OnReady(InputAction.CallbackContext _)
 		{
-			if(_playerId.HasValue)
+			if(PlayerId.HasValue)
 			{
 				if(!_readied)
 				{
-					PlayerReady?.Invoke(_playerId.Value);
+					PlayerReady?.Invoke(PlayerId.Value);
 				}
 				else
 				{
-					PlayerStartRequest?.Invoke(_playerId.Value);
+					PlayerStartRequest?.Invoke(PlayerId.Value);
 				}
 			}
 		}
 
 		private void OnDisconnect(InputAction.CallbackContext _)
 		{
-			if(_playerId.HasValue)
+			_root.schedule.Execute(() =>
 			{
-				if(_playerId == 0)
+				if(PlayerId.HasValue)
 				{
-					BackRequested?.Invoke();
+					if(PlayerId == 0)
+					{
+						BackRequested?.Invoke();
+					}
+					else
+					{
+						PlayerDisconnected?.Invoke(PlayerId.Value);
+					}
 				}
-				else
-				{
-					PlayerDisconnected?.Invoke(_playerId.Value);
-				}
-			}
+			});
+		}
+
+		public void Dispose()
+		{
+			_inputController?.UnsubscribeAction("Disconnect", "UI", _disconnectCallback);
+			_inputController?.UnsubscribeAction("Ready", "UI", _readyCallback);
 		}
 	}
 }
