@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="Player Connection" src="project://database/Assets/UI%20Toolkit/UXML/Player%20Connection.uxml?fileID=9197481963319205126&amp;guid=0c25c35e713bc784ea45c6bc0c64e6c3&amp;type=3#Player Connection"/>
+    <ui:VisualElement name="player-selection-menu" style="flex-grow: 1;">
+        <ui:VisualElement name="player-container" style="flex-grow: 1;">
+            <ui:Instance template="Player Connection" name="player-1"/>
+            <ui:Instance template="Player Connection" name="player-2"/>
+            <ui:Instance template="Player Connection" name="player-3"/>
+            <ui:Instance template="Player Connection" name="player-4"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="info-panel">
+            <ui:VisualElement name="disconnect-back" class="binding">
+                <ui:Image source="project://database/Assets/UI%20Toolkit/Icons/Keyboard%20Vector/keyboard_escape.svg?fileID=7388822144124034973&amp;guid=3d52bb68566da084cbb149572194cf2e&amp;type=3#keyboard_escape"/>
+                <ui:Image source="project://database/Assets/UI%20Toolkit/Icons/Playstation%20Vector/playstation_button_circle.svg?fileID=7388822144124034973&amp;guid=853c0fff2f9a616419c86ae060f91a62&amp;type=3#playstation_button_circle"/>
+                <ui:Label text="Disconnect / Back" name="name"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="ready-start" class="binding">
+                <ui:Image source="project://database/Assets/UI%20Toolkit/Icons/Keyboard%20Vector/keyboard_enter.svg?fileID=7388822144124034973&amp;guid=dfb8dffbb2298174789e427dd7baed8f&amp;type=3#keyboard_enter"/>
+                <ui:Image source="project://database/Assets/UI%20Toolkit/Icons/Playstation%20Vector/playstation4_button_options.svg?fileID=7388822144124034973&amp;guid=544f386a41457b84a8414067a3e764c3&amp;type=3#playstation4_button_options"/>
+                <ui:Label text="Ready / Start" name="name"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

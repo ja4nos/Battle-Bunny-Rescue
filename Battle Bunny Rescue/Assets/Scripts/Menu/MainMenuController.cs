@@ -1,15 +1,13 @@
-﻿using Project.Utilities;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-namespace BBR.Menu
+namespace Project.Menu
 {
 	public class MainMenuController : MonoBehaviour
 	{
 		[SerializeField] private UIDocument _menuUIDocument;
-		[SerializeField] private SceneGroup _gameSceneGroup;
 
 		private void Awake()
 		{
@@ -28,14 +26,10 @@ namespace BBR.Menu
 			exitButton.clicked += OnExitClicked;
 		}
 
-		private void OnPlayClicked()
+		private static void OnPlayClicked()
 		{
 			SceneManager.UnloadSceneAsync("Main Menu");
-
-			foreach(string sceneName in _gameSceneGroup.Scenes)
-			{
-				SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-			}
+			SceneManager.LoadSceneAsync("Player Selection Menu", LoadSceneMode.Additive);
 		}
 
 		private static void OnOptionsClicked()

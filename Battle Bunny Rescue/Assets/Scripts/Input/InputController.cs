@@ -9,8 +9,10 @@ namespace Project.Input
 {
 	public class InputController
 	{
-		private readonly Dictionary<InputAction, Dictionary<int, HashSet<InputCallback>>> _subscribedCallbacks = new();
+		public IReadOnlyDictionary<InputDevice, int> DeviceToPlayerLookup => _deviceToPlayerLookup;
+
 		private readonly Dictionary<InputDevice, int> _deviceToPlayerLookup = new();
+		private readonly Dictionary<InputAction, Dictionary<int, HashSet<InputCallback>>> _subscribedCallbacks = new();
 
 		public InputController()
 		{
@@ -48,6 +50,21 @@ namespace Project.Input
 			}
 		}
 
+		public bool TryGetFirstUnusedPlayerId(out int playerId)
+		{
+			for(int i = 0; i < 4; ++i)
+			{
+				if(!_deviceToPlayerLookup.ContainsValue(i))
+				{
+					playerId = i;
+					return true;
+				}
+			}
+
+			playerId = -1;
+			return false;
+		}
+
 		public void RegisterDevice(int playerId, int deviceId)
 		{
 			InputDevice device = InputSystem.devices.FirstOrDefault(dev => dev.deviceId.Equals(deviceId));
@@ -58,6 +75,11 @@ namespace Project.Input
 				return;
 			}
 
+			RegisterDevice(playerId, device);
+		}
+
+		public void RegisterDevice(int playerId, InputDevice device)
+		{
 			_deviceToPlayerLookup[device] = playerId;
 		}
 

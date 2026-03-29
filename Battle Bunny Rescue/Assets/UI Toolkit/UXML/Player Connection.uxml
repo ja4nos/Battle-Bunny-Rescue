@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="player-connection" style="flex-grow: 1;">
+        <ui:VisualElement name="player-visuals-panel">
+            <ui:Label text="Press any button to join" name="connect-info"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

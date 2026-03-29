@@ -7,12 +7,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Zenject;
 
-namespace BBR.Menu
+namespace Project.Menu
 {
 	public class PauseMenuController : MonoBehaviour
 	{
 		[SerializeField] private UIDocument _menuUIDocument;
-		[SerializeField] private SceneGroup _gameSceneGroup;
+		private SceneGroup _gameSceneGroup;
 
 		[Inject] private InputController _inputController;
 

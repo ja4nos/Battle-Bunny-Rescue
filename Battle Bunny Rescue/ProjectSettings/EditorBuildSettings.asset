@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/InputScene.unity
     guid: c37fb8ae1160887428b3cd97b4545f73
   - enabled: 1
+    path: Assets/Scenes/Player Selection Menu.unity
+    guid: a8d6eff753becd54e95184ce32b3e50d
+  - enabled: 1
     path: Assets/Scenes/Battle Bunny Environment.unity
     guid: 7c5b71f13bb38bd429129ca2513bc703
   - enabled: 1
