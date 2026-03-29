@@ -7,13 +7,6 @@
       "dependencies": {},
       "hash": "a9e27c03d411d2fca01cc7410c24c97cd77cb539"
     },
-    "com.handzlikchris.fastscriptreload": {
-      "version": "https://github.com/handzlikchris/FastScriptReload.git?path=Assets",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "c1bdf803fd2b35d129a666cbebb5635fb231b5ae"
-    },
     "com.unity.burst": {
       "version": "1.8.28",
       "depth": 2,
