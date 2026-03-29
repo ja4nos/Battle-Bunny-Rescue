@@ -9,23 +9,23 @@ namespace BBR.CameraController
 	{
 		[SerializeField] private GameObject _cameraPrefab;
 		[SerializeField] private GameObject _cinemachineCameraPrefab;
-
 		public RenderTexture RenderTexture { get; private set; }
-		public Camera Camera { get; private set; }
 
-		public void Setup(Transform followTransform, Vector2 imageScale, int playerIndex)
+		private Camera _camera;
+
+		internal void Setup(Transform followTransform, Vector2 imageScale, int playerIndex)
 		{
 			int width = (int) (Screen.width * imageScale.x);
 			int height = (int) (Screen.height * imageScale.y);
 			RenderTexture = new RenderTexture(width, height, 24);
-			Camera = Instantiate(_cameraPrefab, transform).GetComponent<Camera>();
-			Camera.targetTexture = RenderTexture;
+			_camera = Instantiate(_cameraPrefab, transform).GetComponent<Camera>();
+			_camera.targetTexture = RenderTexture;
 
 			CinemachineCamera cinemachineCamera = Instantiate(_cinemachineCameraPrefab, transform).GetComponent<CinemachineCamera>();
 			cinemachineCamera.Follow = followTransform;
 			cinemachineCamera.OutputChannel = (OutputChannels) (1 << playerIndex + 1);
 
-			CinemachineBrain brain = Camera.GetComponent<CinemachineBrain>();
+			CinemachineBrain brain = _camera.GetComponent<CinemachineBrain>();
 			brain.ChannelMask = (OutputChannels) (1 << playerIndex + 1);
 		}
 
@@ -37,9 +37,9 @@ namespace BBR.CameraController
 				Destroy(RenderTexture);
 			}
 
-			if(Camera)
+			if(_camera)
 			{
-				Destroy(Camera);
+				Destroy(_camera);
 			}
 		}
 	}

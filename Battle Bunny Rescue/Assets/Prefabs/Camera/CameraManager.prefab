@@ -110,6 +110,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Project.Camera::BBR.CameraController.CameraManager
   _playerCameraPrefab: {fileID: 3873402454661801999, guid: 87986b37bca2c2c4f86dd43f13def5f6, type: 3}
   _outputTemplate: {fileID: 1561956998738645783, guid: dd1f35e3d869e804cb602cc359f1a8bb, type: 3}
+  _eventCameraPrefab: {fileID: 5695942812720766252, guid: 9b037b4a3e6c2c240a23e614c30df3d2, type: 3}
+  _eventOutputTemplate: {fileID: 5029146174497353174, guid: 5e7f0d3e774a7f04e90af34658c580c0, type: 3}
   _outputTransform: {fileID: 2698509094322865070}
 --- !u!20 &1423207839275807417
 Camera:
