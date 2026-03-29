@@ -43,7 +43,7 @@ namespace BBR
 			_rigidbody = GetComponent<Rigidbody>();
 			_rotationAngle = transform.rotation.eulerAngles.y;
 
-			_inputController.TryGetAction("Move", "Player", out _moveInput);
+			InputController.TryGetAction("Move", "Player", out _moveInput);
 			_jumpInput = new InputCallback { PlayerId = null, PerformedCallback = Jump };
 			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
 		}

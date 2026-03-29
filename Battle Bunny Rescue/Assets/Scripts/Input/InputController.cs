@@ -114,7 +114,7 @@ namespace Project.Input
 			deviceCallbackList.Add(inputCallback);
 		}
 
-		public bool TryGetAction(string actionName, string actionMapName, out InputAction action)
+		public static bool TryGetAction(string actionName, string actionMapName, out InputAction action)
 		{
 			action = actionMapName == null
 				? InputSystem.actions.FindAction(actionName)

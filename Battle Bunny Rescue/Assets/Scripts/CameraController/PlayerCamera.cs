@@ -23,7 +23,7 @@ namespace BBR.CameraController
 			int width = (int) (Screen.width * imageScale.x);
 			int height = (int) (Screen.height * imageScale.y);
 			RenderTexture = new RenderTexture(width, height, 24);
-			Camera = Instantiate(_cameraPrefab);
+			Camera = Instantiate(_cameraPrefab, transform);
 			Camera.targetTexture = RenderTexture;
 
 			Camera.transform.position = followTransform.position + _followOffset;

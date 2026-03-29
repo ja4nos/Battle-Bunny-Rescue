@@ -44,6 +44,7 @@ namespace BBR.CameraController
 			{
 				Transform t = transformsToFollow[i];
 				_playerCameras[i] = Instantiate(_playerCameraPrefab, t.position, Quaternion.identity).GetComponent<PlayerCamera>();
+				_playerCameras[i].transform.SetParent(transform);
 				_playerCameras[i].Setup(t, GetScaleFor(transformsToFollow.Length));
 			}
 
