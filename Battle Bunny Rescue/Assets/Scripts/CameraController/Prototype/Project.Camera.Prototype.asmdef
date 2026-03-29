@@ -3,6 +3,7 @@
     "rootNamespace": "BBR",
     "references": [
         "GUID:fb4370b293725ab44b389d38e7d69ba3",
+        "GUID:1de26128b2b34b5690adcb93404f4c89",
         "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [],

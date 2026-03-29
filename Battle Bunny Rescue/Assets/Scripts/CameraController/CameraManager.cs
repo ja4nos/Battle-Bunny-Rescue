@@ -27,7 +27,6 @@ namespace BBR.CameraController
 			RectTransform rectTransform = Instantiate(_eventOutputTemplate, _outputTransform).transform as RectTransform;
 			_eventCamera = Instantiate(_eventCameraPrefab, transform).GetComponent<EventCamera>();
 			_eventCamera.Setup(rectTransform, Vector2.zero);
-			_eventCamera.Show(new Vector3(5, 0, 5), 10);
 		}
 
 		public void SetFor(Transform[] transformsToFollow)

@@ -44,6 +44,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42f80b9bd5b4be8b664c99b4456fe00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Camera::BBR.CameraController.EventCamera
+  _rotationSpeed: 30
   _cameraPrefab: {fileID: 5949129147926445619, guid: e1e6e5b0e2260ab4689f4ee1d682700a, type: 3}
   _cinemachineCameraPrefab: {fileID: 1982993695666362683, guid: b381f229f353193438d506dd99b8eb05, type: 3}
   _size: {x: 512, y: 512}
+  _showCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.80410576
+      outSlope: -0.80410576
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.16250002
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _hideCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

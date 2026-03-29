@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using BBR.Events;
+using BBR.Events.Camera;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace BBR.Camera.Prototype
@@ -38,6 +40,24 @@ namespace BBR.Camera.Prototype
 			else if(Keyboard.current.aKey.isPressed)
 			{
 				_rigidbody.rotation *= Quaternion.Euler(0, -_turnSpeed * Time.deltaTime, 0);
+			}
+
+			if(Keyboard.current.eKey.isPressed)
+			{
+				PlayerController[] players = FindObjectsByType<PlayerController>();
+				Transform t = players[Random.Range(0, players.Length)].transform;
+
+				CameraShowEvent cameraShowEvent = new(t, Random.Range(2, 5));
+				EventBus.Fire(cameraShowEvent);
+			}
+
+			if(Keyboard.current.rKey.isPressed)
+			{
+				PlayerController[] players = FindObjectsByType<PlayerController>();
+				Vector3 pos = players[Random.Range(0, players.Length)].transform.position;
+
+				CameraShowEvent cameraShowEvent = new(pos, Random.Range(2, 5));
+				EventBus.Fire(cameraShowEvent);
 			}
 
 			_currentSpeed = Mathf.Clamp(desiredSpeed, -_maxSpeed, _maxSpeed);
