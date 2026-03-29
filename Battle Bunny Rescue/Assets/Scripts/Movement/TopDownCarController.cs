@@ -24,6 +24,7 @@ namespace BBR
 
 		[SerializeField] [Min(0.1f)] private float _jumpDuration = 2.0f;
 		[SerializeField] private float _fallMultiplier = 25f;
+		[SerializeField] private float _jumpHeight = 0.5f;
 
 		[Inject] private InputController _inputController;
 
@@ -106,7 +107,7 @@ namespace BBR
 			_rigidbody.linearVelocity = forwardVelocity + rightVelocity * _driftMultiplier;
 		}
 
-		private IEnumerator JumpCoroutine(float jumpHeight)
+		private IEnumerator JumpCoroutine()
 		{
 			_isJumping = true;
 
@@ -116,7 +117,7 @@ namespace BBR
 				elapsed += Time.deltaTime;
 				float t = elapsed / _jumpDuration;
 				float forceFraction = _jumpCurve.Evaluate(t);
-				_rigidbody.AddForce(Vector3.up * (jumpHeight * 0.5f * forceFraction), ForceMode.Impulse);
+				_rigidbody.AddForce(Vector3.up * (_jumpHeight * forceFraction), ForceMode.Impulse);
 
 				Vector3 engineForceVector = transform.forward * (_accelerationInput * _accelerationMultiplier);
 				_rigidbody.AddForce(engineForceVector, ForceMode.Impulse);
@@ -126,12 +127,8 @@ namespace BBR
 
 			yield return new WaitUntil(() => _rigidbody.linearVelocity.y < 0);
 
-			elapsed = 0f;
-
 			while(!_stopJumping)
 			{
-				elapsed += Time.deltaTime;
-				float t = elapsed / _jumpDuration;
 				_rigidbody.AddForce(Vector3.down * _fallMultiplier, ForceMode.Force);
 				yield return null;
 			}
@@ -149,7 +146,7 @@ namespace BBR
 				if(!_isJumping && (_accelerationInput != 0 || _steeringInput != 0))
 				{
 					_stopJumping = false;
-					StartCoroutine(JumpCoroutine(1f));
+					StartCoroutine(JumpCoroutine());
 				}
 			}
 		}
@@ -158,12 +155,13 @@ namespace BBR
 		{
 			if(collision.gameObject.CompareTag("Ground"))
 			{
-				_stopJumping = true;
+				//_stopJumping = true;
 
 				if(!_isJumping && (_accelerationInput != 0 || _steeringInput != 0))
 				{
+					_stopJumping = true;
 					_stopJumping = false;
-					StartCoroutine(JumpCoroutine(1f));
+					StartCoroutine(JumpCoroutine());
 				}
 			}
 		}
@@ -182,7 +180,7 @@ namespace BBR
 		{
 			if(context.performed && !_isJumping)
 			{
-				StartCoroutine(JumpCoroutine(1f));
+				StartCoroutine(JumpCoroutine());
 			}
 		}
 

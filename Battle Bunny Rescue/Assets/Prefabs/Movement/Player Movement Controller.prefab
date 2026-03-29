@@ -14,15 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       propertyPath: m_LocalRotation.w
@@ -114,12 +114,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44eb76e61fbc58a42a1d1f6e3aad3f5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Movement::BBR.TopDownCarController
-  _accelerationMultiplier: 0.05
+  _accelerationMultiplier: 0.5
   _turnMultiplier: 3.5
   _driftMultiplier: 0.95
   _inPlaceRotationDivider: 8
   _dragMultiplier: 1.5
-  _maxSpeed: 7
+  _maxSpeed: 70
   _jumpCurve:
     serializedVersion: 2
     m_Curve:
@@ -163,7 +163,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _jumpDuration: 0.2
-  _fallMultiplier: 10
+  _fallMultiplier: 100
+  _jumpHeight: 5
 --- !u!65 &6952463100564241188
 BoxCollider:
   m_ObjectHideFlags: 0

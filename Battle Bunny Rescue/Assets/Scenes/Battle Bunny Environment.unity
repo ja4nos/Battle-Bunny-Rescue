@@ -194,15 +194,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalRotation.w
@@ -330,15 +330,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalRotation.w
@@ -377,6 +377,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
+--- !u!114 &844132828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7178262084159674230, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
+  m_PrefabInstance: {fileID: 844132827}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44eb76e61fbc58a42a1d1f6e3aad3f5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Project.Movement::BBR.TopDownCarController
 --- !u!1001 &1045729235
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -387,15 +398,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalRotation.w
@@ -434,6 +445,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
+--- !u!114 &1045729236 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7178262084159674230, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
+  m_PrefabInstance: {fileID: 1045729235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44eb76e61fbc58a42a1d1f6e3aad3f5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Project.Movement::BBR.TopDownCarController
 --- !u!1 &1844493097
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,6 +487,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Project.GameLoop::BBR.GameManager
   _players:
   - {fileID: 477785112}
+  - {fileID: 844132828}
+  - {fileID: 2012714647}
+  - {fileID: 1045729236}
   _cameraManager: {fileID: 784172741}
 --- !u!4 &1844493099
 Transform:
@@ -491,15 +516,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 8569920030451567873, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
       propertyPath: m_LocalRotation.w
@@ -538,6 +563,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
+--- !u!114 &2012714647 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7178262084159674230, guid: 9101f7a7e822cba499d5248133bbb3ae, type: 3}
+  m_PrefabInstance: {fileID: 2012714646}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44eb76e61fbc58a42a1d1f6e3aad3f5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Project.Movement::BBR.TopDownCarController
 --- !u!1001 &515749585004609478
 PrefabInstance:
   m_ObjectHideFlags: 0
