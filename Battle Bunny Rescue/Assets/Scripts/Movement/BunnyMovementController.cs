@@ -8,7 +8,7 @@ using Zenject;
 namespace BBR
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class TopDownCarController : MonoBehaviour
+	public class BunnyMovementController : MonoBehaviour
 	{
 		[Header("Car settings")] [SerializeField]
 		private float _accelerationMultiplier = 30.0f;
@@ -22,8 +22,12 @@ namespace BBR
 		[Header("Jump settings")] [SerializeField]
 		private AnimationCurve _jumpCurve;
 
+		[SerializeField] private AnimationCurve _fallCurve;
 		[SerializeField] [Min(0.1f)] private float _jumpDuration = 2.0f;
-		[SerializeField] private float _fallMultiplier = 25f;
+		[SerializeField] private float _jumpDownDuration = 0.2f;
+		[SerializeField] private float _jumpHeight = 0.5f;
+		[SerializeField] private Transform _visualTransform;
+		[SerializeField] private Animator _animator;
 
 		[Inject] private InputController _inputController;
 
@@ -32,16 +36,16 @@ namespace BBR
 		private float _rotationAngle;
 		private Rigidbody _rigidbody;
 		private bool _isJumping;
-		private bool _stopJumping;
+		private int _groundMask;
 
 		private InputAction _moveInput;
 		private InputCallback _jumpInput;
-		private IEnumerator _jumpCoroutine;
 
 		private void Start()
 		{
 			_rigidbody = GetComponent<Rigidbody>();
 			_rotationAngle = transform.rotation.eulerAngles.y;
+			_groundMask = 1 << LayerMask.NameToLayer("Ground");
 
 			InputController.TryGetAction("Move", "Player", out _moveInput);
 			_jumpInput = new InputCallback { PlayerId = null, PerformedCallback = Jump };
@@ -55,6 +59,7 @@ namespace BBR
 
 		private void FixedUpdate()
 		{
+			FallDown();
 			ApplyEngineForce();
 			KillOrthogonalVelocity();
 			ApplySteering();
@@ -68,6 +73,8 @@ namespace BBR
 			}
 
 			_rigidbody.linearDamping = Mathf.Lerp(_rigidbody.linearDamping, _dragMultiplier, Time.deltaTime * _dragMultiplier);
+			Vector3 engineForceVector = transform.forward * _accelerationInput * _accelerationMultiplier;
+			_rigidbody.AddForce(engineForceVector, ForceMode.Force);
 		}
 
 		private bool ShouldApplyForce()
@@ -106,7 +113,7 @@ namespace BBR
 			_rigidbody.linearVelocity = forwardVelocity + rightVelocity * _driftMultiplier;
 		}
 
-		private IEnumerator JumpCoroutine(float jumpHeight)
+		private IEnumerator JumpCoroutine()
 		{
 			_isJumping = true;
 
@@ -114,56 +121,27 @@ namespace BBR
 			while(elapsed < _jumpDuration)
 			{
 				elapsed += Time.deltaTime;
-				float t = elapsed / _jumpDuration;
-				float forceFraction = _jumpCurve.Evaluate(t);
-				_rigidbody.AddForce(Vector3.up * (jumpHeight * 0.5f * forceFraction), ForceMode.Impulse);
-
-				Vector3 engineForceVector = transform.forward * (_accelerationInput * _accelerationMultiplier);
-				_rigidbody.AddForce(engineForceVector, ForceMode.Impulse);
-
+				float t = _jumpCurve.Evaluate(elapsed / _jumpDuration);
+				_visualTransform.localPosition = new Vector3(0, t * _jumpHeight, 0);
 				yield return null;
 			}
 
-			yield return new WaitUntil(() => _rigidbody.linearVelocity.y < 0);
-
-			elapsed = 0f;
-
-			while(!_stopJumping)
-			{
-				elapsed += Time.deltaTime;
-				float t = elapsed / _jumpDuration;
-				_rigidbody.AddForce(Vector3.down * _fallMultiplier, ForceMode.Force);
-				yield return null;
-			}
-
+			_visualTransform.localPosition = Vector3.zero;
 			_isJumping = false;
-			_jumpCoroutine = null;
 		}
 
-		private void OnCollisionEnter(Collision collision)
+		private void FallDown()
 		{
-			if(collision.gameObject.CompareTag("Ground"))
+			if(!_isJumping)
 			{
-				_stopJumping = true;
+				Vector3 rayOrigin = transform.position + Vector3.up * 0.1f; // slight offset up
 
-				if(!_isJumping && (_accelerationInput != 0 || _steeringInput != 0))
+				if(Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 10f, _groundMask))
 				{
-					_stopJumping = false;
-					StartCoroutine(JumpCoroutine(1f));
-				}
-			}
-		}
-
-		private void OnCollisionStay(Collision collision)
-		{
-			if(collision.gameObject.CompareTag("Ground"))
-			{
-				_stopJumping = true;
-
-				if(!_isJumping && (_accelerationInput != 0 || _steeringInput != 0))
-				{
-					_stopJumping = false;
-					StartCoroutine(JumpCoroutine(1f));
+					if(hit.point.y < transform.position.y)
+					{
+						transform.position -= new Vector3(0, transform.position.y - hit.point.y, 0);
+					}
 				}
 			}
 		}
@@ -176,13 +154,18 @@ namespace BBR
 				_steeringInput = inputVector.x;
 				_accelerationInput = inputVector.y;
 			}
+
+			if(!_isJumping && (_accelerationInput != 0 || _steeringInput != 0))
+			{
+				StartCoroutine(JumpCoroutine());
+			}
 		}
 
 		public void Jump(InputAction.CallbackContext context)
 		{
 			if(context.performed && !_isJumping)
 			{
-				StartCoroutine(JumpCoroutine(1f));
+				StartCoroutine(JumpCoroutine());
 			}
 		}
 
