@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 namespace Project.Input
 {
@@ -15,6 +16,7 @@ namespace Project.Input
 		private readonly Dictionary<int, InputDevice> _playerToDeviceLookup = new();
 		private readonly Dictionary<InputDevice, int> _deviceToPlayerLookup = new();
 		private readonly Dictionary<InputAction, Dictionary<int, HashSet<InputCallback>>> _subscribedCallbacks = new();
+		private readonly Dictionary<int, Dictionary<string, InputActionMap>> _playerActionMaps = new();
 
 		public InputController()
 		{
@@ -84,10 +86,44 @@ namespace Project.Input
 		{
 			_playerToDeviceLookup[playerId] = device;
 			_deviceToPlayerLookup[device] = playerId;
+
+			InputDevice[] devices;
+
+			if(device is Keyboard && Mouse.current != null)
+			{
+				devices = new[] {device, Mouse.current};
+				_deviceToPlayerLookup[Mouse.current] = playerId;
+			}
+			else
+			{
+				devices = new[] {device};
+			}
+
+			foreach(InputActionMap sourceMap in InputSystem.actions.actionMaps)
+			{
+				InputActionMap playerMap = sourceMap.Clone();
+
+				playerMap.devices = new ReadOnlyArray<InputDevice>(devices);
+				playerMap.Enable();
+
+				_playerActionMaps.TryAdd(playerId, new Dictionary<string, InputActionMap>());
+				_playerActionMaps[playerId].Add(playerMap.name, playerMap);
+			}
 		}
 
 		public void UnregisterDeviceForPlayer(int playerId)
 		{
+			if(_playerActionMaps.TryGetValue(playerId, out Dictionary<string, InputActionMap> actionMaps))
+			{
+				foreach(InputActionMap map in actionMaps.Values)
+				{
+					map.Disable();
+					map.Dispose();
+				}
+
+				_playerActionMaps.Remove(playerId);
+			}
+
 			InputDevice removedDevice = _playerToDeviceLookup[playerId];
 			_playerToDeviceLookup.Remove(playerId);
 			_deviceToPlayerLookup.Remove(removedDevice);
@@ -100,6 +136,20 @@ namespace Project.Input
 
 		public void SubscribeAction(string actionName, string actionMapName, InputCallback inputCallback)
 		{
+			if(inputCallback.PlayerId.HasValue
+				&& _playerActionMaps.TryGetValue(inputCallback.PlayerId.Value, out Dictionary<string, InputActionMap> playerMaps)
+				&& playerMaps.TryGetValue(actionMapName, out InputActionMap playerMap))
+			{
+				InputAction playerAction = playerMap.FindAction(actionName);
+				if(playerAction != null)
+				{
+					playerAction.performed += inputCallback.PerformedCallback;
+					playerAction.started += inputCallback.StartedCallback;
+					playerAction.canceled += inputCallback.CanceledCallback;
+					return;
+				}
+			}
+
 			if(!TryGetAction(actionName, actionMapName, out InputAction action))
 			{
 				return;
@@ -136,6 +186,33 @@ namespace Project.Input
 				return false;
 			}
 
+			return true;
+		}
+
+		public bool TryReadValue<T>(string actionName, string actionMapName, int playerId, out T value) where T : struct
+		{
+			value = default;
+
+			if(!_playerActionMaps.TryGetValue(playerId, out Dictionary<string, InputActionMap> maps))
+			{
+				Debug.LogError($"No action maps found for player {playerId}!");
+				return false;
+			}
+
+			if(!maps.TryGetValue(actionMapName, out InputActionMap map))
+			{
+				Debug.LogError($"No action map found for player {playerId} named {actionMapName}!");
+				return false;
+			}
+
+			InputAction action = map.FindAction(actionName);
+			if(action == null)
+			{
+				Debug.LogError($"Action {actionName} not found!");
+				return false;
+			}
+
+			value = action.ReadValue<T>();
 			return true;
 		}
 

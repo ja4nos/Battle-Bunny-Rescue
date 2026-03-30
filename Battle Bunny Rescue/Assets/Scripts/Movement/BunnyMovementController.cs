@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-namespace BBR
+namespace BBR.Movement
 {
 	[RequireComponent(typeof(Rigidbody))]
 	public class BunnyMovementController : MonoBehaviour
@@ -39,7 +39,6 @@ namespace BBR
 		private bool _isJumping;
 		private int _groundMask;
 
-		private InputAction _moveInput;
 		private InputCallback _jumpInput;
 
 		private void Start()
@@ -53,8 +52,7 @@ namespace BBR
 		{
 			_playerId = playerId;
 
-			InputController.TryGetAction("Move", "Player", out _moveInput);
-			_jumpInput = new InputCallback { PlayerId = _playerId, PerformedCallback = Jump };
+			_jumpInput = new InputCallback {PlayerId = _playerId, PerformedCallback = Jump};
 			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
 		}
 
@@ -79,7 +77,7 @@ namespace BBR
 			}
 
 			_rigidbody.linearDamping = Mathf.Lerp(_rigidbody.linearDamping, _dragMultiplier, Time.deltaTime * _dragMultiplier);
-			Vector3 engineForceVector = transform.forward * _accelerationInput * _accelerationMultiplier;
+			Vector3 engineForceVector = transform.forward * (_accelerationInput * _accelerationMultiplier);
 			_rigidbody.AddForce(engineForceVector, ForceMode.Force);
 		}
 
@@ -154,9 +152,8 @@ namespace BBR
 
 		public void SetInputVector()
 		{
-			if(_moveInput != null)
+			if(_inputController.TryReadValue("Move", "Player", _playerId, out Vector2 inputVector))
 			{
-				Vector2 inputVector = _moveInput.ReadValue<Vector2>();
 				_steeringInput = inputVector.x;
 				_accelerationInput = inputVector.y;
 			}

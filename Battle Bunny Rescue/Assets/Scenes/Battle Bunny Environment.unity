@@ -281,12 +281,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98101472b2ddbc843b01a4b5c31f8fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.GameLoop::BBR.GameManager
-  _players:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   _cameraManager: {fileID: 784172741}
+  _spawnLocations:
+  - {fileID: 515749585004609482}
+  - {fileID: 515749585004609481}
+  - {fileID: 515749585004609480}
+  - {fileID: 515749585004609479}
+  _offset: {x: 0, y: 10, z: 0}
 --- !u!4 &1844493099
 Transform:
   m_ObjectHideFlags: 0
@@ -359,6 +360,26 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96d2083dc07f0bb43b0ad6803d4599ea, type: 3}
+--- !u!4 &515749585004609479 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5257963654152398439, guid: 96d2083dc07f0bb43b0ad6803d4599ea, type: 3}
+  m_PrefabInstance: {fileID: 515749585004609478}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &515749585004609480 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4840532974484160077, guid: 96d2083dc07f0bb43b0ad6803d4599ea, type: 3}
+  m_PrefabInstance: {fileID: 515749585004609478}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &515749585004609481 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1762613704483795209, guid: 96d2083dc07f0bb43b0ad6803d4599ea, type: 3}
+  m_PrefabInstance: {fileID: 515749585004609478}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &515749585004609482 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3785991415748386440, guid: 96d2083dc07f0bb43b0ad6803d4599ea, type: 3}
+  m_PrefabInstance: {fileID: 515749585004609478}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &667411665792251641
 PrefabInstance:
   m_ObjectHideFlags: 0
