@@ -136,20 +136,6 @@ namespace Project.Input
 
 		public void SubscribeAction(string actionName, string actionMapName, InputCallback inputCallback)
 		{
-			if(inputCallback.PlayerId.HasValue
-				&& _playerActionMaps.TryGetValue(inputCallback.PlayerId.Value, out Dictionary<string, InputActionMap> playerMaps)
-				&& playerMaps.TryGetValue(actionMapName, out InputActionMap playerMap))
-			{
-				InputAction playerAction = playerMap.FindAction(actionName);
-				if(playerAction != null)
-				{
-					playerAction.performed += inputCallback.PerformedCallback;
-					playerAction.started += inputCallback.StartedCallback;
-					playerAction.canceled += inputCallback.CanceledCallback;
-					return;
-				}
-			}
-
 			if(!TryGetAction(actionName, actionMapName, out InputAction action))
 			{
 				return;
