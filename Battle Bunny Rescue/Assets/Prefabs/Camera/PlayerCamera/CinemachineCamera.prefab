@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 335175635863361924}
   - component: {fileID: 578251273709778629}
   - component: {fileID: 8229461693301997685}
-  - component: {fileID: 4840286235138372945}
+  - component: {fileID: 1445241816119671985}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -170,7 +170,7 @@ MonoBehaviour:
     Time: 0.5
     Smoothing: 5
     IgnoreY: 0
---- !u!114 &4840286235138372945
+--- !u!114 &1445241816119671985
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,19 +179,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8137814742308602573}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89875cdc57c54474a8a74efd9b2a3b5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 027863a5902b0434abe811c68b493d5c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineInputAxisController
-  ScanRecursively: 1
-  SuppressInputWhileBlending: 1
+  m_EditorClassIdentifier: Project.Camera::BBR.CameraController.PlayerCinemachineInputProvider
+  ScanRecursively: 0
+  SuppressInputWhileBlending: 0
   IgnoreTimeScale: 0
   m_ControllerManager:
     Controllers:
     - Name: Look Orbit X
       Owner: {fileID: 578251273709778629}
-      Enabled: 1
+      Enabled: 0
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -178254799216164879, guid: 052faaac586de48259a63d0c4782560b, type: 3}
         Gain: 1
         CancelDeltaTime: 0
       InputValue: 0
@@ -200,9 +200,9 @@ MonoBehaviour:
         DecelTime: 0.2
     - Name: Look Orbit Y
       Owner: {fileID: 578251273709778629}
-      Enabled: 1
+      Enabled: 0
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -178254799216164879, guid: 052faaac586de48259a63d0c4782560b, type: 3}
         Gain: -1
         CancelDeltaTime: 0
       InputValue: 0
@@ -211,7 +211,7 @@ MonoBehaviour:
         DecelTime: 0.2
     - Name: Orbit Scale
       Owner: {fileID: 578251273709778629}
-      Enabled: 1
+      Enabled: 0
       Input:
         InputAction: {fileID: 5082991133974614888, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
         Gain: -1
@@ -221,4 +221,7 @@ MonoBehaviour:
         AccelTime: 0
         DecelTime: 0
   PlayerIndex: -1
-  AutoEnableInputs: 1
+  AutoEnableInputs: 0
+  _lookXActionName: LookX
+  _lookYActionName: LookY
+  _actionMapName: Player

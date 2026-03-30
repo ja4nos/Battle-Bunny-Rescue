@@ -1,5 +1,7 @@
 using BBR.CameraController;
+using Project.Input;
 using UnityEngine;
+using Zenject;
 
 namespace BBR.GameLoop
 {
@@ -9,9 +11,11 @@ namespace BBR.GameLoop
 		[SerializeField] private Transform[] _spawnLocations;
 		[SerializeField] private Vector3 _offset;
 
+		[Inject] private InputController _inputController;
+
 		public void Init(Transform[] players)
 		{
-			_cameraManager.SetFor(players);
+			_cameraManager.SetFor(players, _inputController);
 
 			for(int i = 0; i < players.Length; i++)
 			{
