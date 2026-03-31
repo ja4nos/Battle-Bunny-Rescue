@@ -70,3 +70,5 @@ MonoBehaviour:
   _maxAmountOfBunnies: 100
   _spawnRateSeconds: 0.1
   _spawnRateAmount: 2
+  _cameraOffset: {x: 0, y: 10, z: 0}
+  _eventDurationSeconds: 2

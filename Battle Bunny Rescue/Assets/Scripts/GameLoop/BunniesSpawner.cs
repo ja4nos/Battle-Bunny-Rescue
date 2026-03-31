@@ -1,8 +1,10 @@
+using BBR.Events;
+using BBR.Events.Camera;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace BBR
+namespace BBR.GameLoop
 {
 	[RequireComponent(typeof(SphereCollider))]
 	public class BunniesSpawner : MonoBehaviour
@@ -11,6 +13,11 @@ namespace BBR
 		[SerializeField] [Min(1)] private int _maxAmountOfBunnies = 100;
 		[SerializeField] [Min(0.1f)] private float _spawnRateSeconds = 1f;
 		[SerializeField] [Min(1)] private int _spawnRateAmount = 2;
+
+		[Header("Event Camera")] [SerializeField]
+		private Vector3 _cameraOffset = new(0f, 10f, 0f);
+
+		[SerializeField] private float _eventDurationSeconds = 2f;
 
 		private int _spawnedBunnies;
 		private SphereCollider _collider;
@@ -39,10 +46,16 @@ namespace BBR
 			{
 				if(_availableBunnies.Count < _maxAmountOfBunnies)
 				{
-					for(int i = 0; i < _spawnRateAmount; i++)
+					for(int i = 0; i < _spawnRateAmount && _availableBunnies.Count < _maxAmountOfBunnies; i++)
 					{
 						_pool.Get(out GameObject bunny);
 						_availableBunnies.Enqueue(bunny);
+					}
+
+					if(_availableBunnies.Count == _maxAmountOfBunnies)
+					{
+						CameraShowEvent cameraShowEvent = new(transform.position + _cameraOffset, _eventDurationSeconds);
+						EventBus.Fire(cameraShowEvent);
 					}
 				}
 
