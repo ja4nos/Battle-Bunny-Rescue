@@ -4,7 +4,6 @@ using Random = UnityEngine.Random;
 
 namespace BBR.Movement
 {
-	[RequireComponent(typeof(Collider))]
 	public class BunnyMovementRandom : BunnyMovementController
 	{
 		public event Action<Collider> OnBunnyPlayerCollision;
