@@ -1,18 +1,19 @@
-using BBR.Events;
-using BBR.Events.Camera;
+using BBR.Movement;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace BBR.GameLoop
 {
-	[RequireComponent(typeof(SphereCollider))]
 	public class BunniesSpawner : MonoBehaviour
 	{
 		[SerializeField] private GameObject _bunnyPrefab;
 		[SerializeField] [Min(1)] private int _maxAmountOfBunnies = 100;
 		[SerializeField] [Min(0.1f)] private float _spawnRateSeconds = 1f;
 		[SerializeField] [Min(1)] private int _spawnRateAmount = 2;
+		[SerializeField] [Min(0.1f)] private float _radius = 75f;
+		[SerializeField] [Range(0.1f, 1f)] private float _minSize = 0.1f;
+		[SerializeField] [Range(0.1f, 1f)] private float _maxSize = 0.3f;
 
 		[Header("Event Camera")] [SerializeField]
 		private Vector3 _cameraOffset = new(0f, 10f, 0f);
@@ -20,17 +21,14 @@ namespace BBR.GameLoop
 		[SerializeField] private float _eventDurationSeconds = 2f;
 
 		private int _spawnedBunnies;
-		private SphereCollider _collider;
 		private float _elapsedTime;
-		private ObjectPool<GameObject> _pool;
+		private ObjectPool<BunnyMovementRandom> _pool;
 
-		private readonly Queue<GameObject> _availableBunnies = new();
+		private readonly Queue<BunnyMovementRandom> _availableBunnies = new();
 
 		private void Start()
 		{
-			_collider = GetComponent<SphereCollider>();
-
-			_pool = new ObjectPool<GameObject>(
+			_pool = new ObjectPool<BunnyMovementRandom>(
 				createFunc: SpawnBunny,
 				actionOnGet: OnGet,
 				actionOnRelease: OnRelease,
@@ -48,67 +46,77 @@ namespace BBR.GameLoop
 				{
 					for(int i = 0; i < _spawnRateAmount && _availableBunnies.Count < _maxAmountOfBunnies; i++)
 					{
-						_pool.Get(out GameObject bunny);
+						_pool.Get(out BunnyMovementRandom bunny);
 						_availableBunnies.Enqueue(bunny);
 					}
 
-					if(_availableBunnies.Count == _maxAmountOfBunnies)
-					{
-						CameraShowEvent cameraShowEvent = new(transform.position + _cameraOffset, _eventDurationSeconds);
-						EventBus.Fire(cameraShowEvent);
-					}
+					//TODO: Disabled for now, we can fire it again once we have powerups or enough bunnies in a base, etc.
+					// if(_availableBunnies.Count == _maxAmountOfBunnies)
+					// {
+					// 	CameraShowEvent cameraShowEvent = new(transform.position + _cameraOffset, _eventDurationSeconds);
+					// 	EventBus.Fire(cameraShowEvent);
+					// }
 				}
 
 				_elapsedTime = 0;
 			}
 		}
 
-		private void OnTriggerEnter(Collider other)
+		private void RescueBunny(Collider other)
 		{
-			if(other.CompareTag("Player")
-				&& _availableBunnies.TryDequeue(out GameObject capturedBunny)
-				&& other.TryGetComponent(out BunnyPlayer player))
+			if(_availableBunnies.TryDequeue(out BunnyMovementRandom capturedBunny))
 			{
-				player.AddBunny(capturedBunny);
+				BunnyPlayer player = other.GetComponentInParent<BunnyPlayer>();
+				if(player)
+				{
+					GameObject bunny = capturedBunny.gameObject;
+					Destroy(capturedBunny);
+					Destroy(bunny.GetComponent<Collider>());
+					Destroy(bunny.GetComponent<Rigidbody>());
+					player.AddBunny(bunny);
+				}
 			}
 		}
 
-		private GameObject SpawnBunny()
+		private BunnyMovementRandom SpawnBunny()
 		{
 			GameObject bunny = Instantiate(_bunnyPrefab, transform);
 			bunny.name = "Bunny";
+			float size = Random.Range(_minSize, _maxSize);
+			bunny.transform.localScale = new Vector3(size, size, size);
+			BunnyMovementRandom bunnyMovement = bunny.GetComponent<BunnyMovementRandom>();
+			bunnyMovement.OnBunnyPlayerCollision += RescueBunny;
 			bunny.SetActive(false);
-			return bunny;
+			return bunnyMovement;
 		}
 
-		private void OnGet(GameObject bunny)
+		private void OnGet(BunnyMovementRandom bunny)
 		{
 			bunny.transform.position = GetRandomSpawnPosition();
-			bunny.SetActive(true);
+			bunny.gameObject.SetActive(true);
 		}
 
-		private static void OnRelease(GameObject bunny)
+		private static void OnRelease(BunnyMovementRandom bunny)
 		{
-			bunny.SetActive(false);
+			bunny.gameObject.SetActive(false);
 		}
 
-		private static void OnDestroyItem(GameObject bunny)
+		private static void OnDestroyItem(BunnyMovementRandom bunny)
 		{
-			Destroy(bunny);
+			Destroy(bunny.gameObject);
 		}
 
 		private Vector3 GetRandomSpawnPosition()
 		{
-			float radius = _collider.radius * transform.localScale.x;
-			Vector3 center = transform.position + _collider.center;
+			float radius = _radius * transform.localScale.x;
 
 			float theta = Random.Range(0f, Mathf.PI * 0.5f);
 			float phi = Random.Range(0f, Mathf.PI * 2f);
 
 			float sinTheta = Mathf.Sin(theta);
-			Vector3 candidate = center + new Vector3(
+			Vector3 candidate = transform.position + new Vector3(
 				sinTheta * Mathf.Cos(phi),
-				Mathf.Cos(theta),
+				0,
 				sinTheta * Mathf.Sin(phi)
 			) * Random.Range(0f, radius);
 

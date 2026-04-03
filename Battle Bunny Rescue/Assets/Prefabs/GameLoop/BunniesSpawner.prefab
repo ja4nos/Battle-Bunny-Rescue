@@ -52,7 +52,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 30
+  m_Radius: 75
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &465513672744759139
 MonoBehaviour:
@@ -66,9 +66,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d8ab350d24d5b44baf9094d1dd0b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Movement::BBR.BunniesSpawner
-  _bunnyPrefab: {fileID: 7063924670898785659, guid: 5ebcacba461ec3246b238ad991dd3f74, type: 3}
+  _bunnyPrefab: {fileID: 1846193367699694432, guid: a6b749a7297425d44bafef703e9666ff, type: 3}
   _maxAmountOfBunnies: 100
   _spawnRateSeconds: 0.1
   _spawnRateAmount: 2
+  _radius: 75
+  _minSize: 0.1
+  _maxSize: 0.3
   _cameraOffset: {x: 0, y: 10, z: 0}
   _eventDurationSeconds: 2

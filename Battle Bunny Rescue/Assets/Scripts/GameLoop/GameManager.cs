@@ -26,7 +26,7 @@ namespace BBR.GameLoop
 				GameObject player = _diContainer.InstantiatePrefab(_playerGameplayPrefab);
 				players[i] = player.transform;
 
-				BunnyMovementController playerMovement = player.GetComponent<BunnyMovementController>();
+				BunnyMovementPlayer playerMovement = player.GetComponent<BunnyMovementPlayer>();
 				playerMovement.Init(info.Id);
 
 				BunnyPlayer bunnyPlayer = player.GetComponent<BunnyPlayer>();

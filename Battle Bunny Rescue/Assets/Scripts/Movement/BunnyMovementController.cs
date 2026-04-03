@@ -1,16 +1,13 @@
 using BBR.Movement.Enums;
-using Project.Input;
-using Project.Input.Models;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Zenject;
 
 namespace BBR.Movement
 {
 	[RequireComponent(typeof(Rigidbody))]
-	public class BunnyMovementController : MonoBehaviour
+	public abstract class BunnyMovementController : MonoBehaviour
 	{
 		[Header("Car settings")] [SerializeField]
 		private float _accelerationMultiplier = 30.0f;
@@ -30,9 +27,6 @@ namespace BBR.Movement
 		[SerializeField] private Transform _visualTransform;
 		[SerializeField] private Animator _animator;
 
-		[Inject] private InputController _inputController;
-
-		private int _playerId;
 		private float _accelerationInput;
 		private float _steeringInput;
 		private float _rotationAngle;
@@ -42,21 +36,11 @@ namespace BBR.Movement
 		private IEnumerator _jumpCoroutine;
 		private MovementStatus _status;
 
-		private InputCallback _jumpInput;
-
 		private void Start()
 		{
 			_rigidbody = GetComponent<Rigidbody>();
 			_rotationAngle = transform.rotation.eulerAngles.y;
 			_groundMask = 1 << LayerMask.NameToLayer("Ground");
-		}
-
-		public void Init(int playerId)
-		{
-			_playerId = playerId;
-
-			_jumpInput = new InputCallback {PlayerId = _playerId, PerformedCallback = Jump};
-			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
 		}
 
 		private void Update()
@@ -174,13 +158,11 @@ namespace BBR.Movement
 			}
 		}
 
-		public void SetInputVector()
+		public virtual void SetInputVector()
 		{
-			if(_inputController.TryReadValue("Move", "Player", _playerId, out Vector2 inputVector))
-			{
-				_steeringInput = inputVector.x;
-				_accelerationInput = inputVector.y;
-			}
+			Vector2 inputVector = GetMovementInput();
+			_steeringInput = inputVector.x;
+			_accelerationInput = inputVector.y;
 
 			if(_status == MovementStatus.None && (_accelerationInput != 0 || _steeringInput != 0))
 			{
@@ -193,6 +175,8 @@ namespace BBR.Movement
 				StartCoroutine(_hopCoroutine);
 			}
 		}
+
+		protected abstract Vector2 GetMovementInput();
 
 		public void Jump(InputAction.CallbackContext context)
 		{
@@ -211,11 +195,6 @@ namespace BBR.Movement
 				_jumpCoroutine = JumpCoroutine();
 				StartCoroutine(_jumpCoroutine);
 			}
-		}
-
-		private void OnDestroy()
-		{
-			_inputController.UnsubscribeAction("Jump", "Player", _jumpInput);
 		}
 	}
 }
