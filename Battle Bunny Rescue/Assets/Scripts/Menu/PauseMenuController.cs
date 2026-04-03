@@ -1,4 +1,5 @@
-﻿using Project.Input;
+﻿using BBR.GameLoop;
+using Project.Input;
 using Project.Input.Models;
 using Project.Utilities;
 using System;
@@ -12,7 +13,8 @@ namespace Project.Menu
 	public class PauseMenuController : MonoBehaviour
 	{
 		[SerializeField] private UIDocument _menuUIDocument;
-		private SceneGroup _gameSceneGroup;
+		[SerializeField] private SceneGroup _gameSceneGroup;
+		[SerializeField] private SceneGroup _mainMenuSceneGroup;
 
 		[Inject] private InputController _inputController;
 
@@ -67,7 +69,12 @@ namespace Project.Menu
 				SceneManager.UnloadSceneAsync(sceneName);
 			}
 
-			SceneManager.LoadScene("Main Menu", LoadSceneMode.Additive);
+			foreach(string sceneName in _mainMenuSceneGroup.Scenes)
+			{
+				SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+			}
+
+			PlayerHelper.ClearPlayerColors();
 		}
 
 		private void OnDestroy()

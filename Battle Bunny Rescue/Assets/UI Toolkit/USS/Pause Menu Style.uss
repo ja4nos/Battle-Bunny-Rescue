@@ -2,36 +2,3 @@
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.66);
 }
-
-#button-panel {
-    justify-content: center;
-    background-color: #2e913d;
-    border-width: 0 2px;
-    border-color: #d8e1d9;
-    align-self: flex-end;
-    padding: 30px;
-    margin-right: 40px;
-}
-
-#pause-menu .unity-button {
-    align-self: center;
-    width: 300px;
-    height: 80px;
-    margin: 20px 0;
-    background-color: #4db15c;
-    color: #d8e1d9;
-    -unity-text-outline: 0.5px black;
-    border-radius: 8px;
-    border-width: 0;
-    font-size: 40px;
-    -unity-font-style: bold;
-    transition: background-color 0.1s;
-}
-
-#pause-menu .unity-button:hover {
-    background-color: #4db15c;
-}
-
-#pause-menu .unity-button:active {
-    background-color: #378343;
-}

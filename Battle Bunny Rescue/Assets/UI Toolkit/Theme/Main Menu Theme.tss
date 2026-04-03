@@ -1,3 +1,5 @@
 @import url("unity-theme://default");
 
+@import url("/Assets/UI Toolkit/USS/Common Menu Style.uss");
 @import url("/Assets/UI Toolkit/USS/Main Menu Style.uss");
+

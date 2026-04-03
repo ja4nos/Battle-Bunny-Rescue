@@ -1,5 +1,5 @@
 ﻿using BBR.GameLoop;
-using BBR.Movement;
+using BBR.GameLoop.Models;
 using Cysharp.Threading.Tasks;
 using Project.Input;
 using Project.Utilities;
@@ -18,8 +18,8 @@ namespace Project.Menu
 	{
 		[SerializeField] private UIDocument _menuUIDocument;
 		[SerializeField] private SceneGroup _gameSceneGroup;
+		[SerializeField] private SceneGroup _playerSelectionMenuSceneGroup;
 		[SerializeField] private GameObject _playerVisualsPrefab;
-		[SerializeField] private GameObject _playerGameplayPrefab;
 
 		[Inject] private InputController _inputController;
 		[Inject] private DiContainer _diContainer;
@@ -125,19 +125,12 @@ namespace Project.Menu
 		{
 			if(ReadyToStart())
 			{
-				Transform[] players = _playerConnections.Values.Where(conn => conn.PlayerId.HasValue).Select(conn =>
-				{
-					BunnyMovementController player = _diContainer.InstantiatePrefab(_playerGameplayPrefab).GetComponent<BunnyMovementController>();
-					DontDestroyOnLoad(player);
-					player.Init(conn.PlayerId.Value);
-					return player.transform;
-				}).ToArray();
+				PlayerInfo[] playerInfo = _playerConnections.Values
+					.Where(conn => conn.PlayerId.HasValue)
+					.Select(conn => new PlayerInfo { Id = conn.PlayerId.Value, Color = conn.PlayerColor })
+					.ToArray();
 
-				List<UniTask> tasks = new()
-				{
-					SceneManager.UnloadSceneAsync("Player Selection Menu").ToUniTask(),
-					SceneManager.UnloadSceneAsync("Menu Environment").ToUniTask()
-				};
+				List<UniTask> tasks = _playerSelectionMenuSceneGroup.Scenes.Select(sceneName => SceneManager.UnloadSceneAsync(sceneName).ToUniTask()).ToList();
 
 				foreach(string sceneName in _gameSceneGroup.Scenes)
 				{
@@ -147,7 +140,7 @@ namespace Project.Menu
 				UniTask.WhenAll(tasks).ContinueWith(() =>
 				{
 					GameManager gameManager = FindAnyObjectByType<GameManager>();
-					gameManager.Init(players);
+					gameManager.Init(playerInfo);
 				}).Forget();
 			}
 		}
@@ -188,6 +181,7 @@ namespace Project.Menu
 				}
 			}
 
+			PlayerHelper.ClearPlayerColors();
 			SceneManager.UnloadSceneAsync("Player Selection Menu");
 			SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Additive);
 		}

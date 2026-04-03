@@ -1,3 +1,4 @@
+using BBR.GameLoop;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,6 +17,11 @@ namespace BBR
 			{
 				_availableSpots.Add(location);
 			}
+		}
+
+		public void Init(int playerId)
+		{
+			PlayerHelper.SetPlayerColor(gameObject, playerId);
 		}
 
 		public void AddBunny(GameObject capturedBunny)

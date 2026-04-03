@@ -282,6 +282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Project.GameLoop::BBR.GameManager
   _cameraManager: {fileID: 784172741}
+  _playerGameplayPrefab: {fileID: 4840622431220187581, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
   _spawnLocations:
   - {fileID: 515749585004609482}
   - {fileID: 515749585004609481}

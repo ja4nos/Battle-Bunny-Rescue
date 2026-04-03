@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using BBR.GameLoop;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace Project.Menu
 {
 	public class PlayerVisualsRenderer : IDisposable
 	{
+		public Color PlayerColor { get; private set; }
+
 		private readonly GameObject _playerVisualsPrefab;
 		private readonly Transform _parentTransform;
 		private readonly int _playerId;
@@ -87,6 +90,32 @@ namespace Project.Menu
 			volume.profile = Resources.Load<VolumeProfile>("Player Selection Volume Profile");
 
 			_initialized = true;
+
+			SetNextAvailablePlayerColor();
+		}
+
+		public void SetNextAvailablePlayerColor()
+		{
+			if(!_initialized)
+			{
+				return;
+			}
+
+			PlayerColor = PlayerHelper.GetNextPlayerColor(_playerId);
+			PlayerHelper.RegisterPlayerColor(_playerId, PlayerColor);
+			PlayerHelper.SetPlayerColor(_playerVisualsInstance, _playerId);
+		}
+
+		public void SetPreviousAvailablePlayerColor()
+		{
+			if(!_initialized)
+			{
+				return;
+			}
+
+			PlayerColor = PlayerHelper.GetPreviousPlayerColor(_playerId);
+			PlayerHelper.RegisterPlayerColor(_playerId, PlayerColor);
+			PlayerHelper.SetPlayerColor(_playerVisualsInstance, _playerId);
 		}
 
 		private void CreateRenderTexture(int width, int height)
@@ -110,6 +139,8 @@ namespace Project.Menu
 					_playerRenderTexture.Release();
 					CreateRenderTexture(newWidth, newHeight);
 				}
+
+				_playerVisualsInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
 
 				UniTask.NextFrame().ContinueWith(() => _playerRendererCamera.enabled = true).Forget();
 				SetReady(false);
@@ -137,6 +168,7 @@ namespace Project.Menu
 
 				if(_playerVisualsInstance.transform.rotation.eulerAngles.y > 180)
 				{
+					//angleDifference = -angleDifference;
 					angleDifference = 360 - angleDifference;
 				}
 

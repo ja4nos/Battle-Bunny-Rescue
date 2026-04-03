@@ -110,8 +110,12 @@ namespace Project.Input
 				playerMap.devices = new ReadOnlyArray<InputDevice>(devices);
 				playerMap.Enable();
 
-				_playerActionMaps.TryAdd(playerId, new Dictionary<string, InputActionMap>());
-				_playerActionMaps[playerId].Add(playerMap.name, playerMap);
+				if(!_playerActionMaps.TryGetValue(playerId, out Dictionary<string, InputActionMap> maps))
+				{
+					_playerActionMaps[playerId] = maps = new Dictionary<string, InputActionMap>();
+				}
+
+				maps[playerMap.name] = playerMap;
 			}
 		}
 
@@ -259,21 +263,19 @@ namespace Project.Input
 				return;
 			}
 
-			// Player-specific input handling
-			if(_deviceToPlayerLookup.TryGetValue(context.control.device, out int playerId))
-			{
-				if(!callbacks.TryGetValue(playerId, out HashSet<InputCallback> deviceCallbackList))
-				{
-					return;
-				}
-
-				CallCallbacks(deviceCallbackList);
-			}
-
 			// Non-player specific input handling
 			if(callbacks.TryGetValue(-1, out HashSet<InputCallback> allPlayersCallbackList))
 			{
 				CallCallbacks(allPlayersCallbackList);
+			}
+
+			// Player-specific input handling
+			if(_deviceToPlayerLookup.TryGetValue(context.control.device, out int playerId))
+			{
+				if(callbacks.TryGetValue(playerId, out HashSet<InputCallback> deviceCallbackList))
+				{
+					CallCallbacks(deviceCallbackList);
+				}
 			}
 
 			return;
