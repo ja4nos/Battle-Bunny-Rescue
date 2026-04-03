@@ -70,6 +70,7 @@ namespace BBR.GameLoop
 				if(player)
 				{
 					GameObject bunny = capturedBunny.gameObject;
+					capturedBunny.VisualTransform.localPosition = Vector3.zero;
 					Destroy(capturedBunny);
 					Destroy(bunny.GetComponent<Collider>());
 					Destroy(bunny.GetComponent<Rigidbody>());

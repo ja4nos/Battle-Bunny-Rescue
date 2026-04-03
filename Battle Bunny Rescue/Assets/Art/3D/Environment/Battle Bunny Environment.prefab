@@ -63,6 +63,7 @@ GameObject:
   - component: {fileID: 7811971021278605923}
   - component: {fileID: 2221675437609873321}
   - component: {fileID: 119391896844810224}
+  - component: {fileID: 7675503183106848485}
   m_Layer: 6
   m_Name: Spawn Player 04
   m_TagString: Untagged
@@ -163,6 +164,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &7675503183106848485
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2685783179519038101}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 9, z: 1}
+  m_Center: {x: 0, y: 5, z: 0}
 --- !u!1 &2752250065976275225
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,6 +232,7 @@ GameObject:
   - component: {fileID: 7124254901852489966}
   - component: {fileID: 8214021983523133981}
   - component: {fileID: 8676969661024270772}
+  - component: {fileID: 208018097563158197}
   m_Layer: 6
   m_Name: Spawn Player 03
   m_TagString: Untagged
@@ -310,6 +333,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &208018097563158197
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3083675738511477281}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 9, z: 1}
+  m_Center: {x: 0.00000047683716, y: 5, z: 0}
 --- !u!1 &4752279811803712273
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,6 +366,7 @@ GameObject:
   - component: {fileID: 7538819656977633288}
   - component: {fileID: 9210172731275457057}
   - component: {fileID: 4395513585018566121}
+  - component: {fileID: 3922520613012604564}
   m_Layer: 6
   m_Name: Spawn Player 01
   m_TagString: Untagged
@@ -422,6 +467,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &3922520613012604564
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4752279811803712273}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 9, z: 1}
+  m_Center: {x: 0, y: 5, z: 0}
 --- !u!1 &5121450232806736291
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,6 +500,7 @@ GameObject:
   - component: {fileID: 896055212584903104}
   - component: {fileID: 5612085662077151008}
   - component: {fileID: 493188861055517981}
+  - component: {fileID: 1075518902302929884}
   m_Layer: 6
   m_Name: Spawn Player 02
   m_TagString: Untagged
@@ -534,6 +601,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &1075518902302929884
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121450232806736291}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000005, y: 9, z: 1.0000005}
+  m_Center: {x: 0, y: 5, z: -0.00000047683716}
 --- !u!1 &5452747997057492429
 GameObject:
   m_ObjectHideFlags: 0

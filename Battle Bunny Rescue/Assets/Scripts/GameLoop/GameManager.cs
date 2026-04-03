@@ -29,10 +29,10 @@ namespace BBR.GameLoop
 				BunnyMovementPlayer playerMovement = player.GetComponent<BunnyMovementPlayer>();
 				playerMovement.Init(info.Id);
 
-				BunnyPlayer bunnyPlayer = player.GetComponent<BunnyPlayer>();
-				bunnyPlayer.Init(info.Id);
-
 				Transform spawnLocation = _spawnLocations[i];
+
+				BunnyPlayer bunnyPlayer = player.GetComponent<BunnyPlayer>();
+				bunnyPlayer.Init(info.Id, spawnLocation);
 
 				player.transform.SetParent(transform);
 				player.gameObject.SetActive(false);

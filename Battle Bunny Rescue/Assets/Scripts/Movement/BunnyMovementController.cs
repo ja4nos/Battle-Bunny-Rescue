@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace BBR.Movement
 {
@@ -24,7 +25,10 @@ namespace BBR.Movement
 		[SerializeField] private float _hopHeight = 0.5f;
 		[SerializeField] private float _jumpMultiplier = 4f;
 		[SerializeField] private float _fallSpeed = 10f;
-		[SerializeField] private Transform _visualTransform;
+
+		[SerializeField] [FormerlySerializedAs("_visualTransform")]
+		public Transform VisualTransform;
+
 		[SerializeField] private Animator _animator;
 
 		private float _accelerationInput;
@@ -113,11 +117,11 @@ namespace BBR.Movement
 			{
 				elapsed += Time.deltaTime;
 				float t = _jumpCurve.Evaluate(elapsed / _jumpDuration);
-				_visualTransform.localPosition = new Vector3(0, t * _hopHeight, 0);
+				VisualTransform.localPosition = new Vector3(0, t * _hopHeight, 0);
 				yield return null;
 			}
 
-			_visualTransform.localPosition = Vector3.zero;
+			VisualTransform.localPosition = Vector3.zero;
 			_status = MovementStatus.None;
 		}
 
@@ -128,17 +132,17 @@ namespace BBR.Movement
 			float elapsed = 0f;
 			float jumpHeight = _hopHeight * _jumpMultiplier;
 			float jumpDuration = _jumpDuration * (_jumpMultiplier / 2f);
-			float initialHeight = _visualTransform.localPosition.y;
+			float initialHeight = VisualTransform.localPosition.y;
 
 			while(elapsed < jumpDuration)
 			{
 				elapsed += Time.deltaTime;
 				float t = _jumpCurve.Evaluate(elapsed / jumpDuration);
-				_visualTransform.localPosition = new Vector3(0, initialHeight + t * jumpHeight, 0);
+				VisualTransform.localPosition = new Vector3(0, initialHeight + t * jumpHeight, 0);
 				yield return null;
 			}
 
-			_visualTransform.localPosition = Vector3.zero;
+			VisualTransform.localPosition = Vector3.zero;
 			_status = MovementStatus.None;
 		}
 
