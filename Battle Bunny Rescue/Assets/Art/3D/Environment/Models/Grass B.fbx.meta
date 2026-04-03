@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a61f4532c0b6bc0498cfe49179458321
+guid: 63ebf3beff491844eadc09ff3bbcb953
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,18 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Shrub
-    second: {fileID: 2100000, guid: 40f3ce1cfd60c364da3cfea32fb5036c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Shrub.001
-    second: {fileID: 2100000, guid: 4a2ef5425deee9043b517f599698cde9, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Tree_CWC_leaves
-    second: {fileID: 2100000, guid: 4c3eb23edaae96e44be78fa9c314afc9, type: 2}
+      name: Small_Foliage
+    second: {fileID: 2100000, guid: 24903a768c6368149aec0a74a02a7620, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
