@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4295481258738132136, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4840622431220187581, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
       propertyPath: m_Name
       value: SmallBunnySpawned
@@ -75,6 +79,10 @@ PrefabInstance:
     - target: {fileID: 4840622431220187581, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853195465046246416, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6266849997388768454, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
       propertyPath: m_IsActive
@@ -164,7 +172,7 @@ MonoBehaviour:
   _fallSpeed: 10
   _visualTransform: {fileID: 7666510561417993423}
   _animator: {fileID: 2849844447213018129}
-  _directionChangeFrequencyMs: 2000
+  _directionChangeFrequencySeconds: 2
 --- !u!95 &2849844447213018129 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 9024942136986353356, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}

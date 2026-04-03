@@ -64,14 +64,17 @@ namespace BBR.GameLoop
 
 		private void RescueBunny(Collider other)
 		{
-			if(_availableBunnies.TryDequeue(out BunnyMovementRandom capturedBunny)
-				&& other.TryGetComponent(out BunnyPlayer player))
+			if(_availableBunnies.TryDequeue(out BunnyMovementRandom capturedBunny))
 			{
-				GameObject bunny = capturedBunny.gameObject;
-				Destroy(capturedBunny);
-				Destroy(bunny.GetComponent<Collider>());
-				Destroy(bunny.GetComponent<Rigidbody>());
-				player.AddBunny(bunny);
+				BunnyPlayer player = other.GetComponentInParent<BunnyPlayer>();
+				if(player)
+				{
+					GameObject bunny = capturedBunny.gameObject;
+					Destroy(capturedBunny);
+					Destroy(bunny.GetComponent<Collider>());
+					Destroy(bunny.GetComponent<Rigidbody>());
+					player.AddBunny(bunny);
+				}
 			}
 		}
 
