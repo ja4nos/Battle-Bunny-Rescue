@@ -166,8 +166,8 @@ GameObject:
   - component: {fileID: 2684991271876753949}
   - component: {fileID: 2340725800221964077}
   - component: {fileID: 165843963408504399}
-  - component: {fileID: 2166701135690400648}
   - component: {fileID: 6757982834168425011}
+  - component: {fileID: 454103876346734649}
   m_Layer: 0
   m_Name: BunnyPlayer
   m_TagString: Player
@@ -239,7 +239,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 2, z: 3}
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2166701135690400648
+--- !u!114 &6757982834168425011
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -248,9 +248,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 4840622431220187581}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57ccc96b5f773fa459c47f0554fdb8c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b187c6258fc77b40bf7afc3d7fe4b73, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Project.Movement::BBR.BunnyMovementController
+  m_EditorClassIdentifier: Project.GameLoop::BBR.BunnyPlayer
+  _smallBunniesLocations:
+  - {fileID: 3607797231789407377}
+  - {fileID: 2898444203543864135}
+  - {fileID: 1011902002830637727}
+  - {fileID: 4553312354790569229}
+  - {fileID: 1257594411361683530}
+  - {fileID: 5603618625466037273}
+  - {fileID: 2040623006590634751}
+  - {fileID: 2443354335793413090}
+  - {fileID: 1298102060328291899}
+  - {fileID: 5494106837931348325}
+--- !u!114 &454103876346734649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4840622431220187581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8b11baa1cb34f21a14d983d127a3340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Project.Movement::BBR.Movement.BunnyMovementPlayer
   _accelerationMultiplier: 50
   _turnMultiplier: 3.5
   _driftMultiplier: 0.95
@@ -304,29 +327,6 @@ MonoBehaviour:
   _fallSpeed: 10
   _visualTransform: {fileID: 3519367253397044754}
   _animator: {fileID: 9024942136986353356}
---- !u!114 &6757982834168425011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4840622431220187581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b187c6258fc77b40bf7afc3d7fe4b73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Project.GameLoop::BBR.BunnyPlayer
-  _smallBunniesLocations:
-  - {fileID: 3607797231789407377}
-  - {fileID: 2898444203543864135}
-  - {fileID: 1011902002830637727}
-  - {fileID: 4553312354790569229}
-  - {fileID: 1257594411361683530}
-  - {fileID: 5603618625466037273}
-  - {fileID: 2040623006590634751}
-  - {fileID: 2443354335793413090}
-  - {fileID: 1298102060328291899}
-  - {fileID: 5494106837931348325}
 --- !u!1 &5782487840661318677
 GameObject:
   m_ObjectHideFlags: 0

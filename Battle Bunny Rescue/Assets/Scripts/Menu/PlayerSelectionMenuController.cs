@@ -127,7 +127,7 @@ namespace Project.Menu
 			{
 				Transform[] players = _playerConnections.Values.Where(conn => conn.PlayerId.HasValue).Select(conn =>
 				{
-					BunnyMovementController player = _diContainer.InstantiatePrefab(_playerGameplayPrefab).GetComponent<BunnyMovementController>();
+					BunnyMovementPlayer player = _diContainer.InstantiatePrefab(_playerGameplayPrefab).GetComponent<BunnyMovementPlayer>();
 					DontDestroyOnLoad(player);
 					player.Init(conn.PlayerId.Value);
 					return player.transform;
