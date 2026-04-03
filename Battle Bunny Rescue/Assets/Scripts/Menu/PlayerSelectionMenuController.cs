@@ -18,7 +18,8 @@ namespace Project.Menu
 	{
 		[SerializeField] private UIDocument _menuUIDocument;
 		[SerializeField] private SceneGroup _gameSceneGroup;
-		[SerializeField] private GameObject _playerPrefab;
+		[SerializeField] private GameObject _playerVisualsPrefab;
+		[SerializeField] private GameObject _playerGameplayPrefab;
 
 		[Inject] private InputController _inputController;
 		[Inject] private DiContainer _diContainer;
@@ -35,16 +36,17 @@ namespace Project.Menu
 
 			InputSystem.onAnyButtonPress.Call(OnDeviceButtonPress);
 
-			_playerConnections.Add(0, new PlayerConnectionController());
-			_playerConnections.Add(1, new PlayerConnectionController());
-			_playerConnections.Add(2, new PlayerConnectionController());
-			_playerConnections.Add(3, new PlayerConnectionController());
+			_playerConnections.Add(0, new PlayerConnectionController(_playerVisualsPrefab, transform, 0));
+			_playerConnections.Add(1, new PlayerConnectionController(_playerVisualsPrefab, transform, 1));
+			_playerConnections.Add(2, new PlayerConnectionController(_playerVisualsPrefab, transform, 2));
+			_playerConnections.Add(3, new PlayerConnectionController(_playerVisualsPrefab, transform, 3));
 
 			foreach(PlayerConnectionController controller in _playerConnections.Values)
 			{
 				_diContainer.BindInstance(controller);
 				_diContainer.Inject(controller);
 
+				controller.PlayerNotReady += OnPlayerNotReady;
 				controller.PlayerReady += OnPlayerReady;
 				controller.PlayerStartRequest += OnPlayerStartRequested;
 				controller.PlayerDisconnected += OnPlayerDisconnected;
@@ -107,6 +109,12 @@ namespace Project.Menu
 			}
 		}
 
+		private void OnPlayerNotReady(int playerId)
+		{
+			_playerConnections[playerId].SetReady(false);
+			UpdateStartEnabled();
+		}
+
 		private void OnPlayerReady(int playerId)
 		{
 			_playerConnections[playerId].SetReady(true);
@@ -119,7 +127,7 @@ namespace Project.Menu
 			{
 				Transform[] players = _playerConnections.Values.Where(conn => conn.PlayerId.HasValue).Select(conn =>
 				{
-					BunnyMovementController player = _diContainer.InstantiatePrefab(_playerPrefab).GetComponent<BunnyMovementController>();
+					BunnyMovementController player = _diContainer.InstantiatePrefab(_playerGameplayPrefab).GetComponent<BunnyMovementController>();
 					DontDestroyOnLoad(player);
 					player.Init(conn.PlayerId.Value);
 					return player.transform;
@@ -188,6 +196,11 @@ namespace Project.Menu
 		{
 			foreach(PlayerConnectionController controller in _playerConnections.Values)
 			{
+				controller.PlayerNotReady -= OnPlayerNotReady;
+				controller.PlayerReady -= OnPlayerReady;
+				controller.PlayerStartRequest -= OnPlayerStartRequested;
+				controller.PlayerDisconnected -= OnPlayerDisconnected;
+
 				controller.Dispose();
 			}
 		}

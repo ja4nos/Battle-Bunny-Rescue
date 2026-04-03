@@ -1,6 +1,7 @@
 ﻿using Project.Input;
 using Project.Input.Models;
 using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 using Zenject;
@@ -9,6 +10,7 @@ namespace Project.Menu
 {
 	public class PlayerConnectionController : IDisposable
 	{
+		public event Action<int> PlayerNotReady;
 		public event Action<int> PlayerReady;
 		public event Action<int> PlayerStartRequest;
 		public event Action<int> PlayerDisconnected;
@@ -18,14 +20,18 @@ namespace Project.Menu
 
 		[Inject] private InputController _inputController;
 
+		private readonly PlayerVisualsRenderer _playerVisualsRenderer;
+
+		private float _connectedTime;
 		private VisualElement _root;
 		private Label _readiedLabel;
 
 		private InputCallback _disconnectCallback;
 		private InputCallback _readyCallback;
 
-		public PlayerConnectionController()
+		public PlayerConnectionController(GameObject playerVisualsPrefab, Transform parentTransform, int playerId)
 		{
+			_playerVisualsRenderer = new PlayerVisualsRenderer(playerVisualsPrefab, parentTransform, playerId);
 			_disconnectCallback = new InputCallback { PerformedCallback = OnDisconnect };
 			_readyCallback = new InputCallback { PerformedCallback = OnReady };
 		}
@@ -34,6 +40,7 @@ namespace Project.Menu
 		{
 			_root = root;
 			_readiedLabel = root.Q<Label>(name: "readied");
+			_playerVisualsRenderer.OnEnable(root);
 		}
 
 		public void SetConnection(int? playerId)
@@ -44,6 +51,7 @@ namespace Project.Menu
 
 				if(playerId.HasValue)
 				{
+					_connectedTime = Time.time;
 					_root.AddToClassList("connected");
 
 					_disconnectCallback.PlayerId = playerId.Value;
@@ -69,11 +77,14 @@ namespace Project.Menu
 			IsReady = ready;
 			_root.EnableInClassList("ready", ready);
 			_readiedLabel.text = ready ? "Ready" : "Not Ready";
+			_playerVisualsRenderer.SetReady(ready);
 		}
 
 		private void OnReady(InputAction.CallbackContext _)
 		{
-			if(PlayerId.HasValue)
+			const float debounceTime = 0.2f;
+
+			if(PlayerId.HasValue && Time.time - _connectedTime > debounceTime)
 			{
 				if(!IsReady)
 				{
@@ -92,7 +103,14 @@ namespace Project.Menu
 			{
 				if(PlayerId.HasValue)
 				{
-					PlayerDisconnected?.Invoke(PlayerId.Value);
+					if(IsReady)
+					{
+						PlayerNotReady?.Invoke(PlayerId.Value);
+					}
+					else
+					{
+						PlayerDisconnected?.Invoke(PlayerId.Value);
+					}
 				}
 			});
 		}
@@ -101,6 +119,7 @@ namespace Project.Menu
 		{
 			_inputController?.UnsubscribeAction("Disconnect", "UI", _disconnectCallback);
 			_inputController?.UnsubscribeAction("Ready", "UI", _readyCallback);
+			_playerVisualsRenderer.Dispose();
 		}
 	}
 }
