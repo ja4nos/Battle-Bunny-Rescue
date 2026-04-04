@@ -308,6 +308,7 @@ MonoBehaviour:
   _staminaTimeSeconds: 4
   _staminaRecoveryRatePerSecond: 0.1
   _sprintMultiplier: 4
+  _bumpForce: {x: 10, y: 2}
 --- !u!1 &5782487840661318677
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,6 +350,59 @@ Transform:
   - {fileID: 5494106837931348325}
   m_Father: {fileID: 3519367253397044754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6670933235158276851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8382083583063802201}
+  - component: {fileID: 983335484401513068}
+  m_Layer: 0
+  m_Name: BumpTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8382083583063802201
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6670933235158276851}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3519367253397044754}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &983335484401513068
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6670933235158276851}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 2}
 --- !u!1 &6733132847501414183
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,6 +592,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5193520709036598994}
+    - targetCorrespondingSourceObject: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8382083583063802201}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 67879766384610201, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       insertIndex: -1

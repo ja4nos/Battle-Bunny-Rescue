@@ -6,7 +6,7 @@ namespace BBR.Movement
 {
 	public class BunnyMovementRandom : BunnyMovementController
 	{
-		public event Action<Collider> OnBunnyPlayerCollision;
+		public event Action<BunnyMovementRandom, Collider> OnBunnyPlayerCollision;
 
 		[SerializeField] private float _directionChangeFrequencySeconds = 2.0f;
 
@@ -29,7 +29,7 @@ namespace BBR.Movement
 		{
 			if(other.CompareTag("Player"))
 			{
-				OnBunnyPlayerCollision?.Invoke(other);
+				OnBunnyPlayerCollision?.Invoke(this, other);
 			}
 		}
 	}

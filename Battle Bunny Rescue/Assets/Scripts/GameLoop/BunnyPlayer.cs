@@ -8,11 +8,16 @@ namespace BBR
 {
 	public class BunnyPlayer : MonoBehaviour
 	{
+		public bool IsStunned => _stunTimeRemainingSeconds > 0f;
+		public bool IsFull => _availableSpots.Count == 0;
+
+		[SerializeField] private float _stunTimeSeconds = 3f;
 		[SerializeField] private Transform[] _smallBunniesLocations;
 
 		private Transform _playerBase;
 		private int _playerId;
 		private int _savedBunniesCount;
+		private float _stunTimeRemainingSeconds;
 
 		private readonly List<Transform> _availableSpots = new();
 		private readonly List<GameObject> _capturedBunnies = new();
@@ -23,6 +28,8 @@ namespace BBR
 			{
 				_availableSpots.Add(location);
 			}
+
+			EventBus.Register<PlayerBumpedEvent>(LoseBunnies);
 		}
 
 		public void Init(int playerId, Transform playerBase)
@@ -32,9 +39,14 @@ namespace BBR
 			PlayerHelper.SetPlayerColor(gameObject, playerId);
 		}
 
+		private void Update()
+		{
+			_stunTimeRemainingSeconds = Mathf.Max(0, _stunTimeRemainingSeconds - Time.deltaTime);
+		}
+
 		public void AddBunny(GameObject capturedBunny)
 		{
-			if(_availableSpots.Count > 0)
+			if(!IsFull)
 			{
 				int spotIndex = Random.Range(0, _availableSpots.Count);
 				Transform spot = _availableSpots[spotIndex];
@@ -44,6 +56,24 @@ namespace BBR
 				capturedBunny.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 				_capturedBunnies.Add(capturedBunny);
 				_availableSpots.RemoveAt(spotIndex);
+			}
+		}
+
+		private void LoseBunnies(PlayerBumpedEvent evt)
+		{
+			if(evt.PlayerId == _playerId && _capturedBunnies.Count > 0)
+			{
+				_stunTimeRemainingSeconds = _stunTimeSeconds;
+
+				EventBus.Fire(new LostBunniesEvent(_capturedBunnies));
+
+				_capturedBunnies.Clear();
+				_availableSpots.Clear();
+
+				foreach(Transform location in _smallBunniesLocations)
+				{
+					_availableSpots.Add(location);
+				}
 			}
 		}
 
@@ -69,6 +99,11 @@ namespace BBR
 
 				EventBus.Fire(new SavedBunniesEvent(_playerId, _savedBunniesCount));
 			}
+		}
+
+		private void OnDestroy()
+		{
+			EventBus.Unregister<PlayerBumpedEvent>(LoseBunnies);
 		}
 	}
 }

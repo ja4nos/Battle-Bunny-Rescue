@@ -1,3 +1,4 @@
+using BBR.Events;
 using BBR.Movement.Enums;
 using BBR.Movement.Helpers;
 using Project.Input;
@@ -15,6 +16,7 @@ namespace BBR.Movement
 		[SerializeField] private float _staminaTimeSeconds = 4f;
 		[SerializeField] private float _staminaRecoveryRatePerSecond = 1f;
 		[SerializeField] private float _sprintMultiplier = 4f;
+		[SerializeField] private Vector2 _bumpForce = new(2f, 2f);
 
 		[Inject] private InputController _inputController;
 
@@ -22,6 +24,7 @@ namespace BBR.Movement
 		private InputCallback _sprintInput;
 		private int _playerId;
 		private IEnumerator _jumpCoroutine;
+		private IEnumerator _bumpCoroutine;
 		private float _remainingStamina;
 
 		public void Init(int playerId)
@@ -59,7 +62,8 @@ namespace BBR.Movement
 
 		private void Jump(InputAction.CallbackContext context)
 		{
-			if(context.performed && !CurrentState.HasFlag(MovementStatus.Jumping))
+			if(context.performed && !CurrentState.HasFlag(MovementStatus.Jumping)
+				&& !CurrentState.HasFlag(MovementStatus.Bumped))
 			{
 				if(HopCoroutine != null)
 				{
@@ -95,6 +99,59 @@ namespace BBR.Movement
 
 			VisualTransform.localPosition = Vector3.zero;
 			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Jumping);
+		}
+
+		private void OnTriggerEnter(Collider other)
+		{
+			if(other.transform.CompareTag("Player"))
+			{
+				other.GetComponentInParent<BunnyMovementPlayer>().Bump(transform.forward);
+			}
+		}
+
+		public void Bump(Vector3 direction)
+		{
+			if(HopCoroutine != null)
+			{
+				StopCoroutine(HopCoroutine);
+			}
+
+			if(_jumpCoroutine != null)
+			{
+				StopCoroutine(_jumpCoroutine);
+			}
+
+			_bumpCoroutine = BumpCoroutine(direction);
+			StartCoroutine(_bumpCoroutine);
+		}
+
+		private IEnumerator BumpCoroutine(Vector3 direction)
+		{
+			CurrentState = MovementStatus.Bumped;
+			MovementHelper.AddState(ref CurrentState, MovementStatus.Recoil);
+
+			float elapsed = 0f;
+			float jumpHeight = HopHeight * _jumpMultiplier * _bumpForce.y;
+			float jumpDuration = JumpDuration * (_jumpMultiplier / 2f);
+			float initialHeight = VisualTransform.localPosition.y;
+
+			while(elapsed < jumpDuration)
+			{
+				elapsed += Time.deltaTime;
+				float t = JumpCurve.Evaluate(elapsed / jumpDuration);
+				VisualTransform.localPosition = new Vector3(0, initialHeight + t * jumpHeight, 0);
+				Rigidbody.AddForce(direction * _bumpForce.x, ForceMode.Impulse);
+				yield return null;
+			}
+
+			VisualTransform.localPosition = Vector3.zero;
+			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Recoil);
+		}
+
+		protected override void OnPlayerStoppedBumping()
+		{
+			base.OnPlayerStoppedBumping();
+			EventBus.Fire(new PlayerBumpedEvent(_playerId));
 		}
 
 		private void OnDestroy()
