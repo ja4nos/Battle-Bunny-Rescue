@@ -1,5 +1,5 @@
 ﻿using BBR.GameLoop;
-using BBR.Movement;
+using BBR.GameLoop.Models;
 using Cysharp.Threading.Tasks;
 using Project.Input;
 using Project.Utilities;
@@ -18,7 +18,8 @@ namespace Project.Menu
 	{
 		[SerializeField] private UIDocument _menuUIDocument;
 		[SerializeField] private SceneGroup _gameSceneGroup;
-		[SerializeField] private GameObject _playerPrefab;
+		[SerializeField] private SceneGroup _playerSelectionMenuSceneGroup;
+		[SerializeField] private GameObject _playerVisualsPrefab;
 
 		[Inject] private InputController _inputController;
 		[Inject] private DiContainer _diContainer;
@@ -35,16 +36,17 @@ namespace Project.Menu
 
 			InputSystem.onAnyButtonPress.Call(OnDeviceButtonPress);
 
-			_playerConnections.Add(0, new PlayerConnectionController());
-			_playerConnections.Add(1, new PlayerConnectionController());
-			_playerConnections.Add(2, new PlayerConnectionController());
-			_playerConnections.Add(3, new PlayerConnectionController());
+			_playerConnections.Add(0, new PlayerConnectionController(_playerVisualsPrefab, transform, 0));
+			_playerConnections.Add(1, new PlayerConnectionController(_playerVisualsPrefab, transform, 1));
+			_playerConnections.Add(2, new PlayerConnectionController(_playerVisualsPrefab, transform, 2));
+			_playerConnections.Add(3, new PlayerConnectionController(_playerVisualsPrefab, transform, 3));
 
 			foreach(PlayerConnectionController controller in _playerConnections.Values)
 			{
 				_diContainer.BindInstance(controller);
 				_diContainer.Inject(controller);
 
+				controller.PlayerNotReady += OnPlayerNotReady;
 				controller.PlayerReady += OnPlayerReady;
 				controller.PlayerStartRequest += OnPlayerStartRequested;
 				controller.PlayerDisconnected += OnPlayerDisconnected;
@@ -107,6 +109,12 @@ namespace Project.Menu
 			}
 		}
 
+		private void OnPlayerNotReady(int playerId)
+		{
+			_playerConnections[playerId].SetReady(false);
+			UpdateStartEnabled();
+		}
+
 		private void OnPlayerReady(int playerId)
 		{
 			_playerConnections[playerId].SetReady(true);
@@ -117,19 +125,12 @@ namespace Project.Menu
 		{
 			if(ReadyToStart())
 			{
-				Transform[] players = _playerConnections.Values.Where(conn => conn.PlayerId.HasValue).Select(conn =>
-				{
-					BunnyMovementController player = _diContainer.InstantiatePrefab(_playerPrefab).GetComponent<BunnyMovementController>();
-					DontDestroyOnLoad(player);
-					player.Init(conn.PlayerId.Value);
-					return player.transform;
-				}).ToArray();
+				PlayerInfo[] playerInfo = _playerConnections.Values
+					.Where(conn => conn.PlayerId.HasValue)
+					.Select(conn => new PlayerInfo { Id = conn.PlayerId.Value, Color = conn.PlayerColor })
+					.ToArray();
 
-				List<UniTask> tasks = new()
-				{
-					SceneManager.UnloadSceneAsync("Player Selection Menu").ToUniTask(),
-					SceneManager.UnloadSceneAsync("Menu Environment").ToUniTask()
-				};
+				List<UniTask> tasks = _playerSelectionMenuSceneGroup.Scenes.Select(sceneName => SceneManager.UnloadSceneAsync(sceneName).ToUniTask()).ToList();
 
 				foreach(string sceneName in _gameSceneGroup.Scenes)
 				{
@@ -139,7 +140,7 @@ namespace Project.Menu
 				UniTask.WhenAll(tasks).ContinueWith(() =>
 				{
 					GameManager gameManager = FindAnyObjectByType<GameManager>();
-					gameManager.Init(players);
+					gameManager.Init(playerInfo);
 				}).Forget();
 			}
 		}
@@ -180,6 +181,7 @@ namespace Project.Menu
 				}
 			}
 
+			PlayerHelper.ClearPlayerColors();
 			SceneManager.UnloadSceneAsync("Player Selection Menu");
 			SceneManager.LoadSceneAsync("Main Menu", LoadSceneMode.Additive);
 		}
@@ -188,6 +190,11 @@ namespace Project.Menu
 		{
 			foreach(PlayerConnectionController controller in _playerConnections.Values)
 			{
+				controller.PlayerNotReady -= OnPlayerNotReady;
+				controller.PlayerReady -= OnPlayerReady;
+				controller.PlayerStartRequest -= OnPlayerStartRequested;
+				controller.PlayerDisconnected -= OnPlayerDisconnected;
+
 				controller.Dispose();
 			}
 		}

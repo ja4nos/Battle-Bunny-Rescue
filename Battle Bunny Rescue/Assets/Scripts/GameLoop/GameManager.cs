@@ -1,5 +1,6 @@
 using BBR.CameraController;
-using Project.Input;
+using BBR.GameLoop.Models;
+using BBR.Movement;
 using UnityEngine;
 using Zenject;
 
@@ -8,22 +9,51 @@ namespace BBR.GameLoop
 	public class GameManager : MonoBehaviour
 	{
 		[SerializeField] private CameraManager _cameraManager;
+		[SerializeField] private GameObject _playerGameplayPrefab;
 		[SerializeField] private Transform[] _spawnLocations;
 		[SerializeField] private Vector3 _offset;
 
-		[Inject] private InputController _inputController;
+		[Inject] private DiContainer _diContainer;
 
-		public void Init(Transform[] players)
+		public void Init(PlayerInfo[] playerInfo)
 		{
-			_cameraManager.SetFor(players, _inputController);
+			Transform[] players = new Transform[playerInfo.Length];
 
-			for(int i = 0; i < players.Length; i++)
+			int i = 0;
+			for(; i < playerInfo.Length; i++)
 			{
-				players[i].SetParent(transform);
-				players[i].gameObject.SetActive(false);
-				players[i].SetPositionAndRotation(_spawnLocations[i].position + _offset, _spawnLocations[i].rotation);
-				players[i].gameObject.SetActive(true);
+				PlayerInfo info = playerInfo[i];
+				GameObject player = _diContainer.InstantiatePrefab(_playerGameplayPrefab);
+				players[i] = player.transform;
+
+				BunnyMovementPlayer playerMovement = player.GetComponent<BunnyMovementPlayer>();
+				playerMovement.Init(info.Id);
+
+				Transform spawnLocation = _spawnLocations[i];
+
+				BunnyPlayer bunnyPlayer = player.GetComponent<BunnyPlayer>();
+				bunnyPlayer.Init(info.Id, spawnLocation);
+
+				player.transform.SetParent(transform);
+				player.gameObject.SetActive(false);
+				player.transform.SetPositionAndRotation(spawnLocation.position + _offset, spawnLocation.rotation);
+				player.gameObject.SetActive(true);
+
+				ChangeSpawnColor(spawnLocation, info.Color);
 			}
+
+			for(; i < _spawnLocations.Length; i++)
+			{
+				ChangeSpawnColor(_spawnLocations[i], Color.white);
+			}
+
+			_cameraManager.SetFor(players);
+		}
+
+		private static void ChangeSpawnColor(Transform spawnLocation, Color color)
+		{
+			Renderer spawnRenderer = spawnLocation.gameObject.GetComponent<Renderer>();
+			spawnRenderer.material.color = color;
 		}
 	}
 }

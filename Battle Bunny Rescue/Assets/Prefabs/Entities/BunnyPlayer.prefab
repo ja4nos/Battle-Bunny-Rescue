@@ -165,9 +165,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2684991271876753949}
   - component: {fileID: 2340725800221964077}
-  - component: {fileID: 165843963408504399}
-  - component: {fileID: 2166701135690400648}
   - component: {fileID: 6757982834168425011}
+  - component: {fileID: 454103876346734649}
   m_Layer: 0
   m_Name: BunnyPlayer
   m_TagString: Player
@@ -211,35 +210,14 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
+  m_ImplicitCom: 0
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!65 &165843963408504399
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4840622431220187581}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3, y: 2, z: 3}
-  m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &2166701135690400648
+--- !u!114 &6757982834168425011
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -248,13 +226,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 4840622431220187581}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57ccc96b5f773fa459c47f0554fdb8c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b187c6258fc77b40bf7afc3d7fe4b73, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Project.Movement::BBR.BunnyMovementController
+  m_EditorClassIdentifier: Project.GameLoop::BBR.BunnyPlayer
+  _smallBunniesLocations:
+  - {fileID: 3607797231789407377}
+  - {fileID: 2898444203543864135}
+  - {fileID: 1011902002830637727}
+  - {fileID: 4553312354790569229}
+  - {fileID: 1257594411361683530}
+  - {fileID: 5603618625466037273}
+  - {fileID: 2040623006590634751}
+  - {fileID: 2443354335793413090}
+  - {fileID: 1298102060328291899}
+  - {fileID: 5494106837931348325}
+--- !u!114 &454103876346734649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4840622431220187581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8b11baa1cb34f21a14d983d127a3340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Project.Movement::BBR.Movement.BunnyMovementPlayer
   _accelerationMultiplier: 50
   _turnMultiplier: 3.5
   _driftMultiplier: 0.95
-  _inPlaceRotationDivider: 8
   _dragMultiplier: 1.5
   _maxSpeed: 7
   _jumpCurve:
@@ -299,76 +299,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _fallCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2.5
-      outSlope: 2.5
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.4
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.603912
-    - serializedVersion: 3
-      time: 0.6
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -2.5000002
-      outSlope: -2.5000002
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   _jumpDuration: 0.2
-  _jumpDownDuration: 0.2
-  _jumpHeight: 0.5
+  _hopHeight: 0.5
+  _jumpMultiplier: 4
+  _fallSpeed: 10
   _visualTransform: {fileID: 3519367253397044754}
   _animator: {fileID: 9024942136986353356}
---- !u!114 &6757982834168425011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4840622431220187581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b187c6258fc77b40bf7afc3d7fe4b73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Project.GameLoop::BBR.BunnyPlayer
-  _smallBunniesLocations:
-  - {fileID: 3607797231789407377}
-  - {fileID: 2898444203543864135}
-  - {fileID: 1011902002830637727}
-  - {fileID: 4553312354790569229}
-  - {fileID: 1257594411361683530}
-  - {fileID: 5603618625466037273}
-  - {fileID: 2040623006590634751}
-  - {fileID: 2443354335793413090}
-  - {fileID: 1298102060328291899}
-  - {fileID: 5494106837931348325}
 --- !u!1 &5782487840661318677
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,6 +513,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 67879766384610201, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
@@ -595,13 +535,42 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5193520709036598994}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 67879766384610201, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4853195465046246416}
   m_SourcePrefab: {fileID: 100100000, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
 --- !u!4 &3519367253397044754 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 845261543195726115, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
   m_PrefabInstance: {fileID: 4282278089811406641}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4295481258738132136 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 67879766384610201, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+  m_PrefabInstance: {fileID: 4282278089811406641}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4853195465046246416
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4295481258738132136}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 2, z: 3}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &9024942136986353356 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5067319467724444157, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}

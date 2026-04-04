@@ -10,10 +10,10 @@ namespace Project.Input
 {
 	public class InputController
 	{
-		public IReadOnlyDictionary<int, InputDevice> PlayerToDeviceLookup => _playerToDeviceLookup;
+		public IReadOnlyDictionary<int, InputDevice[]> PlayerToDeviceLookup => _playerToDeviceLookup;
 		public IReadOnlyDictionary<InputDevice, int> DeviceToPlayerLookup => _deviceToPlayerLookup;
 
-		private readonly Dictionary<int, InputDevice> _playerToDeviceLookup = new();
+		private readonly Dictionary<int, InputDevice[]> _playerToDeviceLookup = new();
 		private readonly Dictionary<InputDevice, int> _deviceToPlayerLookup = new();
 		private readonly Dictionary<InputAction, Dictionary<int, HashSet<InputCallback>>> _subscribedCallbacks = new();
 		private readonly Dictionary<int, Dictionary<string, InputActionMap>> _playerActionMaps = new();
@@ -33,23 +33,26 @@ namespace Project.Input
 
 		private void HandleNewDevice(InputDevice device)
 		{
-			InputDevice toSwap = null;
+			InputDevice[] toSwap = null;
 			int swappedPlayerId = -1;
 
-			foreach((int playerId, InputDevice boundDevice) in _playerToDeviceLookup)
+			foreach((int playerId, InputDevice[] boundDevices) in _playerToDeviceLookup)
 			{
-				if(!boundDevice.added || !boundDevice.enabled)
+				foreach(InputDevice boundDevice in boundDevices)
 				{
-					toSwap = boundDevice;
-					swappedPlayerId = playerId;
-					break;
+					if(!boundDevice.added || !boundDevice.enabled)
+					{
+						toSwap = boundDevices;
+						swappedPlayerId = playerId;
+						break;
+					}
 				}
 			}
 
 			if(toSwap != null)
 			{
-				Debug.Log($"Swapped player {swappedPlayerId} from device {toSwap.displayName} with Id {toSwap.deviceId} to new device {device.displayName} with Id {device.deviceId}");
-				_playerToDeviceLookup[swappedPlayerId] = device;
+				Debug.Log($"Swapped player {swappedPlayerId} from device(s) {string.Join(", ", toSwap.Select(d => $"{d.displayName} ({d.deviceId})"))} to new device {device.displayName} ({device.deviceId})");
+				_playerToDeviceLookup[swappedPlayerId] = new[] { device };
 				_deviceToPlayerLookup[device] = swappedPlayerId;
 			}
 		}
@@ -84,20 +87,21 @@ namespace Project.Input
 
 		public void RegisterDeviceForPlayer(int playerId, InputDevice device)
 		{
-			_playerToDeviceLookup[playerId] = device;
 			_deviceToPlayerLookup[device] = playerId;
 
 			InputDevice[] devices;
 
 			if(device is Keyboard && Mouse.current != null)
 			{
-				devices = new[] {device, Mouse.current};
+				devices = new[] { device, Mouse.current };
 				_deviceToPlayerLookup[Mouse.current] = playerId;
 			}
 			else
 			{
-				devices = new[] {device};
+				devices = new[] { device };
 			}
+
+			_playerToDeviceLookup[playerId] = devices;
 
 			foreach(InputActionMap sourceMap in InputSystem.actions.actionMaps)
 			{
@@ -106,8 +110,12 @@ namespace Project.Input
 				playerMap.devices = new ReadOnlyArray<InputDevice>(devices);
 				playerMap.Enable();
 
-				_playerActionMaps.TryAdd(playerId, new Dictionary<string, InputActionMap>());
-				_playerActionMaps[playerId].Add(playerMap.name, playerMap);
+				if(!_playerActionMaps.TryGetValue(playerId, out Dictionary<string, InputActionMap> maps))
+				{
+					_playerActionMaps[playerId] = maps = new Dictionary<string, InputActionMap>();
+				}
+
+				maps[playerMap.name] = playerMap;
 			}
 		}
 
@@ -124,9 +132,12 @@ namespace Project.Input
 				_playerActionMaps.Remove(playerId);
 			}
 
-			InputDevice removedDevice = _playerToDeviceLookup[playerId];
+			foreach(InputDevice removedDevice in _playerToDeviceLookup[playerId])
+			{
+				_deviceToPlayerLookup.Remove(removedDevice);
+			}
+
 			_playerToDeviceLookup.Remove(playerId);
-			_deviceToPlayerLookup.Remove(removedDevice);
 		}
 
 		public void SubscribeAction(string actionName, InputCallback inputCallback)
@@ -136,20 +147,6 @@ namespace Project.Input
 
 		public void SubscribeAction(string actionName, string actionMapName, InputCallback inputCallback)
 		{
-			if(inputCallback.PlayerId.HasValue
-				&& _playerActionMaps.TryGetValue(inputCallback.PlayerId.Value, out Dictionary<string, InputActionMap> playerMaps)
-				&& playerMaps.TryGetValue(actionMapName, out InputActionMap playerMap))
-			{
-				InputAction playerAction = playerMap.FindAction(actionName);
-				if(playerAction != null)
-				{
-					playerAction.performed += inputCallback.PerformedCallback;
-					playerAction.started += inputCallback.StartedCallback;
-					playerAction.canceled += inputCallback.CanceledCallback;
-					return;
-				}
-			}
-
 			if(!TryGetAction(actionName, actionMapName, out InputAction action))
 			{
 				return;
@@ -266,21 +263,19 @@ namespace Project.Input
 				return;
 			}
 
-			// Player-specific input handling
-			if(_deviceToPlayerLookup.TryGetValue(context.control.device, out int playerId))
-			{
-				if(!callbacks.TryGetValue(playerId, out HashSet<InputCallback> deviceCallbackList))
-				{
-					return;
-				}
-
-				CallCallbacks(deviceCallbackList);
-			}
-
 			// Non-player specific input handling
 			if(callbacks.TryGetValue(-1, out HashSet<InputCallback> allPlayersCallbackList))
 			{
 				CallCallbacks(allPlayersCallbackList);
+			}
+
+			// Player-specific input handling
+			if(_deviceToPlayerLookup.TryGetValue(context.control.device, out int playerId))
+			{
+				if(callbacks.TryGetValue(playerId, out HashSet<InputCallback> deviceCallbackList))
+				{
+					CallCallbacks(deviceCallbackList);
+				}
 			}
 
 			return;
