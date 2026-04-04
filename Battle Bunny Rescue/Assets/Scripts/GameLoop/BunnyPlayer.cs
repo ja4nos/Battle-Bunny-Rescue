@@ -1,10 +1,9 @@
 using BBR.Events;
-using BBR.GameLoop;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace BBR
+namespace BBR.GameLoop
 {
 	public class BunnyPlayer : MonoBehaviour
 	{
@@ -12,7 +11,10 @@ namespace BBR
 
 		private Transform _playerBase;
 		private int _playerId;
+		private int _capturedBunniesCount;
 		private int _savedBunniesCount;
+		private CapturedBunniesEvent _capturedBunniesEvent;
+		private SavedBunniesEvent _savedBunniesEvent;
 
 		private readonly List<Transform> _availableSpots = new();
 		private readonly List<GameObject> _capturedBunnies = new();
@@ -23,6 +25,9 @@ namespace BBR
 			{
 				_availableSpots.Add(location);
 			}
+
+			_capturedBunniesEvent = new CapturedBunniesEvent(_playerId);
+			_savedBunniesEvent = new SavedBunniesEvent(_playerId);
 		}
 
 		public void Init(int playerId, Transform playerBase)
@@ -42,8 +47,12 @@ namespace BBR
 				capturedBunny.transform.localPosition = Vector3.zero;
 				capturedBunny.transform.localRotation = Quaternion.identity;
 				capturedBunny.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+				_capturedBunniesCount++;
 				_capturedBunnies.Add(capturedBunny);
 				_availableSpots.RemoveAt(spotIndex);
+
+				_capturedBunniesEvent.CapturedBunniesCount = _capturedBunniesCount;
+				EventBus.Fire(_capturedBunniesEvent);
 			}
 		}
 
@@ -59,6 +68,7 @@ namespace BBR
 					_savedBunniesCount++;
 				}
 
+				_capturedBunniesCount = 0;
 				_capturedBunnies.Clear();
 				_availableSpots.Clear();
 
@@ -67,7 +77,11 @@ namespace BBR
 					_availableSpots.Add(location);
 				}
 
-				EventBus.Fire(new SavedBunniesEvent(_playerId, _savedBunniesCount));
+				_savedBunniesEvent.SavedBunniesCount = _savedBunniesCount;
+				EventBus.Fire(_savedBunniesEvent);
+
+				_capturedBunniesEvent.CapturedBunniesCount = _capturedBunniesCount;
+				EventBus.Fire(_capturedBunniesEvent);
 			}
 		}
 	}

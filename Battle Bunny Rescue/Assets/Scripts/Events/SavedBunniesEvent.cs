@@ -3,9 +3,9 @@
 	public class SavedBunniesEvent
 	{
 		public readonly int PlayerId;
-		public readonly int SavedBunniesCount;
+		public int SavedBunniesCount;
 
-		public SavedBunniesEvent(int playerId, int savedBunniesCount)
+		public SavedBunniesEvent(int playerId, int savedBunniesCount = 0)
 		{
 			PlayerId = playerId;
 			SavedBunniesCount = savedBunniesCount;
