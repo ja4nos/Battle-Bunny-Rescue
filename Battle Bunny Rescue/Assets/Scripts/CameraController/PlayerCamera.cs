@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Project.Input;
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace BBR.CameraController
 
 		private Camera _camera;
 
-		internal void Setup(Transform followTransform, Vector2 imageScale, int playerIndex)
+		internal void Setup(Transform followTransform, Vector2 imageScale, int playerIndex, InputController inputController)
 		{
 			int width = (int) (Screen.width * imageScale.x);
 			int height = (int) (Screen.height * imageScale.y);
@@ -23,10 +24,13 @@ namespace BBR.CameraController
 
 			CinemachineCamera cinemachineCamera = Instantiate(_cinemachineCameraPrefab, transform).GetComponent<CinemachineCamera>();
 			cinemachineCamera.Follow = followTransform;
-			cinemachineCamera.OutputChannel = (OutputChannels) (1 << playerIndex + 1);
+			cinemachineCamera.OutputChannel = (OutputChannels) (1 << (playerIndex + 1));
 
 			CinemachineBrain brain = _camera.GetComponent<CinemachineBrain>();
-			brain.ChannelMask = (OutputChannels) (1 << playerIndex + 1);
+			brain.ChannelMask = (OutputChannels) (1 << (playerIndex + 1));
+
+			PlayerCinemachineInputProvider inputProvider = cinemachineCamera.GetComponent<PlayerCinemachineInputProvider>();
+			inputProvider.Init(playerIndex, inputController);
 		}
 
 		private void OnDestroy()

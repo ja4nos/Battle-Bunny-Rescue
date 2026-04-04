@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BBR.Camera.Prototype
+namespace BBR.CameraController.Prototype
 {
 	public class FollowTargetController : MonoBehaviour
 	{

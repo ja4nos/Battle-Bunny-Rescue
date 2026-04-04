@@ -3,7 +3,7 @@ using BBR.Events.Camera;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace BBR.Camera.Prototype
+namespace BBR.CameraController.Prototype
 {
 	[RequireComponent(typeof(Rigidbody))]
 	public class PlayerController : MonoBehaviour
