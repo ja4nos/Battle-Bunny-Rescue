@@ -141,6 +141,9 @@ namespace Project.Menu
 				{
 					GameManager gameManager = FindAnyObjectByType<GameManager>();
 					gameManager.Init(playerInfo);
+
+					PlayerUIManager playerUIManager = FindAnyObjectByType<PlayerUIManager>();
+					playerUIManager.Init(playerInfo.Length);
 				}).Forget();
 			}
 		}
