@@ -33,7 +33,9 @@ namespace BBR.Movement
 		[SerializeField] [FormerlySerializedAs("_visualTransform")]
 		public Transform VisualTransform;
 
-		[SerializeField] private Animator _animator;
+		[SerializeField] [FormerlySerializedAs("_animator")]
+		protected Animator Animator;
+
 		[SerializeField] protected ParticlePool DustParticlePool;
 
 		protected IEnumerator HopCoroutine;
@@ -45,7 +47,7 @@ namespace BBR.Movement
 		private float _rotationAngle;
 		private int _groundMask;
 
-		private void Start()
+		protected virtual void Start()
 		{
 			Rigidbody = GetComponent<Rigidbody>();
 			_rotationAngle = transform.rotation.eulerAngles.y;
@@ -113,7 +115,7 @@ namespace BBR.Movement
 			Rigidbody.linearVelocity = forwardVelocity + rightVelocity * _driftMultiplier;
 		}
 
-		private IEnumerator Hop()
+		protected virtual IEnumerator Hop()
 		{
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Hopping);
 

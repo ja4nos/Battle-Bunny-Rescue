@@ -27,12 +27,21 @@ namespace BBR.Movement
 		private IEnumerator _bumpCoroutine;
 		private float _remainingStamina;
 
+		private static readonly int _loop = Animator.StringToHash("Loop");
+		private static readonly int _walk = Animator.StringToHash("Walk");
+
 		public void Init(int playerId)
 		{
 			_playerId = playerId;
 
 			_jumpInput = new InputCallback { PlayerId = _playerId, PerformedCallback = Jump };
 			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
+		}
+
+		protected override void Start()
+		{
+			base.Start();
+			Animator.SetBool(_loop, false);
 		}
 
 		protected override void Update()
@@ -80,8 +89,18 @@ namespace BBR.Movement
 			}
 		}
 
+		protected override IEnumerator Hop()
+		{
+			Animator.SetTrigger(_walk);
+			Animator.speed = 4;
+			yield return base.Hop();
+			Animator.speed = 1;
+		}
+
 		private IEnumerator JumpCoroutine()
 		{
+			Animator.SetTrigger(_walk);
+			Animator.speed = 2;
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Jumping);
 
 			float elapsed = 0f;
@@ -102,6 +121,7 @@ namespace BBR.Movement
 			particles.transform.position = VisualTransform.position;
 			particles.Play();
 			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Jumping);
+			Animator.speed = 1;
 		}
 
 		private void OnTriggerEnter(Collider other)

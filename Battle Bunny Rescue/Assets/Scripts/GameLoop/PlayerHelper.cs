@@ -105,7 +105,7 @@ namespace BBR.GameLoop
 				_playerIdToColorIdLookup[playerId] = playerColorId;
 			}
 
-			const string basketsName = "Baskets";
+			const string basketsName = "Baskets.001";
 			Renderer[] renderers = playerInstance.GetComponentsInChildren<Renderer>();
 			Renderer basketsRenderer = renderers.FirstOrDefault(r => r.gameObject.name == basketsName);
 
