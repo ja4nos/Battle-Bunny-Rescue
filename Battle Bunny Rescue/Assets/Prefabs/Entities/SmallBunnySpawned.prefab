@@ -124,7 +124,7 @@ MonoBehaviour:
   _driftMultiplier: 0.95
   _dragMultiplier: 1.5
   _maxSpeed: 7
-  _jumpCurve:
+  JumpCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -166,12 +166,14 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _jumpDuration: 0.2
-  _hopHeight: 0.5
-  _jumpMultiplier: 4
+  JumpDuration: 0.2
+  HopHeight: 0.5
   _fallSpeed: 10
-  _visualTransform: {fileID: 7666510561417993423}
+  VisualTransform: {fileID: 7666510561417993423}
   _animator: {fileID: 2849844447213018129}
+  DustParticlePool:
+    _parent: {fileID: 9219051180804151488}
+    _prefab: {fileID: 8462040170210329842, guid: a28c09a93e975e44f9ea824d27e27ebc, type: 3}
   _directionChangeFrequencySeconds: 2
 --- !u!95 &2849844447213018129 stripped
 Animator:
@@ -181,5 +183,10 @@ Animator:
 --- !u!4 &7666510561417993423 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3519367253397044754, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+  m_PrefabInstance: {fileID: 6535751524747240157}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9219051180804151488 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2684991271876753949, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
   m_PrefabInstance: {fileID: 6535751524747240157}
   m_PrefabAsset: {fileID: 0}

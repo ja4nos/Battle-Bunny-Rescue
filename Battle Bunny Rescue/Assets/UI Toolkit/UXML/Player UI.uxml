@@ -1,5 +1,17 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="player-ui" style="flex-grow: 1;">
+        <ui:VisualElement name="basket">
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+            <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
+        </ui:VisualElement>
         <ui:VisualElement name="panel">
             <ui:VisualElement name="score" style="flex-direction: row;">
                 <ui:Image name="bunny-full" source="project://database/Assets/Art/2D/Icons/small-bunny-full.png?fileID=2800000&amp;guid=704e47b097f5b18429d0a239c44f3125&amp;type=3#small-bunny-full"/>

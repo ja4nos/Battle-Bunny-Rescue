@@ -98,6 +98,9 @@ namespace BBR.Movement
 			}
 
 			VisualTransform.localPosition = Vector3.zero;
+			ParticleSystem particles = DustParticlePool.Get();
+			particles.transform.position = VisualTransform.position;
+			particles.Play();
 			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Jumping);
 		}
 
@@ -154,9 +157,10 @@ namespace BBR.Movement
 			EventBus.Fire(new PlayerBumpedEvent(_playerId));
 		}
 
-		private void OnDestroy()
+		protected override void OnDestroy()
 		{
 			_inputController.UnsubscribeAction("Jump", "Player", _jumpInput);
+			base.OnDestroy();
 		}
 	}
 }

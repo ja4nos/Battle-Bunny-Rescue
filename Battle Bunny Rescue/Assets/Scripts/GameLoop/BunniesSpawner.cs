@@ -1,5 +1,6 @@
 using BBR.Events;
 using BBR.Movement;
+using Pool.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -15,6 +16,7 @@ namespace BBR.GameLoop
 		[SerializeField] [Min(0.1f)] private float _radius = 75f;
 		[SerializeField] [Range(0.1f, 1f)] private float _minSize = 0.1f;
 		[SerializeField] [Range(0.1f, 1f)] private float _maxSize = 0.3f;
+		[SerializeField] private ParticlePool _bunnyRescueParticlePool;
 
 		[Header("Event Camera")] [SerializeField]
 		private Vector3 _cameraOffset = new(0f, 10f, 0f);
@@ -73,6 +75,9 @@ namespace BBR.GameLoop
 			{
 				BunnyMovementRandom bunny = Instantiate(capturedBunny);
 				bunny.VisualTransform.localPosition = Vector3.zero;
+				ParticleSystem rescueParticle = _bunnyRescueParticlePool.Get();
+				rescueParticle.transform.position = player.transform.position;
+				rescueParticle.Play();
 				Destroy(bunny);
 				Destroy(bunny.GetComponent<Collider>());
 				Destroy(bunny.GetComponent<Rigidbody>());

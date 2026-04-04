@@ -1,5 +1,6 @@
 using BBR.Movement.Enums;
 using BBR.Movement.Helpers;
+using Pool.Pool;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -33,6 +34,7 @@ namespace BBR.Movement
 		public Transform VisualTransform;
 
 		[SerializeField] private Animator _animator;
+		[SerializeField] protected ParticlePool DustParticlePool;
 
 		protected IEnumerator HopCoroutine;
 		protected MovementStatus CurrentState;
@@ -125,6 +127,9 @@ namespace BBR.Movement
 			}
 
 			VisualTransform.localPosition = Vector3.zero;
+			ParticleSystem particles = DustParticlePool.Get();
+			particles.transform.position = VisualTransform.position;
+			particles.Play();
 			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Hopping);
 		}
 
@@ -171,5 +176,10 @@ namespace BBR.Movement
 		protected virtual void OnPlayerStoppedBumping() { }
 
 		protected abstract Vector2 GetMovementInput();
+
+		protected virtual void OnDestroy()
+		{
+			DustParticlePool.Dispose();
+		}
 	}
 }
