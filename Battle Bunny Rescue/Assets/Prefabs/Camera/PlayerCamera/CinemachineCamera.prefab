@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 335175635863361924}
   - component: {fileID: 578251273709778629}
   - component: {fileID: 8229461693301997685}
+  - component: {fileID: 1406899026209353906}
   - component: {fileID: 1445241816119671985}
   m_Layer: 0
   m_Name: CinemachineCamera
@@ -32,7 +33,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8623150484500067356}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -0.03, y: 0, z: 0}
 --- !u!114 &335175635863361924
@@ -170,6 +172,30 @@ MonoBehaviour:
     Time: 0.5
     Smoothing: 5
     IgnoreY: 0
+--- !u!114 &1406899026209353906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8137814742308602573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseListener
+  ApplyAfter: 1
+  ChannelMask: 1
+  Gain: 1
+  Use2DDistance: 0
+  UseCameraSpace: 0
+  SignalCombinationMode: 0
+  ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!114 &1445241816119671985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,3 +251,65 @@ MonoBehaviour:
   _lookXActionName: LookX
   _lookYActionName: LookY
   _actionMapName: Player
+--- !u!1001 &6902289054392576625
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5681849342497447611}
+    m_Modifications:
+    - target: {fileID: 2835462411911138418, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_Name
+      value: ImpulseSource
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+--- !u!4 &8623150484500067356 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2909975164638715501, guid: 422faab1baaeaee4a872ad51ef16b767, type: 3}
+  m_PrefabInstance: {fileID: 6902289054392576625}
+  m_PrefabAsset: {fileID: 0}
