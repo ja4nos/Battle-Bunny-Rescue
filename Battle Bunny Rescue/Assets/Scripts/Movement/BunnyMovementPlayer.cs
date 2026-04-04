@@ -1,6 +1,8 @@
 using BBR.Events;
+using BBR.Events.Camera;
 using BBR.Movement.Enums;
 using BBR.Movement.Helpers;
+using Pool.Pool;
 using Project.Input;
 using Project.Input.Models;
 using System.Collections;
@@ -17,6 +19,8 @@ namespace BBR.Movement
 		[SerializeField] private float _staminaRecoveryRatePerSecond = 1f;
 		[SerializeField] private float _sprintMultiplier = 4f;
 		[SerializeField] private Vector2 _bumpForce = new(2f, 2f);
+		[SerializeField] private Transform _bumpTransform;
+		[SerializeField] private ParticlePool _bumpParticles;
 
 		[Inject] private InputController _inputController;
 
@@ -72,7 +76,7 @@ namespace BBR.Movement
 		private void Jump(InputAction.CallbackContext context)
 		{
 			if(context.performed && !CurrentState.HasFlag(MovementStatus.Jumping)
-				&& !CurrentState.HasFlag(MovementStatus.Bumped))
+								&& !CurrentState.HasFlag(MovementStatus.Bumped))
 			{
 				if(HopCoroutine != null)
 				{
@@ -128,7 +132,13 @@ namespace BBR.Movement
 		{
 			if(other.transform.CompareTag("Player"))
 			{
-				other.GetComponentInParent<BunnyMovementPlayer>().Bump(transform.forward);
+				BunnyMovementPlayer otherPlayer = other.GetComponentInParent<BunnyMovementPlayer>();
+				ParticleSystem bumpParticles = _bumpParticles.Get();
+				bumpParticles.transform.position = _bumpTransform.position;
+				bumpParticles.Play();
+				CameraShakeEvent cameraShakeEvent = new(1, new[] { _playerId, otherPlayer._playerId });
+				EventBus.Fire(cameraShakeEvent);
+				otherPlayer.Bump(transform.forward);
 			}
 		}
 
@@ -180,6 +190,7 @@ namespace BBR.Movement
 		protected override void OnDestroy()
 		{
 			_inputController.UnsubscribeAction("Jump", "Player", _jumpInput);
+			_bumpParticles.Dispose();
 			base.OnDestroy();
 		}
 	}

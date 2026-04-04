@@ -1,6 +1,5 @@
 ﻿using BBR.Events;
 using BBR.Events.Camera;
-using Cysharp.Threading.Tasks;
 using Project.Input;
 using System;
 using System.Linq;
@@ -53,7 +52,7 @@ namespace BBR.CameraController
 		{
 			if(shakeEvent.AffectedPlayers.Contains(_playerIndex))
 			{
-				_cinemachineImpulseSource.GenerateImpulseAtPositionWithVelocity(_cinemachineImpulseSource.transform.position, Vector3.one * 0.1f);
+				_cinemachineImpulseSource.GenerateImpulseAtPositionWithVelocity(_cinemachineImpulseSource.transform.position, Vector3.one * shakeEvent.Force);
 			}
 		}
 
