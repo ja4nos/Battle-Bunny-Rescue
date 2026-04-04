@@ -1,5 +1,6 @@
 ﻿using BBR.Events;
 using BBR.GameLoop;
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,8 +13,11 @@ namespace Project.Menu
 		private readonly int _playerId;
 
 		private VisualElement _panel;
+		private VisualElement _score;
 		private Label _scoreLabel;
 		private List<Image> _basketBunnies;
+
+		private int _savedBunniesCount;
 
 		public PlayerUIController(int playerId)
 		{
@@ -25,6 +29,7 @@ namespace Project.Menu
 		public void OnEnable(VisualElement root)
 		{
 			_panel = root.Q<VisualElement>(name: "panel");
+			_score = root.Q<VisualElement>(name: "score");
 			_scoreLabel = root.Q<Label>(name: "count");
 			VisualElement basket = root.Q(name: "basket");
 			_basketBunnies = basket.Query<Image>().Build().ToList();
@@ -45,9 +50,17 @@ namespace Project.Menu
 
 		private void OnSavedBunniesChanged(SavedBunniesEvent evt)
 		{
-			if(_scoreLabel != null && _playerId == evt.PlayerId)
+			if(_scoreLabel != null && _playerId == evt.PlayerId && _savedBunniesCount != evt.SavedBunniesCount)
 			{
+				_savedBunniesCount = evt.SavedBunniesCount;
 				_scoreLabel.text = $"x{evt.SavedBunniesCount}";
+
+				DOTween.Kill(_score);
+				DOTween.To(() => _score.resolvedStyle.scale.value.x, scale => _score.style.scale = new StyleScale(new Vector2(scale, scale)), 1.5f, 0.1f)
+					.SetEase(Ease.Linear)
+					.SetLoops(2, LoopType.Yoyo)
+					.SetId(_score)
+					.SetAutoKill();
 			}
 		}
 
@@ -58,7 +71,8 @@ namespace Project.Menu
 				for(int i = 0; i < _basketBunnies.Count; i++)
 				{
 					Image basketBunny = _basketBunnies[i];
-					basketBunny.SetEnabled(i < evt.CapturedBunniesCount);
+					bool captured = i < evt.CapturedBunniesCount;
+					basketBunny.EnableInClassList("captured", captured);
 				}
 			}
 		}
