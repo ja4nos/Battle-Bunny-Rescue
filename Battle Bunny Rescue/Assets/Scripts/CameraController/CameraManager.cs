@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Project.Input;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BBR.CameraController
@@ -29,7 +30,7 @@ namespace BBR.CameraController
 			_eventCamera.Setup(rectTransform, Vector2.zero);
 		}
 
-		public void SetFor(Transform[] transformsToFollow)
+		public void SetFor(Transform[] transformsToFollow, InputController inputController)
 		{
 			if(_playerCameras != null)
 			{
@@ -54,7 +55,7 @@ namespace BBR.CameraController
 			{
 				Transform t = transformsToFollow[i];
 				_playerCameras[i] = Instantiate(_playerCameraPrefab, t.position, Quaternion.identity, transform).GetComponent<PlayerCamera>();
-				_playerCameras[i].Setup(t, GetScaleFor(transformsToFollow.Length), i);
+				_playerCameras[i].Setup(t, GetScaleFor(transformsToFollow.Length), i, inputController);
 			}
 
 			Vector2 scale = GetScaleFor(transformsToFollow.Length);

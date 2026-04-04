@@ -10,7 +10,7 @@ namespace BBR
 
 		private void Start()
 		{
-			_cameraManager.SetFor(_players);
+			_cameraManager.SetFor(_players, null);
 		}
 	}
 }
