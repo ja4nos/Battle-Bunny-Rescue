@@ -14,12 +14,18 @@ namespace BBR.CameraController
 		private InputAxis _verticalAxis;
 		private int _playerId;
 		private InputController _inputController;
+ 		private CinemachineOrbitalFollow _orbitalFollow;
 
 		public void Init(int playerId, InputController inputController)
 		{
 			_playerId = playerId;
 			_inputController = inputController;
 			PlayerIndex = _playerId;
+
+			if(!transform.TryGetComponent(out _orbitalFollow))
+			{
+				Debug.LogError($"Could not find {nameof(CinemachineOrbitalFollow)} on player {name}! Disabling the {nameof(PlayerCinemachineInputProvider)} script!", this);
+			}
 		}
 
 		private void Update()
@@ -28,20 +34,8 @@ namespace BBR.CameraController
 			{
 				return;
 			}
-
-			Debug.Log($"LOOK {_playerId} {look}");
-
-			CinemachineCamera freeLook = GetComponent<CinemachineCamera>();
-			if(freeLook == null)
-			{
-				return;
-			}
-
-			if(freeLook.TryGetComponent(out CinemachineOrbitalFollow orbital))
-			{
-				orbital.HorizontalAxis.Value += look.x * 0.1f;
-				orbital.VerticalAxis.Value += look.y * 0.1f;
-			}
+			_orbitalFollow.HorizontalAxis.Value += look.x * 0.1f;
+			_orbitalFollow.VerticalAxis.Value += look.y * 0.1f;
 		}
 	}
 }
