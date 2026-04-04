@@ -30,7 +30,7 @@ namespace BBR.CameraController
 
 		private void Update()
 		{
-			if(!_inputController.TryReadValue("Look", _actionMapName, _playerId, out Vector2 look))
+			if(_inputController == null || !_inputController.TryReadValue("Look", _actionMapName, _playerId, out Vector2 look))
 			{
 				return;
 			}

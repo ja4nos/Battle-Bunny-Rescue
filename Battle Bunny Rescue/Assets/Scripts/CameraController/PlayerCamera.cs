@@ -1,5 +1,9 @@
-﻿using Project.Input;
+﻿using BBR.Events;
+using BBR.Events.Camera;
+using Cysharp.Threading.Tasks;
+using Project.Input;
 using System;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -13,6 +17,8 @@ namespace BBR.CameraController
 		public RenderTexture RenderTexture { get; private set; }
 
 		private Camera _camera;
+		private int _playerIndex;
+		private CinemachineImpulseSource _cinemachineImpulseSource;
 
 		internal void Setup(Transform followTransform, Vector2 imageScale, int playerIndex, InputController inputController)
 		{
@@ -22,19 +28,39 @@ namespace BBR.CameraController
 			_camera = Instantiate(_cameraPrefab, transform).GetComponent<Camera>();
 			_camera.targetTexture = RenderTexture;
 
+			_playerIndex = playerIndex;
+
 			CinemachineCamera cinemachineCamera = Instantiate(_cinemachineCameraPrefab, transform).GetComponent<CinemachineCamera>();
 			cinemachineCamera.Follow = followTransform;
-			cinemachineCamera.OutputChannel = (OutputChannels) (1 << (playerIndex + 1));
+			cinemachineCamera.OutputChannel = (OutputChannels) (1 << playerIndex + 1);
 
 			CinemachineBrain brain = _camera.GetComponent<CinemachineBrain>();
-			brain.ChannelMask = (OutputChannels) (1 << (playerIndex + 1));
+			brain.ChannelMask = (OutputChannels) (1 << playerIndex + 1);
 
 			PlayerCinemachineInputProvider inputProvider = cinemachineCamera.GetComponent<PlayerCinemachineInputProvider>();
 			inputProvider.Init(playerIndex, inputController);
+
+			CinemachineImpulseListener cinemachineImpulseListener = cinemachineCamera.GetComponent<CinemachineImpulseListener>();
+			cinemachineImpulseListener.ChannelMask = playerIndex + 1;
+
+			_cinemachineImpulseSource = cinemachineCamera.GetComponentInChildren<CinemachineImpulseSource>();
+			_cinemachineImpulseSource.ImpulseDefinition.ImpulseChannel = playerIndex + 1;
+
+			EventBus.Register<CameraShakeEvent>(OnCameraShake);
+		}
+
+		private void OnCameraShake(CameraShakeEvent shakeEvent)
+		{
+			if(shakeEvent.AffectedPlayers.Contains(_playerIndex))
+			{
+				_cinemachineImpulseSource.GenerateImpulseAtPositionWithVelocity(_cinemachineImpulseSource.transform.position, Vector3.one * 0.1f);
+			}
 		}
 
 		private void OnDestroy()
 		{
+			EventBus.Unregister<CameraShakeEvent>(OnCameraShake);
+
 			if(RenderTexture)
 			{
 				RenderTexture.Release();

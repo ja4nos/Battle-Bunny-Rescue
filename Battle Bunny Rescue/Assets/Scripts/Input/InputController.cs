@@ -96,6 +96,10 @@ namespace Project.Input
 				devices = new[] { device, Mouse.current };
 				_deviceToPlayerLookup[Mouse.current] = playerId;
 			}
+			else if(device is Mouse)
+			{
+				return;
+			}
 			else
 			{
 				devices = new[] { device };
