@@ -1,3 +1,4 @@
+using BBR.Events;
 using BBR.GameLoop;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace BBR
 		[SerializeField] private Transform[] _smallBunniesLocations;
 
 		private Transform _playerBase;
+		private int _playerId;
+		private int _savedBunniesCount;
 
 		private readonly List<Transform> _availableSpots = new();
 		private readonly List<GameObject> _capturedBunnies = new();
@@ -25,6 +28,7 @@ namespace BBR
 		public void Init(int playerId, Transform playerBase)
 		{
 			_playerBase = playerBase;
+			_playerId = playerId;
 			PlayerHelper.SetPlayerColor(gameObject, playerId);
 		}
 
@@ -52,13 +56,18 @@ namespace BBR
 					capturedBunny.transform.SetParent(other.transform.parent, false);
 					capturedBunny.transform.position = new Vector3(Random.Range(other.bounds.center.x - other.bounds.extents.x, other.bounds.center.x + other.bounds.extents.x), other.bounds.center.y - other.bounds.extents.y, Random.Range(other.bounds.center.z - other.bounds.extents.z, other.bounds.center.z + other.bounds.extents.z));
 					capturedBunny.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+					_savedBunniesCount++;
 				}
+
 				_capturedBunnies.Clear();
 				_availableSpots.Clear();
+
 				foreach(Transform location in _smallBunniesLocations)
 				{
 					_availableSpots.Add(location);
 				}
+
+				EventBus.Fire(new SavedBunniesEvent(_playerId, _savedBunniesCount));
 			}
 		}
 	}

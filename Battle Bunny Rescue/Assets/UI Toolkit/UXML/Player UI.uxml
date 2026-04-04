@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
->
-    
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="player-ui" style="flex-grow: 1;">
+        <ui:VisualElement name="panel">
+            <ui:VisualElement name="score" style="flex-direction: row;">
+                <ui:Image name="bunny-full" source="project://database/Assets/Art/2D/Icons/small-bunny-full.png?fileID=2800000&amp;guid=704e47b097f5b18429d0a239c44f3125&amp;type=3#small-bunny-full"/>
+                <ui:Label text="x0" name="count"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

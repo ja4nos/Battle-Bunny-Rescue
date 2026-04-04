@@ -1,1 +1,46 @@
-VisualElement {}
+.row {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+#player-0,
+#player-1,
+#player-2,
+#player-3 {
+    flex-grow: 1;
+    width: 100%;
+}
+
+#player-ui {
+    width: 100%;
+    height: 100%;
+    justify-content: flex-end;
+    align-self: center;
+}
+
+#panel {
+    align-self: flex-end;
+    background-color: #2e913d;
+    border-width: 5px;
+    border-radius: 24px;
+    border-color: #d8e1d9;
+    padding: 20px;
+    margin: 50px;
+}
+
+#score {
+    flex-direction: row;
+    align-items: center;
+}
+
+#bunny-full {
+    width: 64px;
+    height: 64px;
+}
+
+.unity-text-element {
+    color: #d8e1d9;
+    font-size: 36px;
+    -unity-font-style: bold;
+    -unity-text-outline: 0.25px black;
+}

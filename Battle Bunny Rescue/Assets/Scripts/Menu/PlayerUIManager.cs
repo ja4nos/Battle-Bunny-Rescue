@@ -24,6 +24,8 @@ namespace Project.Menu
 			{
 				Debug.LogError($"{nameof(VisualTreeAsset)} has not been assigned to {nameof(PlayerUIController)}!", this);
 			}
+
+			enabled = false;
 		}
 
 		public void Init(int playerCount)
@@ -36,6 +38,7 @@ namespace Project.Menu
 				{
 					row = new VisualElement();
 					row.AddToClassList("row");
+					_uiDocument.rootVisualElement.Add(row);
 				}
 
 				VisualElement playerUIInstance = _playerUIAsset.Instantiate();
@@ -44,6 +47,14 @@ namespace Project.Menu
 
 				_playerUIControllers.Add(i, new PlayerUIController(i));
 			}
+
+			if(playerCount > _rowElementCount && row is { childCount: 1 })
+			{
+				VisualElement freeSpace = new() { style = { flexGrow = 1, width = new StyleLength(new Length(100, LengthUnit.Percent)) } };
+				row.Add(freeSpace);
+			}
+
+			enabled = true;
 		}
 
 		private void OnEnable()

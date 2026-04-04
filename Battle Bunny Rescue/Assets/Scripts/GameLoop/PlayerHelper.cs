@@ -22,6 +22,12 @@ namespace BBR.GameLoop
 			new(0.9f, 0.4f, 0.7f)
 		};
 
+		public static Color GetPlayerColor(int playerId)
+		{
+			int playerColorId = _playerIdToColorIdLookup.GetValueOrDefault(playerId, playerId);
+			return _playerColors[playerColorId];
+		}
+
 		public static Color GetNextPlayerColor(int playerId)
 		{
 			int currentIndex = _playerIdToColorIdLookup.GetValueOrDefault(playerId, 0);
