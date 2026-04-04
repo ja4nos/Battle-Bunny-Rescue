@@ -73,5 +73,8 @@ MonoBehaviour:
   _radius: 75
   _minSize: 0.1
   _maxSize: 0.3
+  _bunnyRescueParticlePool:
+    _parent: {fileID: 2750602401103650120}
+    _prefab: {fileID: 6649065898354293794, guid: eeb3276692a7ada4aae6395e90fd5cb2, type: 3}
   _cameraOffset: {x: 0, y: 10, z: 0}
   _eventDurationSeconds: 2

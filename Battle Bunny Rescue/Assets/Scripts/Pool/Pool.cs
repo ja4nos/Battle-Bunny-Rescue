@@ -10,6 +10,7 @@ namespace Pool.Pool
 	{
 		public int Count => _pool.Count;
 
+		[SerializeField] private Transform _parent;
 		[SerializeField] private GameObject _prefab;
 
 		private readonly List<T> _pool = new();
@@ -51,7 +52,7 @@ namespace Pool.Pool
 
 		private T Instantiate()
 		{
-			T item = Object.Instantiate(_prefab).GetComponent<T>();
+			T item = Object.Instantiate(_prefab, _parent).GetComponent<T>();
 			item.gameObject.SetActive(true);
 			_pool.Add(item);
 			return item;
@@ -73,7 +74,10 @@ namespace Pool.Pool
 			}
 		}
 
-		public abstract void Return(T item);
+		public virtual void Return(T item)
+		{
+			item.transform.SetParent(_parent);
+		}
 
 		public virtual void Dispose()
 		{

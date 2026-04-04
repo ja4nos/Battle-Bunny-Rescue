@@ -10,6 +10,7 @@ namespace Pool.Pool
 		{
 			item.Stop();
 			item.gameObject.SetActive(false);
+			base.Return(item);
 		}
 	}
 }
