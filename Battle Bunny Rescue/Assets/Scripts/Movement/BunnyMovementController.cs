@@ -1,8 +1,8 @@
 using BBR.Movement.Enums;
+using BBR.Movement.Helpers;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 namespace BBR.Movement
@@ -18,12 +18,15 @@ namespace BBR.Movement
 		[SerializeField] private float _dragMultiplier = 3.0f;
 		[SerializeField] private float _maxSpeed = 20f;
 
-		[Header("Jump settings")] [SerializeField]
-		private AnimationCurve _jumpCurve;
+		[Header("Jump settings")] [SerializeField] [FormerlySerializedAs("_jumpCurve")]
+		protected AnimationCurve JumpCurve;
 
-		[SerializeField] [Min(0.1f)] private float _jumpDuration = 2.0f;
-		[SerializeField] private float _hopHeight = 0.5f;
-		[SerializeField] private float _jumpMultiplier = 4f;
+		[SerializeField] [Min(0.1f)] [FormerlySerializedAs("_jumpDuration")]
+		protected float JumpDuration = 2.0f;
+
+		[SerializeField] [FormerlySerializedAs("_hopHeight")]
+		protected float HopHeight = 0.5f;
+
 		[SerializeField] private float _fallSpeed = 10f;
 
 		[SerializeField] [FormerlySerializedAs("_visualTransform")]
@@ -31,14 +34,14 @@ namespace BBR.Movement
 
 		[SerializeField] private Animator _animator;
 
+		protected IEnumerator HopCoroutine;
+		protected MovementStatus CurrentState;
+
 		private float _accelerationInput;
 		private float _steeringInput;
 		private float _rotationAngle;
 		private Rigidbody _rigidbody;
 		private int _groundMask;
-		private IEnumerator _hopCoroutine;
-		private IEnumerator _jumpCoroutine;
-		private MovementStatus _status;
 
 		private void Start()
 		{
@@ -47,7 +50,7 @@ namespace BBR.Movement
 			_groundMask = 1 << LayerMask.NameToLayer("Ground");
 		}
 
-		private void Update()
+		protected virtual void Update()
 		{
 			SetInputVector();
 		}
@@ -108,49 +111,28 @@ namespace BBR.Movement
 			_rigidbody.linearVelocity = forwardVelocity + rightVelocity * _driftMultiplier;
 		}
 
-		private IEnumerator HopCoroutine()
+		private IEnumerator Hop()
 		{
-			_status = MovementStatus.Hopping;
+			MovementHelper.AddState(ref CurrentState, MovementStatus.Hopping);
 
 			float elapsed = 0f;
-			while(elapsed < _jumpDuration)
+			while(elapsed < JumpDuration)
 			{
 				elapsed += Time.deltaTime;
-				float t = _jumpCurve.Evaluate(elapsed / _jumpDuration);
-				VisualTransform.localPosition = new Vector3(0, t * _hopHeight, 0);
+				float t = JumpCurve.Evaluate(elapsed / JumpDuration);
+				VisualTransform.localPosition = new Vector3(0, t * HopHeight, 0);
 				yield return null;
 			}
 
 			VisualTransform.localPosition = Vector3.zero;
-			_status = MovementStatus.None;
-		}
-
-		private IEnumerator JumpCoroutine()
-		{
-			_status = MovementStatus.Jumping;
-
-			float elapsed = 0f;
-			float jumpHeight = _hopHeight * _jumpMultiplier;
-			float jumpDuration = _jumpDuration * (_jumpMultiplier / 2f);
-			float initialHeight = VisualTransform.localPosition.y;
-
-			while(elapsed < jumpDuration)
-			{
-				elapsed += Time.deltaTime;
-				float t = _jumpCurve.Evaluate(elapsed / jumpDuration);
-				VisualTransform.localPosition = new Vector3(0, initialHeight + t * jumpHeight, 0);
-				yield return null;
-			}
-
-			VisualTransform.localPosition = Vector3.zero;
-			_status = MovementStatus.None;
+			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Hopping);
 		}
 
 		private void FallDown()
 		{
-			if(_status == MovementStatus.None)
+			if(!MovementHelper.IsAirborne(CurrentState))
 			{
-				Vector3 rayOrigin = transform.position + Vector3.up * 0.1f; // slight offset up
+				Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
 
 				if(Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 10f, _groundMask)
 					&& hit.point.y < transform.position.y)
@@ -168,37 +150,18 @@ namespace BBR.Movement
 			_steeringInput = inputVector.x;
 			_accelerationInput = inputVector.y;
 
-			if(_status == MovementStatus.None && (_accelerationInput != 0 || _steeringInput != 0))
+			if(!MovementHelper.IsAirborne(CurrentState) && (_accelerationInput != 0 || _steeringInput != 0))
 			{
-				if(_hopCoroutine != null)
+				if(HopCoroutine != null)
 				{
-					StopCoroutine(_hopCoroutine);
+					StopCoroutine(HopCoroutine);
 				}
 
-				_hopCoroutine = HopCoroutine();
-				StartCoroutine(_hopCoroutine);
+				HopCoroutine = Hop();
+				StartCoroutine(HopCoroutine);
 			}
 		}
 
 		protected abstract Vector2 GetMovementInput();
-
-		public void Jump(InputAction.CallbackContext context)
-		{
-			if(context.performed && _status != MovementStatus.Jumping)
-			{
-				if(_hopCoroutine != null)
-				{
-					StopCoroutine(_hopCoroutine);
-				}
-
-				if(_jumpCoroutine != null)
-				{
-					StopCoroutine(_jumpCoroutine);
-				}
-
-				_jumpCoroutine = JumpCoroutine();
-				StartCoroutine(_jumpCoroutine);
-			}
-		}
 	}
 }

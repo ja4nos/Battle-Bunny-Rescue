@@ -252,12 +252,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8b11baa1cb34f21a14d983d127a3340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Movement::BBR.Movement.BunnyMovementPlayer
-  _accelerationMultiplier: 50
+  _accelerationMultiplier: 30
   _turnMultiplier: 3.5
   _driftMultiplier: 0.95
   _dragMultiplier: 1.5
-  _maxSpeed: 7
-  _jumpCurve:
+  _maxSpeed: 70
+  JumpCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -299,12 +299,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _jumpDuration: 0.2
-  _hopHeight: 0.5
-  _jumpMultiplier: 4
+  JumpDuration: 0.2
+  HopHeight: 0.5
   _fallSpeed: 10
-  _visualTransform: {fileID: 3519367253397044754}
+  VisualTransform: {fileID: 3519367253397044754}
   _animator: {fileID: 9024942136986353356}
+  _jumpMultiplier: 4
+  _staminaTimeSeconds: 4
+  _staminaRecoveryRatePerSecond: 0.1
+  _sprintMultiplier: 4
 --- !u!1 &5782487840661318677
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,9 +1,14 @@
-﻿namespace BBR.Movement.Enums
+﻿using System;
+
+namespace BBR.Movement.Enums
 {
+	[Flags]
 	public enum MovementStatus
 	{
-		None,
-		Hopping,
-		Jumping
+		None = 0,
+		Hopping = 1 << 0,
+		Jumping = 1 << 1,
+		Sprinting = 1 << 2,
+		AnyAirborne = Jumping | Hopping
 	}
 }
