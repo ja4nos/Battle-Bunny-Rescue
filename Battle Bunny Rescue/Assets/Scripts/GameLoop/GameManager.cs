@@ -1,6 +1,7 @@
 using BBR.CameraController;
 using BBR.GameLoop.Models;
 using BBR.Movement;
+using Project.Input;
 using UnityEngine;
 using Zenject;
 
@@ -14,6 +15,7 @@ namespace BBR.GameLoop
 		[SerializeField] private Vector3 _offset;
 
 		[Inject] private DiContainer _diContainer;
+		[Inject] private InputController _inputController;
 
 		public void Init(PlayerInfo[] playerInfo)
 		{
@@ -47,7 +49,7 @@ namespace BBR.GameLoop
 				ChangeSpawnColor(_spawnLocations[i], Color.white);
 			}
 
-			_cameraManager.SetFor(players);
+			_cameraManager.SetFor(players, _inputController);
 		}
 
 		private static void ChangeSpawnColor(Transform spawnLocation, Color color)

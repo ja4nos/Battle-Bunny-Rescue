@@ -101,19 +101,19 @@ MonoBehaviour:
   Radius: 5
   Orbits:
     Top:
-      Radius: 3
-      Height: 5
+      Radius: 7
+      Height: 7
     Center:
-      Radius: 5
-      Height: 3
+      Radius: 10
+      Height: 4
     Bottom:
-      Radius: 2.5
+      Radius: 7
       Height: 1.5
-    SplineCurvature: 0.5
+    SplineCurvature: 0.3
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 40.972458
-    Center: 40.972458
+    Value: -165.37886
+    Center: -158.77374
     Range: {x: -180, y: 180}
     Wrap: 1
     Recentering:
@@ -122,7 +122,7 @@ MonoBehaviour:
       Time: 0.5
     Restrictions: 0
   VerticalAxis:
-    Value: 17.5
+    Value: 43.84323
     Center: 17.5
     Range: {x: -10, y: 45}
     Wrap: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
   TargetOffset: {x: 0, y: 2, z: 0}
   Damping: {x: 0.5, y: 0.5}
   Lookahead:
-    Enabled: 1
+    Enabled: 0
     Time: 0.5
     Smoothing: 5
     IgnoreY: 0
@@ -191,7 +191,7 @@ MonoBehaviour:
       Owner: {fileID: 578251273709778629}
       Enabled: 0
       Input:
-        InputAction: {fileID: -178254799216164879, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+        InputAction: {fileID: 0}
         Gain: 1
         CancelDeltaTime: 0
       InputValue: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
       Owner: {fileID: 578251273709778629}
       Enabled: 0
       Input:
-        InputAction: {fileID: -178254799216164879, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+        InputAction: {fileID: 0}
         Gain: -1
         CancelDeltaTime: 0
       InputValue: 0
