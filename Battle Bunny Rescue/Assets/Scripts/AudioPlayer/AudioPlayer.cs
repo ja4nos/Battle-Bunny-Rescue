@@ -14,6 +14,8 @@ namespace BBR.AudioPlayer
 		[SerializeField] [Range(-80, 20)] private float _maximumVolume;
 		[SerializeField] private float _volumeChangeSpeed = 7;
 		[SerializeField] private GameObject _sfxSourceTemplate;
+		[SerializeField] private AudioClip _music;
+		[SerializeField] private float _musicVolume = 0.8f;
 
 		// Hacky hack...
 		private static GameObject _sfxTemplate;
@@ -33,6 +35,7 @@ namespace BBR.AudioPlayer
 		private void Awake()
 		{
 			Set(Resources.Load<AudioMixer>("Mixer"), _minimumVolume, _maximumVolume, _volumeChangeSpeed);
+			PlayMusic(_music, "MusicVolume", volume: _musicVolume);
 		}
 
 		private void OnDisable()
@@ -177,6 +180,7 @@ namespace BBR.AudioPlayer
 			if(volume < 0)
 			{
 				_mixer.GetFloat(volumeLabel, out volume);
+				volume /= _maxVolume - _minVolume;
 			}
 
 			SetVolume(volumeLabel, 0, callback: () =>
@@ -184,7 +188,7 @@ namespace BBR.AudioPlayer
 				_musicSource.clip = clip;
 				_musicSource.loop = isLooping;
 				_musicSource.Play();
-				SetVolume(volumeLabel, (volume - _minVolume) / (_maxVolume - _minVolume));
+				SetVolume(volumeLabel, volume);
 			});
 		}
 
@@ -240,7 +244,8 @@ namespace BBR.AudioPlayer
 			}
 
 			_mixer.GetFloat(volumeLabel, out float currentVolume);
-			_tweens[volumeLabel] = DOVirtual.Float(currentVolume, _minVolume + range * volume, _volumeSpeed, val => _mixer.SetFloat(volumeLabel, val));
+			_tweens[volumeLabel] = DOVirtual.Float(currentVolume, _minVolume + range * volume, _volumeSpeed, val => _mixer.SetFloat(volumeLabel, val))
+				.OnComplete(() => callback?.Invoke());
 		}
 	}
 }

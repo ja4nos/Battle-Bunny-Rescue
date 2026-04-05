@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-   m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -326,7 +326,7 @@ MonoBehaviour:
   _maximumVolume: 0
   _volumeChangeSpeed: 0.15
   _sfxSourceTemplate: {fileID: 350360900}
-  _music: {fileID: 8300000, guid: 0eca4211cfa33524bb87c3352677a50d, type: 3}
+  _music: {fileID: 8300000, guid: 1fe07615224dde0468a417ffd73e741f, type: 3}
 --- !u!4 &1841356178
 Transform:
   m_ObjectHideFlags: 0
