@@ -114,6 +114,7 @@ namespace BBR.Movement
 
 		private IEnumerator JumpCoroutine()
 		{
+			HopSound.Play();
 			Animator.SetTrigger(_walk);
 			Animator.speed = 2;
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Jumping);
