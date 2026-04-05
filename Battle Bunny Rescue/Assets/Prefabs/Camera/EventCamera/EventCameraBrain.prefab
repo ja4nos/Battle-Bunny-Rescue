@@ -56,7 +56,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: EventCameraBrain
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 745409998082150122, guid: 56de44aa6ccaacc44b95bb9ada93e89d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

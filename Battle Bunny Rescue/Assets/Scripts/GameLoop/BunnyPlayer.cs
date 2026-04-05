@@ -11,6 +11,7 @@ namespace BBR.GameLoop
 	{
 		public int PlayerId { get; private set; }
 		public int SavedBunniesCount { get; private set; }
+		public int CapturedBunniesCount { get; private set; }
 		public bool IsStunned => _stunTimeRemainingSeconds > 0f;
 		public bool IsFull => _availableSpots.Count == 0;
 
@@ -19,7 +20,6 @@ namespace BBR.GameLoop
 		[SerializeField] private ParticlePool _deliveryParticles;
 
 		private Transform _playerBase;
-		private int _capturedBunniesCount;
 		private float _stunTimeRemainingSeconds;
 		private CapturedBunniesEvent _capturedBunniesEvent;
 		private SavedBunniesEvent _savedBunniesEvent;
@@ -62,11 +62,11 @@ namespace BBR.GameLoop
 				capturedBunny.transform.localPosition = Vector3.zero;
 				capturedBunny.transform.localRotation = Quaternion.identity;
 				capturedBunny.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-				_capturedBunniesCount++;
+				CapturedBunniesCount++;
 				_capturedBunnies.Add(capturedBunny);
 				_availableSpots.RemoveAt(spotIndex);
 
-				_capturedBunniesEvent.CapturedBunniesCount = _capturedBunniesCount;
+				_capturedBunniesEvent.CapturedBunniesCount = CapturedBunniesCount;
 				EventBus.Fire(_capturedBunniesEvent);
 			}
 		}
@@ -87,9 +87,9 @@ namespace BBR.GameLoop
 					_availableSpots.Add(location);
 				}
 
-				_capturedBunniesCount = 0;
+				CapturedBunniesCount = 0;
 
-				_capturedBunniesEvent.CapturedBunniesCount = _capturedBunniesCount;
+				_capturedBunniesEvent.CapturedBunniesCount = CapturedBunniesCount;
 				EventBus.Fire(_capturedBunniesEvent);
 			}
 		}
@@ -111,15 +111,15 @@ namespace BBR.GameLoop
 					SavedBunniesCount++;
 				}
 
-				if(_capturedBunniesCount > 0)
+				if(CapturedBunniesCount > 0)
 				{
 					_savedBunniesEvent.SavedBunniesCount = SavedBunniesCount;
 					EventBus.Fire(_savedBunniesEvent);
-					CameraShakeEvent cameraShakeEvent = new(0.1f * _capturedBunniesCount, new[] { PlayerId });
+					CameraShakeEvent cameraShakeEvent = new(0.1f * CapturedBunniesCount, new[] { PlayerId });
 					EventBus.Fire(cameraShakeEvent);
 				}
 
-				_capturedBunniesCount = 0;
+				CapturedBunniesCount = 0;
 				_capturedBunnies.Clear();
 				_availableSpots.Clear();
 
@@ -128,7 +128,7 @@ namespace BBR.GameLoop
 					_availableSpots.Add(location);
 				}
 
-				_capturedBunniesEvent.CapturedBunniesCount = _capturedBunniesCount;
+				_capturedBunniesEvent.CapturedBunniesCount = CapturedBunniesCount;
 				EventBus.Fire(_capturedBunniesEvent);
 			}
 		}
