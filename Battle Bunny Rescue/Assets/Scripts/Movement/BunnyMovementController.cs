@@ -33,21 +33,23 @@ namespace BBR.Movement
 		[SerializeField] [FormerlySerializedAs("_visualTransform")]
 		public Transform VisualTransform;
 
-		[SerializeField] private Animator _animator;
+		[SerializeField] [FormerlySerializedAs("_animator")]
+		protected Animator Animator;
+
 		[SerializeField] protected ParticlePool DustParticlePool;
 
 		protected IEnumerator HopCoroutine;
 		protected MovementStatus CurrentState;
+		protected Rigidbody Rigidbody;
 
 		private float _accelerationInput;
 		private float _steeringInput;
 		private float _rotationAngle;
-		private Rigidbody _rigidbody;
 		private int _groundMask;
 
-		private void Start()
+		protected virtual void Start()
 		{
-			_rigidbody = GetComponent<Rigidbody>();
+			Rigidbody = GetComponent<Rigidbody>();
 			_rotationAngle = transform.rotation.eulerAngles.y;
 			_groundMask = 1 << LayerMask.NameToLayer("Ground");
 		}
@@ -72,14 +74,14 @@ namespace BBR.Movement
 				return;
 			}
 
-			_rigidbody.linearDamping = Mathf.Lerp(_rigidbody.linearDamping, _dragMultiplier, Time.deltaTime * _dragMultiplier);
+			Rigidbody.linearDamping = Mathf.Lerp(Rigidbody.linearDamping, _dragMultiplier, Time.deltaTime * _dragMultiplier);
 			Vector3 engineForceVector = transform.forward * (_accelerationInput * _accelerationMultiplier);
-			_rigidbody.AddForce(engineForceVector, ForceMode.Force);
+			Rigidbody.AddForce(engineForceVector, ForceMode.Force);
 		}
 
 		private bool ShouldApplyForce()
 		{
-			float velocityVsForward = Vector3.Dot(transform.forward, _rigidbody.linearVelocity);
+			float velocityVsForward = Vector3.Dot(transform.forward, Rigidbody.linearVelocity);
 
 			if(velocityVsForward > _maxSpeed && _accelerationInput > 0)
 			{
@@ -91,7 +93,7 @@ namespace BBR.Movement
 				return false;
 			}
 
-			if(_rigidbody.linearVelocity.sqrMagnitude > _maxSpeed * _maxSpeed && _accelerationInput > 0)
+			if(Rigidbody.linearVelocity.sqrMagnitude > _maxSpeed * _maxSpeed && _accelerationInput > 0)
 			{
 				return false;
 			}
@@ -102,18 +104,18 @@ namespace BBR.Movement
 		private void ApplySteering()
 		{
 			_rotationAngle += _steeringInput * _turnMultiplier;
-			_rigidbody.MoveRotation(Quaternion.AngleAxis(_rotationAngle, Vector3.up));
+			Rigidbody.MoveRotation(Quaternion.AngleAxis(_rotationAngle, Vector3.up));
 		}
 
 		private void KillOrthogonalVelocity()
 		{
-			Vector3 forwardVelocity = transform.forward * Vector3.Dot(_rigidbody.linearVelocity, transform.forward);
-			Vector3 rightVelocity = transform.right * Vector3.Dot(_rigidbody.linearVelocity, transform.right);
+			Vector3 forwardVelocity = transform.forward * Vector3.Dot(Rigidbody.linearVelocity, transform.forward);
+			Vector3 rightVelocity = transform.right * Vector3.Dot(Rigidbody.linearVelocity, transform.right);
 
-			_rigidbody.linearVelocity = forwardVelocity + rightVelocity * _driftMultiplier;
+			Rigidbody.linearVelocity = forwardVelocity + rightVelocity * _driftMultiplier;
 		}
 
-		private IEnumerator Hop()
+		protected virtual IEnumerator Hop()
 		{
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Hopping);
 
@@ -146,6 +148,11 @@ namespace BBR.Movement
 					float decrease = Math.Min(transform.position.y - hit.point.y, step);
 					transform.position -= new Vector3(0, decrease, 0);
 				}
+				else if(CurrentState.HasFlag(MovementStatus.Bumped) && !CurrentState.HasFlag(MovementStatus.Recoil))
+				{
+					MovementHelper.RemoveState(ref CurrentState, MovementStatus.Bumped);
+					OnPlayerStoppedBumping();
+				}
 			}
 		}
 
@@ -155,7 +162,8 @@ namespace BBR.Movement
 			_steeringInput = inputVector.x;
 			_accelerationInput = inputVector.y;
 
-			if(!MovementHelper.IsAirborne(CurrentState) && (_accelerationInput != 0 || _steeringInput != 0))
+			if(CurrentState != MovementStatus.Bumped && !MovementHelper.IsAirborne(CurrentState)
+				&& (_accelerationInput != 0 || _steeringInput != 0))
 			{
 				if(HopCoroutine != null)
 				{
@@ -166,6 +174,8 @@ namespace BBR.Movement
 				StartCoroutine(HopCoroutine);
 			}
 		}
+
+		protected virtual void OnPlayerStoppedBumping() { }
 
 		protected abstract Vector2 GetMovementInput();
 

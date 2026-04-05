@@ -1,3 +1,4 @@
+using BBR.Events;
 using BBR.Movement;
 using Pool.Pool;
 using System.Collections.Generic;
@@ -37,6 +38,8 @@ namespace BBR.GameLoop
 				actionOnDestroy: OnDestroyItem,
 				maxSize: _maxAmountOfBunnies
 			);
+
+			EventBus.Register<LostBunniesEvent>(OnLostBunnies);
 		}
 
 		private void Update()
@@ -64,23 +67,23 @@ namespace BBR.GameLoop
 			}
 		}
 
-		private void RescueBunny(Collider other)
+		private void RescueBunny(BunnyMovementRandom capturedBunny, Collider other)
 		{
-			if(_availableBunnies.TryDequeue(out BunnyMovementRandom capturedBunny))
+			BunnyPlayer player = other.GetComponentInParent<BunnyPlayer>();
+
+			if(player && !player.IsStunned && !player.IsFull)
 			{
-				BunnyPlayer player = other.GetComponentInParent<BunnyPlayer>();
-				if(player)
-				{
-					GameObject bunny = capturedBunny.gameObject;
-					capturedBunny.VisualTransform.localPosition = Vector3.zero;
-					ParticleSystem rescueParticle = _bunnyRescueParticlePool.Get();
-					rescueParticle.transform.position = player.transform.position;
-					rescueParticle.Play();
-					Destroy(capturedBunny);
-					Destroy(bunny.GetComponent<Collider>());
-					Destroy(bunny.GetComponent<Rigidbody>());
-					player.AddBunny(bunny);
-				}
+				BunnyMovementRandom bunny = Instantiate(capturedBunny);
+				bunny.VisualTransform.localPosition = Vector3.zero;
+				ParticleSystem rescueParticle = _bunnyRescueParticlePool.Get();
+				rescueParticle.transform.position = player.transform.position;
+				rescueParticle.Play();
+				Destroy(bunny);
+				Destroy(bunny.GetComponent<Collider>());
+				Destroy(bunny.GetComponent<Rigidbody>());
+				player.AddBunny(bunny.gameObject);
+
+				_pool.Release(capturedBunny);
 			}
 		}
 
@@ -102,9 +105,11 @@ namespace BBR.GameLoop
 			bunny.gameObject.SetActive(true);
 		}
 
-		private static void OnRelease(BunnyMovementRandom bunny)
+		private void OnRelease(BunnyMovementRandom bunny)
 		{
 			bunny.gameObject.SetActive(false);
+			bunny.transform.SetParent(transform);
+			_elapsedTime = 0f;
 		}
 
 		private static void OnDestroyItem(BunnyMovementRandom bunny)
@@ -129,8 +134,20 @@ namespace BBR.GameLoop
 			return candidate;
 		}
 
+		private void OnLostBunnies(LostBunniesEvent evt)
+		{
+			foreach(GameObject lostBunny in evt.LostBunnies)
+			{
+				_pool.Get(out BunnyMovementRandom bunny);
+				_availableBunnies.Enqueue(bunny);
+				bunny.transform.position = lostBunny.transform.position;
+				Destroy(lostBunny);
+			}
+		}
+
 		private void OnDestroy()
 		{
+			EventBus.Unregister<LostBunniesEvent>(OnLostBunnies);
 			_pool.Dispose();
 		}
 	}

@@ -190,7 +190,7 @@ MonoBehaviour:
   _menuUIDocument: {fileID: 366609267}
   _gameSceneGroup: {fileID: 11400000, guid: e254f28d0627e3241bf43d7d8f09490c, type: 2}
   _playerSelectionMenuSceneGroup: {fileID: 11400000, guid: 828b503e5d39eb34ba7a662ad875ef41, type: 2}
-  _playerVisualsPrefab: {fileID: 67879766384610201, guid: 59648229c3b50e54cb372826f2fafb76, type: 3}
+  _playerVisualsPrefab: {fileID: 2945882380278853953, guid: 22ba586428bc2ec489b2317dcff357f1, type: 3}
 --- !u!1 &178447876604642129
 GameObject:
   m_ObjectHideFlags: 0

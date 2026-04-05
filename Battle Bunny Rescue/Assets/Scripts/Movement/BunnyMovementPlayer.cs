@@ -1,6 +1,8 @@
 using BBR.Events;
+using BBR.Events.Camera;
 using BBR.Movement.Enums;
 using BBR.Movement.Helpers;
+using Pool.Pool;
 using Project.Input;
 using Project.Input.Models;
 using System.Collections;
@@ -16,6 +18,9 @@ namespace BBR.Movement
 		[SerializeField] private float _staminaTimeSeconds = 4f;
 		[SerializeField] private float _staminaRecoveryRatePerSecond = 1f;
 		[SerializeField] private float _sprintMultiplier = 4f;
+		[SerializeField] private Vector2 _bumpForce = new(2f, 2f);
+		[SerializeField] private Transform _bumpTransform;
+		[SerializeField] private ParticlePool _bumpParticles;
 
 		[Inject] private InputController _inputController;
 
@@ -23,8 +28,12 @@ namespace BBR.Movement
 		private InputCallback _sprintInput;
 		private int _playerId;
 		private IEnumerator _jumpCoroutine;
+		private IEnumerator _bumpCoroutine;
 		private float _remainingStamina;
 		private StaminaChangedEvent _staminaChangedEvent;
+
+		private static readonly int _loop = Animator.StringToHash("Loop");
+		private static readonly int _walk = Animator.StringToHash("Walk");
 
 		public void Init(int playerId)
 		{
@@ -35,6 +44,12 @@ namespace BBR.Movement
 			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
 
 			_remainingStamina = _staminaTimeSeconds;
+		}
+
+		protected override void Start()
+		{
+			base.Start();
+			Animator.SetBool(_loop, false);
 		}
 
 		protected override void Update()
@@ -71,7 +86,8 @@ namespace BBR.Movement
 
 		private void Jump(InputAction.CallbackContext context)
 		{
-			if(context.performed && !CurrentState.HasFlag(MovementStatus.Jumping))
+			if(context.performed && !CurrentState.HasFlag(MovementStatus.Jumping)
+								&& !CurrentState.HasFlag(MovementStatus.Bumped))
 			{
 				if(HopCoroutine != null)
 				{
@@ -88,8 +104,18 @@ namespace BBR.Movement
 			}
 		}
 
+		protected override IEnumerator Hop()
+		{
+			Animator.SetTrigger(_walk);
+			Animator.speed = 4;
+			yield return base.Hop();
+			Animator.speed = 1;
+		}
+
 		private IEnumerator JumpCoroutine()
 		{
+			Animator.SetTrigger(_walk);
+			Animator.speed = 2;
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Jumping);
 
 			float elapsed = 0f;
@@ -110,11 +136,72 @@ namespace BBR.Movement
 			particles.transform.position = VisualTransform.position;
 			particles.Play();
 			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Jumping);
+			Animator.speed = 1;
+		}
+
+		private void OnTriggerEnter(Collider other)
+		{
+			if(other.transform.CompareTag("Player"))
+			{
+				BunnyMovementPlayer otherPlayer = other.GetComponentInParent<BunnyMovementPlayer>();
+				ParticleSystem bumpParticles = _bumpParticles.Get();
+				bumpParticles.transform.position = _bumpTransform.position;
+				bumpParticles.Play();
+				CameraShakeEvent cameraShakeEvent = new(1, new[] { _playerId, otherPlayer._playerId });
+				EventBus.Fire(cameraShakeEvent);
+				otherPlayer.Bump(transform.forward);
+			}
+		}
+
+		public void Bump(Vector3 direction)
+		{
+			if(HopCoroutine != null)
+			{
+				StopCoroutine(HopCoroutine);
+			}
+
+			if(_jumpCoroutine != null)
+			{
+				StopCoroutine(_jumpCoroutine);
+			}
+
+			_bumpCoroutine = BumpCoroutine(direction);
+			StartCoroutine(_bumpCoroutine);
+		}
+
+		private IEnumerator BumpCoroutine(Vector3 direction)
+		{
+			CurrentState = MovementStatus.Bumped;
+			MovementHelper.AddState(ref CurrentState, MovementStatus.Recoil);
+
+			float elapsed = 0f;
+			float jumpHeight = HopHeight * _jumpMultiplier * _bumpForce.y;
+			float jumpDuration = JumpDuration * (_jumpMultiplier / 2f);
+			float initialHeight = VisualTransform.localPosition.y;
+
+			while(elapsed < jumpDuration)
+			{
+				elapsed += Time.deltaTime;
+				float t = JumpCurve.Evaluate(elapsed / jumpDuration);
+				VisualTransform.localPosition = new Vector3(0, initialHeight + t * jumpHeight, 0);
+				Rigidbody.AddForce(direction * _bumpForce.x, ForceMode.Impulse);
+				yield return null;
+			}
+
+			VisualTransform.localPosition = Vector3.zero;
+			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Recoil);
+		}
+
+		protected override void OnPlayerStoppedBumping()
+		{
+			base.OnPlayerStoppedBumping();
+			EventBus.Fire(new PlayerBumpedEvent(_playerId));
 		}
 
 		protected override void OnDestroy()
 		{
 			_inputController.UnsubscribeAction("Jump", "Player", _jumpInput);
+			_bumpParticles.Dispose();
 			base.OnDestroy();
 		}
 	}
