@@ -115,7 +115,7 @@ namespace BBR.GameLoop
 				{
 					_savedBunniesEvent.SavedBunniesCount = SavedBunniesCount;
 					EventBus.Fire(_savedBunniesEvent);
-					CameraShakeEvent cameraShakeEvent = new(0.1f * _capturedBunniesCount, new[] { _playerId });
+					CameraShakeEvent cameraShakeEvent = new(0.1f * _capturedBunniesCount, new[] { PlayerId });
 					EventBus.Fire(cameraShakeEvent);
 				}
 
