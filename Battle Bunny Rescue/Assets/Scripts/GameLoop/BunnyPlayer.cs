@@ -105,7 +105,7 @@ namespace BBR.GameLoop
 					float sign = other.bounds.center.y < 0 ? -1 : 1;
 					capturedBunny.transform.position = new Vector3(Random.Range(other.bounds.center.x - other.bounds.extents.x, other.bounds.center.x + other.bounds.extents.x), other.bounds.center.y - other.bounds.extents.y * sign, Random.Range(other.bounds.center.z - other.bounds.extents.z, other.bounds.center.z + other.bounds.extents.z));
 					capturedBunny.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-					ParticleSystem particles = _deliveryParticles.Get(other.transform.parent);
+					ParticleSystem particles = _deliveryParticles.Get(capturedBunny.transform);
 					particles.transform.position = capturedBunny.transform.position;
 					particles.Play();
 					SavedBunniesCount++;

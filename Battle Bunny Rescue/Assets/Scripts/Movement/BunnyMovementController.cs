@@ -135,7 +135,7 @@ namespace BBR.Movement
 			}
 
 			VisualTransform.localPosition = Vector3.zero;
-			ParticleSystem particles = DustParticlePool.Get();
+			ParticleSystem particles = DustParticlePool.Get(transform);
 			particles.transform.position = VisualTransform.position;
 			particles.Play();
 			if(HopSound)
