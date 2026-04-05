@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42f80b9bd5b4be8b664c99b4456fe00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Camera::BBR.CameraController.EventCamera
-  _rotationSpeed: 30
+  _rotationSpeed: 0
   _cameraPrefab: {fileID: 5949129147926445619, guid: e1e6e5b0e2260ab4689f4ee1d682700a, type: 3}
   _cinemachineCameraPrefab: {fileID: 1982993695666362683, guid: b381f229f353193438d506dd99b8eb05, type: 3}
   _size: {x: 512, y: 512}
@@ -96,3 +96,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _offset: {x: 5, y: 5, z: 0}
