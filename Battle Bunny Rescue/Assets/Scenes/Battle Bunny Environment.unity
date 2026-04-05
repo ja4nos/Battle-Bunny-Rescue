@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Project.GameLoop::BBR.GameLoop.GameTimer
   _uiDocument: {fileID: 1251624693}
-  _matchLengthSeconds: 5
+  _matchLengthSeconds: 180
   _startColor: {r: 0.37610483, g: 0.8679245, b: 0.2988608, a: 1}
   _endColor: {r: 0.7735849, g: 0, b: 0, a: 1}
 --- !u!4 &781726147
