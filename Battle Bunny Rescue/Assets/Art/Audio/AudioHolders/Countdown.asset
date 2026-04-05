@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70f7e6c1f56407a9cefdb487665bc7e, type: 3}
+  m_Name: Countdown
+  m_EditorClassIdentifier: BBR.AudioPlayer::BBR.AudioPlayer.AudioHolder
+  _audioClips:
+  - {fileID: 8300000, guid: f9f833b1e109b2346976d0272242e162, type: 3}
+  _minPitch: 1
+  _maxPitch: 1
+  _volume: 1
