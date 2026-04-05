@@ -1,3 +1,4 @@
+using BBR.AudioPlayer;
 using BBR.Movement.Enums;
 using BBR.Movement.Helpers;
 using Pool.Pool;
@@ -39,6 +40,8 @@ namespace BBR.Movement
 		[SerializeField] private Collider _collider;
 
 		[SerializeField] protected ParticlePool DustParticlePool;
+
+		[SerializeField] protected AudioHolder HopSound;
 
 		protected IEnumerator HopCoroutine;
 		protected MovementStatus CurrentState;
@@ -135,6 +138,10 @@ namespace BBR.Movement
 			ParticleSystem particles = DustParticlePool.Get();
 			particles.transform.position = VisualTransform.position;
 			particles.Play();
+			if(HopSound)
+			{
+				HopSound.Play();
+			}
 			MovementHelper.RemoveState(ref CurrentState, MovementStatus.Hopping);
 		}
 
@@ -192,7 +199,7 @@ namespace BBR.Movement
 			_accelerationInput = inputVector.y;
 
 			if(CurrentState != MovementStatus.Bumped && !MovementHelper.IsAirborne(CurrentState)
-				&& (_accelerationInput != 0 || _steeringInput != 0))
+													&& (_accelerationInput != 0 || _steeringInput != 0))
 			{
 				if(HopCoroutine != null)
 				{

@@ -24,6 +24,8 @@ namespace Project.Menu
 			playButton.clicked += OnPlayClicked;
 			optionsButton.clicked += OnOptionsClicked;
 			exitButton.clicked += OnExitClicked;
+
+			playButton.Focus();
 		}
 
 		private static void OnPlayClicked()

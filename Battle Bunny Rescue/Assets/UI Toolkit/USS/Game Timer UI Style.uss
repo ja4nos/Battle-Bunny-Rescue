@@ -1,0 +1,11 @@
+.unity-progress-bar__container {
+    min-height: auto;
+    max-height: auto;
+}
+
+.unity-progress-bar__background {
+    height: 100px;
+}
+
+.unity-progress-bar__progress {
+}

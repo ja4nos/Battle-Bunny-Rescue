@@ -95,9 +95,8 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 454103876346734649, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
     - {fileID: 6757982834168425011, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
-    m_RemovedGameObjects:
-    - {fileID: 6670933235158276851, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
-    - {fileID: 3130991169430642243, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+    m_RemovedGameObjects: [{fileID: 6670933235158276851, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3},
+      {fileID: 3130991169430642243, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}]
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4840622431220187581, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
@@ -177,6 +176,7 @@ MonoBehaviour:
   DustParticlePool:
     _parent: {fileID: 9219051180804151488}
     _prefab: {fileID: 8462040170210329842, guid: a28c09a93e975e44f9ea824d27e27ebc, type: 3}
+  _hopSound: {fileID: 0}
   _directionChangeFrequencySeconds: 2
 --- !u!65 &1867204861076481741 stripped
 BoxCollider:
