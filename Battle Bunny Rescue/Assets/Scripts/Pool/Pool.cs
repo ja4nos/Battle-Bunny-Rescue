@@ -15,12 +15,13 @@ namespace Pool.Pool
 
 		private readonly List<T> _pool = new();
 
-		public T Get()
+		public T Get(Transform parent = null)
 		{
 			foreach(T item in _pool)
 			{
 				if(!item.gameObject.activeSelf)
 				{
+					item.transform.SetParent(parent);
 					item.gameObject.SetActive(true);
 					return item;
 				}
