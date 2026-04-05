@@ -1,5 +1,13 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="player-ui" style="flex-grow: 1;">
+        <ui:VisualElement name="carrot-juice-jar">
+            <ui:VisualElement name="mask">
+                <ui:Image name="juice" style="position: absolute; overflow: hidden; background-image: url(&quot;project://database/Assets/Art/2D/Icons/jar-fill.svg?fileID=7388822144124034973&amp;guid=6ef1d96d41e45414d9bcde1d50c66551&amp;type=3#jar-fill&quot;); opacity: 1; width: 93px; left: 2px; height: 120px; bottom: 3px;"/>
+            </ui:VisualElement>
+            <ui:Image name="jar" style="background-image: url(&quot;project://database/Assets/Art/2D/Icons/jar.svg?fileID=7388822144124034973&amp;guid=7f2e54a98c5838e40b52f7b4280bfca9&amp;type=3#jar&quot;);">
+                <ui:Image name="carrot" style="background-image: url(&quot;project://database/Assets/Art/2D/Icons/carrot.svg?fileID=7388822144124034973&amp;guid=28d4fa71beed39f479d75c2288cee8ee&amp;type=3#carrot&quot;);"/>
+            </ui:Image>
+        </ui:VisualElement>
         <ui:VisualElement name="basket">
             <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>
             <ui:Image source="project://database/Assets/Art/2D/Icons/small-bunny-head.png?fileID=2800000&amp;guid=9e1a3a08c34110b42991f3624688241f&amp;type=3#small-bunny-head" enabled="false"/>

@@ -16,6 +16,7 @@ namespace Project.Menu
 		private VisualElement _score;
 		private Label _scoreLabel;
 		private List<Image> _basketBunnies;
+		private VisualElement _staminaMask;
 
 		private int _savedBunniesCount;
 
@@ -24,6 +25,7 @@ namespace Project.Menu
 			_playerId = playerId;
 			EventBus.Register<SavedBunniesEvent>(OnSavedBunniesChanged);
 			EventBus.Register<CapturedBunniesEvent>(OnCapturedBunniesChanged);
+			EventBus.Register<StaminaChangedEvent>(OnStaminaChanged);
 		}
 
 		public void OnEnable(VisualElement root)
@@ -33,6 +35,7 @@ namespace Project.Menu
 			_scoreLabel = root.Q<Label>(name: "count");
 			VisualElement basket = root.Q(name: "basket");
 			_basketBunnies = basket.Query<Image>().Build().ToList();
+			_staminaMask = root.Q<VisualElement>(name: "mask");
 
 			Color color = PlayerHelper.GetPlayerColor(_playerId);
 
@@ -77,10 +80,20 @@ namespace Project.Menu
 			}
 		}
 
+		private void OnStaminaChanged(StaminaChangedEvent evt)
+		{
+			if(_staminaMask != null && _playerId == evt.PlayerId)
+			{
+				Debug.Log($"Stamina percentage: {evt.StaminaPercentage}");
+				_staminaMask.style.height = new StyleLength(new Length(evt.StaminaPercentage, LengthUnit.Percent));
+			}
+		}
+
 		public void Dispose()
 		{
 			EventBus.Unregister<SavedBunniesEvent>(OnSavedBunniesChanged);
 			EventBus.Unregister<CapturedBunniesEvent>(OnCapturedBunniesChanged);
+			EventBus.Unregister<StaminaChangedEvent>(OnStaminaChanged);
 		}
 	}
 }

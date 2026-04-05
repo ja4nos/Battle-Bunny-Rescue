@@ -1,3 +1,4 @@
+using BBR.Events;
 using BBR.Movement.Enums;
 using BBR.Movement.Helpers;
 using Project.Input;
@@ -23,18 +24,26 @@ namespace BBR.Movement
 		private int _playerId;
 		private IEnumerator _jumpCoroutine;
 		private float _remainingStamina;
+		private StaminaChangedEvent _staminaChangedEvent;
 
 		public void Init(int playerId)
 		{
 			_playerId = playerId;
+			_staminaChangedEvent = new StaminaChangedEvent(playerId);
 
 			_jumpInput = new InputCallback { PlayerId = _playerId, PerformedCallback = Jump };
 			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
+
+			_remainingStamina = _staminaTimeSeconds;
 		}
 
 		protected override void Update()
 		{
 			_remainingStamina = Mathf.Min(_remainingStamina + Time.deltaTime * _staminaRecoveryRatePerSecond, _staminaTimeSeconds);
+
+			_staminaChangedEvent.StaminaPercentage = _remainingStamina / _staminaTimeSeconds * 100f;
+			EventBus.Fire(_staminaChangedEvent);
+
 			base.Update();
 		}
 
@@ -50,6 +59,9 @@ namespace BBR.Movement
 				{
 					sprintMultiplier.y = _sprintMultiplier;
 				}
+
+				_staminaChangedEvent.StaminaPercentage = _remainingStamina / _staminaTimeSeconds * 100f;
+				EventBus.Fire(_staminaChangedEvent);
 			}
 
 			return _inputController.TryReadValue("Move", "Player", _playerId, out Vector2 inputVector)
