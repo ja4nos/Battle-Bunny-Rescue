@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ee5e298338f2d394fb3162a8c204b9fe, type: 3}
       propertyPath: m_Name
-      value: Shrub D
+      value: Shrub A
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
