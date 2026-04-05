@@ -108,8 +108,8 @@ namespace Project.Menu
 			BunnyPlayer[] players = DestroyComponents<BunnyPlayer>();
 
 			List<IGrouping<int, (int PlayerId, int SavedBunniesCount)>> playerScores = players
-				.Select(bp => (bp.PlayerId, bp.SavedBunniesCount))
-				.GroupBy(kvp => kvp.SavedBunniesCount)
+				.Select(bp => (bp.PlayerId, bp.SavedBunniesCount + bp.CapturedBunniesCount))
+				.GroupBy(kvp => kvp.Item2)
 				.OrderByDescending(group => group.Key)
 				.ToList();
 
