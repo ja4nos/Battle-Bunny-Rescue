@@ -7,13 +7,6 @@
       "dependencies": {},
       "hash": "a9e27c03d411d2fca01cc7410c24c97cd77cb539"
     },
-    "com.handzlikchris.fastscriptreload": {
-      "version": "https://github.com/handzlikchris/FastScriptReload.git?path=Assets",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "51140b71d9e5df1de231b33ec20ee089b18bebec"
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
