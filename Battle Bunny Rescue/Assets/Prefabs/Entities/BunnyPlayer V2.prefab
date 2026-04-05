@@ -395,15 +395,17 @@ MonoBehaviour:
     m_RotationOrder: 4
   JumpDuration: 0.2
   HopHeight: 0.5
-  _fallSpeed: 10
+  _fallSpeed: 20
   VisualTransform: {fileID: 7910454620339271352}
   Animator: {fileID: 1733878594083962838}
+  _collider: {fileID: 780895242124593028}
   DustParticlePool:
     _parent: {fileID: 2684991271876753949}
     _prefab: {fileID: 7098037057617871963, guid: c5908276e6ae0644ca2e08d288e5ec6a, type: 3}
-  _jumpMultiplier: 4
-  _staminaTimeSeconds: 4
-  _staminaRecoveryRatePerSecond: 0.1
+  _jumpMultiplier: 9
+  _jumpAnimationSpeed: 1
+  _staminaTimeSeconds: 2
+  _staminaRecoveryRatePerSecond: 0.2
   _sprintMultiplier: 4
   _bumpForce: {x: 10, y: 2}
   _bumpTransform: {fileID: 376684421696072627}
