@@ -16,6 +16,7 @@ namespace BBR.Movement
 	public class BunnyMovementPlayer : BunnyMovementController
 	{
 		[SerializeField] private float _jumpMultiplier = 4f;
+		[SerializeField] private float _jumpAnimationSpeed = 2f;
 		[SerializeField] private float _staminaTimeSeconds = 4f;
 		[SerializeField] private float _staminaRecoveryRatePerSecond = 1f;
 		[SerializeField] private float _sprintMultiplier = 4f;
@@ -23,6 +24,7 @@ namespace BBR.Movement
 		[SerializeField] private Transform _bumpTransform;
 		[SerializeField] private ParticlePool _bumpParticles;
 		[SerializeField] private AudioHolder _hitSound;
+		[SerializeField] private AudioHolder _jumpSound;
 
 		[Inject] private InputController _inputController;
 
@@ -89,7 +91,7 @@ namespace BBR.Movement
 		private void Jump(InputAction.CallbackContext context)
 		{
 			if(context.performed && !CurrentState.HasFlag(MovementStatus.Jumping)
-								&& !CurrentState.HasFlag(MovementStatus.Bumped))
+				&& !CurrentState.HasFlag(MovementStatus.Bumped))
 			{
 				if(HopCoroutine != null)
 				{
@@ -116,21 +118,24 @@ namespace BBR.Movement
 
 		private IEnumerator JumpCoroutine()
 		{
-			HopSound.Play();
+			_jumpSound.Play();
 			Animator.SetTrigger(_walk);
-			Animator.speed = 2;
+			Animator.speed = _jumpAnimationSpeed;
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Jumping);
+			MovementHelper.AddState(ref CurrentState, MovementStatus.InJump);
 
 			float elapsed = 0f;
 			float jumpHeight = HopHeight * _jumpMultiplier;
 			float jumpDuration = JumpDuration * (_jumpMultiplier / 2f);
 			float initialHeight = VisualTransform.localPosition.y;
+			float initialTransformHeight = VisualTransform.position.y;
 
 			while(elapsed < jumpDuration)
 			{
 				elapsed += Time.deltaTime;
 				float t = JumpCurve.Evaluate(elapsed / jumpDuration);
-				VisualTransform.localPosition = new Vector3(0, initialHeight + t * jumpHeight, 0);
+				VisualTransform.localPosition = new Vector3(0, initialHeight - Mathf.Max(0, transform.position.y - initialTransformHeight) + t * jumpHeight, 0);
+				VisualTransform.position = new Vector3(VisualTransform.position.x, Mathf.Max(transform.position.y, VisualTransform.position.y), VisualTransform.position.z);
 				yield return null;
 			}
 
@@ -199,6 +204,7 @@ namespace BBR.Movement
 		protected override void OnPlayerStoppedBumping()
 		{
 			base.OnPlayerStoppedBumping();
+			HopSound.Play();
 			EventBus.Fire(new PlayerBumpedEvent(_playerId));
 		}
 

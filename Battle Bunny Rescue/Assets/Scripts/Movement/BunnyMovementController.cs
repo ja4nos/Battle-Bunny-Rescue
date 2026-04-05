@@ -37,6 +37,8 @@ namespace BBR.Movement
 		[SerializeField] [FormerlySerializedAs("_animator")]
 		protected Animator Animator;
 
+		[SerializeField] private Collider _collider;
+
 		[SerializeField] protected ParticlePool DustParticlePool;
 
 		[SerializeField] protected AudioHolder HopSound;
@@ -60,6 +62,7 @@ namespace BBR.Movement
 		protected virtual void Update()
 		{
 			SetInputVector();
+			FallDown();
 		}
 
 		private void FixedUpdate()
@@ -144,21 +147,53 @@ namespace BBR.Movement
 
 		private void FallDown()
 		{
-			if(!MovementHelper.IsAirborne(CurrentState))
-			{
-				Vector3 rayOrigin = transform.position + Vector3.up * 0.1f;
+			float? maxHitPoint = null;
+			Vector3 colliderSize = transform.lossyScale;
 
-				if(Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 10f, _groundMask)
-					&& hit.point.y < transform.position.y)
+			Vector3 rayOrigin = transform.position + Vector3.up * 100f;
+
+			if(Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 1000f, _groundMask))
+			{
+				maxHitPoint = hit.point.y;
+			}
+
+			rayOrigin = _collider.bounds.center + colliderSize + Vector3.up * 100f;
+
+			if(Physics.Raycast(rayOrigin, Vector3.down, out hit, 1000f, _groundMask))
+			{
+				maxHitPoint = maxHitPoint.HasValue ? Mathf.Max(hit.point.y, maxHitPoint.Value) : hit.point.y;
+			}
+
+			rayOrigin = _collider.bounds.center - colliderSize + Vector3.up * 100f;
+
+			if(Physics.Raycast(rayOrigin, Vector3.down, out hit, 1000f, _groundMask))
+			{
+				maxHitPoint = maxHitPoint.HasValue ? Mathf.Max(hit.point.y, maxHitPoint.Value) : hit.point.y;
+			}
+
+			if(maxHitPoint.HasValue)
+			{
+				if(maxHitPoint.Value < transform.position.y)
 				{
 					float step = _fallSpeed * Time.deltaTime;
-					float decrease = Math.Min(transform.position.y - hit.point.y, step);
+					float decrease = Math.Min(transform.position.y - maxHitPoint.Value, step);
 					transform.position -= new Vector3(0, decrease, 0);
 				}
-				else if(CurrentState.HasFlag(MovementStatus.Bumped) && !CurrentState.HasFlag(MovementStatus.Recoil))
+				else
 				{
-					MovementHelper.RemoveState(ref CurrentState, MovementStatus.Bumped);
-					OnPlayerStoppedBumping();
+					transform.position = new Vector3(transform.position.x, maxHitPoint.Value, transform.position.z);
+
+					if(!CurrentState.HasFlag(MovementStatus.Jumping) && CurrentState.HasFlag(MovementStatus.InJump))
+					{
+						HopSound.Play();
+						MovementHelper.RemoveState(ref CurrentState, MovementStatus.InJump);
+					}
+
+					if(CurrentState.HasFlag(MovementStatus.Bumped) && !CurrentState.HasFlag(MovementStatus.Recoil))
+					{
+						MovementHelper.RemoveState(ref CurrentState, MovementStatus.Bumped);
+						OnPlayerStoppedBumping();
+					}
 				}
 			}
 		}
@@ -170,7 +205,7 @@ namespace BBR.Movement
 			_accelerationInput = inputVector.y;
 
 			if(CurrentState != MovementStatus.Bumped && !MovementHelper.IsAirborne(CurrentState)
-													&& (_accelerationInput != 0 || _steeringInput != 0))
+				&& (_accelerationInput != 0 || _steeringInput != 0))
 			{
 				if(HopCoroutine != null)
 				{

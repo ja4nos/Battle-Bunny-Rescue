@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 455cc91dd111d0643a93e024b06edc64
+guid: d87cac2047582f04c9c07a442a12ec73
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,8 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Dirt
-    second: {fileID: 2100000, guid: 2864d1c27574b6b4fa25aa1273734958, type: 2}
+      name: Flags
+    second: {fileID: 2100000, guid: 7491c7bf72e8a634c8a3b51f9385ed97, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood A
+    second: {fileID: 2100000, guid: f278691b3369cc04a8c96a5ab4aef5f7, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -44,10 +49,10 @@ ModelImporter:
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     importPhysicalCameras: 1
-    importVisibility: 0
-    importBlendShapes: 0
-    importCameras: 0
-    importLights: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
@@ -55,7 +60,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
-    bakeAxisConversion: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
