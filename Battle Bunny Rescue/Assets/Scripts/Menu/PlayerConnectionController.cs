@@ -1,4 +1,5 @@
-﻿using Project.Input;
+﻿using BBR.AudioPlayer;
+using Project.Input;
 using Project.Input.Models;
 using System;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace Project.Menu
 		[Inject] private InputController _inputController;
 
 		private readonly PlayerVisualsRenderer _playerVisualsRenderer;
+		private readonly AudioHolder _clickSfx;
 
 		private float _connectedTime;
 		private VisualElement _root;
@@ -31,9 +33,10 @@ namespace Project.Menu
 		private InputCallback _readyCallback;
 		private InputCallback _navigateCallback;
 
-		public PlayerConnectionController(GameObject playerVisualsPrefab, Transform parentTransform, int playerId)
+		public PlayerConnectionController(GameObject playerVisualsPrefab, Transform parentTransform, int playerId, AudioHolder clickSfx)
 		{
 			_playerVisualsRenderer = new PlayerVisualsRenderer(playerVisualsPrefab, parentTransform, playerId, spin: true);
+			_clickSfx = clickSfx;
 			_disconnectCallback = new InputCallback { PerformedCallback = OnDisconnect };
 			_readyCallback = new InputCallback { PerformedCallback = OnReady };
 			_navigateCallback = new InputCallback { StartedCallback = OnNavigate, PerformedCallback = OnNavigate };
@@ -53,6 +56,8 @@ namespace Project.Menu
 				{
 					_playerVisualsRenderer.SetPreviousAvailablePlayerColor();
 				}
+
+				_clickSfx.Play();
 			}
 		}
 
@@ -142,6 +147,8 @@ namespace Project.Menu
 		{
 			_inputController?.UnsubscribeAction("Disconnect", "UI", _disconnectCallback);
 			_inputController?.UnsubscribeAction("Ready", "UI", _readyCallback);
+			_inputController?.UnsubscribeAction("Navigate", "UI", _navigateCallback);
+
 			_playerVisualsRenderer.Dispose();
 		}
 	}

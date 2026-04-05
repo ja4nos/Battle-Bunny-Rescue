@@ -1,4 +1,5 @@
-﻿using BBR.CameraController;
+﻿using BBR.AudioPlayer;
+using BBR.CameraController;
 using BBR.Events;
 using BBR.GameLoop;
 using BBR.Movement;
@@ -28,6 +29,7 @@ namespace Project.Menu
 		[SerializeField] private SceneGroup _mainMenuSceneGroup;
 		[SerializeField] private GameObject _playerVisualsPrefab;
 		[SerializeField] private AnimationCurve _jumpAnimationCurve;
+		[SerializeField] private AudioHolder _clickSfx;
 
 		[Inject] private InputController _inputController;
 
@@ -154,6 +156,8 @@ namespace Project.Menu
 
 		private void OnExitClicked()
 		{
+			_clickSfx.Play();
+
 			foreach(string sceneName in _gameSceneGroup.Scenes)
 			{
 				SceneManager.UnloadSceneAsync(sceneName);

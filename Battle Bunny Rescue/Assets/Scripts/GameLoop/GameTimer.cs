@@ -1,6 +1,5 @@
 ﻿using BBR.Events;
 using System;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Debug = UnityEngine.Debug;
@@ -13,9 +12,9 @@ namespace BBR.GameLoop
 		[SerializeField] private double _matchLengthSeconds;
 		[SerializeField] private Gradient _gradient;
 
-		private Stopwatch _stopwatch;
 		private ProgressBar _progressBar;
 		private VisualElement _fill;
+		private float _secondsElapsed;
 		private bool _countdownStarted;
 
 		private void Awake()
@@ -27,28 +26,27 @@ namespace BBR.GameLoop
 
 			_progressBar = _uiDocument.rootVisualElement.Q<ProgressBar>();
 			_fill = _progressBar.Q<VisualElement>(className: "unity-progress-bar__progress");
-
-			_stopwatch = new Stopwatch();
-			_stopwatch.Start();
 		}
 
 		private void Update()
 		{
-			float remainingPercentage = 1 - (float) Math.Min(_stopwatch.Elapsed.TotalSeconds / _matchLengthSeconds, 1);
+			_secondsElapsed += Time.deltaTime;
+
+			float remainingPercentage = 1 - (float) Math.Min(_secondsElapsed / _matchLengthSeconds, 1);
 			Color color = _gradient.Evaluate(remainingPercentage);
 
 			_progressBar.value = remainingPercentage;
 			_fill.style.backgroundColor = color;
 
-			if(!_countdownStarted && _matchLengthSeconds - _stopwatch.Elapsed.TotalSeconds <= 10)
+			if(!_countdownStarted && _matchLengthSeconds - _secondsElapsed <= 10)
 			{
+				Debug.Log("Final countdown!!!");
 				_countdownStarted = true;
-				//EventBus.Fire(new countdo);
+				EventBus.Fire(new StartCountdownEvent());
 			}
 
-			if(_stopwatch.Elapsed.TotalSeconds >= _matchLengthSeconds)
+			if(_secondsElapsed >= _matchLengthSeconds)
 			{
-				_stopwatch.Stop();
 				enabled = false;
 				EventBus.Fire(new GameEndEvent());
 			}

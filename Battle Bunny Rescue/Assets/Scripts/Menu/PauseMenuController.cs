@@ -1,4 +1,5 @@
-﻿using BBR.GameLoop;
+﻿using BBR.AudioPlayer;
+using BBR.GameLoop;
 using Project.Input;
 using Project.Input.Models;
 using Project.Utilities;
@@ -15,6 +16,7 @@ namespace Project.Menu
 		[SerializeField] private UIDocument _menuUIDocument;
 		[SerializeField] private SceneGroup _gameSceneGroup;
 		[SerializeField] private SceneGroup _mainMenuSceneGroup;
+		[SerializeField] private AudioHolder _clickSfx;
 
 		[Inject] private InputController _inputController;
 
@@ -27,6 +29,7 @@ namespace Project.Menu
 			if(_menuUIDocument == null)
 			{
 				Debug.LogError($"No pause menu UI document has been assigned to {nameof(PauseMenuController)}!", this);
+				Destroy(this);
 				return;
 			}
 
@@ -44,6 +47,9 @@ namespace Project.Menu
 			_resumeButton.clicked += OnResumeClicked;
 			optionsButton.clicked += OnOptionsClicked;
 			exitButton.clicked += OnExitClicked;
+
+			_menuUIDocument.rootVisualElement.RegisterCallback<FocusEvent>(_ => { _clickSfx.Play(); }, TrickleDown.TrickleDown);
+			_menuUIDocument.rootVisualElement.RegisterCallback<NavigationSubmitEvent>(_ => { _clickSfx.Play(); }, TrickleDown.TrickleDown);
 
 			SetUIShown(_shown);
 		}

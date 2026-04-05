@@ -1,10 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="flex-grow: 1;">
+    <ui:VisualElement name="panel" style="flex-grow: 1;">
         <ui:Label text="Easter is coming..."/>
-        <ui:VisualElement style="flex-grow: 1;">
-            <ui:VisualElement style="flex-grow: 1;">
-                <ui:ProgressBar value="0.4" high-value="1"/>
-            </ui:VisualElement>
-        </ui:VisualElement>
+        <ui:ProgressBar value="0.4" high-value="1"/>
     </ui:VisualElement>
 </ui:UXML>

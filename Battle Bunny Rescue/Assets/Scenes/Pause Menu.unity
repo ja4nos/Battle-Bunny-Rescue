@@ -190,6 +190,7 @@ MonoBehaviour:
   _menuUIDocument: {fileID: 366609267}
   _gameSceneGroup: {fileID: 11400000, guid: e254f28d0627e3241bf43d7d8f09490c, type: 2}
   _mainMenuSceneGroup: {fileID: 11400000, guid: 14ac174c000e23a46b223bf291fe6668, type: 2}
+  _clickSfx: {fileID: 11400000, guid: 36f10340790787440b42e05a83f7caff, type: 2}
 --- !u!1 &178447876604642129
 GameObject:
   m_ObjectHideFlags: 0
