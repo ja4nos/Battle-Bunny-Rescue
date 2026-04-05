@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 662113005643756134, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b16b458a55465b4d8df39ce3ad3f005, type: 2}
+    - target: {fileID: 662113005643756134, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e03786d164d9ca649bb7ee609fb1eaea, type: 2}
     - target: {fileID: 2340725800221964077, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
       propertyPath: m_UseGravity
       value: 0
@@ -88,15 +96,28 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6356963489042542747, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e03786d164d9ca649bb7ee609fb1eaea, type: 2}
     - target: {fileID: 6453118597069428494, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8041494295659435040, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b16b458a55465b4d8df39ce3ad3f005, type: 2}
+    - target: {fileID: 8041494295659435040, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+      propertyPath: 'm_Materials.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e03786d164d9ca649bb7ee609fb1eaea, type: 2}
     m_RemovedComponents:
     - {fileID: 454103876346734649, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
     - {fileID: 6757982834168425011, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
-    m_RemovedGameObjects: [{fileID: 6670933235158276851, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3},
-      {fileID: 3130991169430642243, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}]
+    m_RemovedGameObjects:
+    - {fileID: 6670933235158276851, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
+    - {fileID: 3130991169430642243, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4840622431220187581, guid: fccbeb950dc4676438dbebd6218c8bb9, type: 3}
@@ -176,7 +197,7 @@ MonoBehaviour:
   DustParticlePool:
     _parent: {fileID: 9219051180804151488}
     _prefab: {fileID: 8462040170210329842, guid: a28c09a93e975e44f9ea824d27e27ebc, type: 3}
-  _hopSound: {fileID: 0}
+  HopSound: {fileID: 0}
   _directionChangeFrequencySeconds: 2
 --- !u!65 &1867204861076481741 stripped
 BoxCollider:
