@@ -2,6 +2,8 @@ using BBR.CameraController;
 using BBR.GameLoop.Models;
 using BBR.Movement;
 using Project.Input;
+using System;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -54,8 +56,15 @@ namespace BBR.GameLoop
 
 		private static void ChangeSpawnColor(Transform spawnLocation, Color color)
 		{
-			Renderer spawnRenderer = spawnLocation.gameObject.GetComponent<Renderer>();
-			spawnRenderer.material.color = color;
+			Renderer[] renderers = spawnLocation.GetComponentsInChildren<Renderer>();
+
+			Renderer flags1 = renderers.First(r => string.Equals(r.name, "Plane.002", StringComparison.Ordinal)).GetComponent<Renderer>();
+			Renderer flags2 = renderers.First(r => string.Equals(r.name, "Plane.003", StringComparison.Ordinal)).GetComponent<Renderer>();
+			Renderer cube = renderers.First(r => string.Equals(r.name, "Spawn Cube", StringComparison.Ordinal)).GetComponent<Renderer>();
+
+			flags1.material.color = color;
+			flags2.material.color = color;
+			cube.material.color = color;
 		}
 	}
 }
