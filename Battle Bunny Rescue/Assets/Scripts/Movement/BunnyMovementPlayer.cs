@@ -1,3 +1,4 @@
+using BBR.AudioPlayer;
 using BBR.Events;
 using BBR.Events.Camera;
 using BBR.Movement.Enums;
@@ -21,6 +22,7 @@ namespace BBR.Movement
 		[SerializeField] private Vector2 _bumpForce = new(2f, 2f);
 		[SerializeField] private Transform _bumpTransform;
 		[SerializeField] private ParticlePool _bumpParticles;
+		[SerializeField] private AudioHolder _hitSound;
 
 		[Inject] private InputController _inputController;
 
@@ -114,6 +116,7 @@ namespace BBR.Movement
 
 		private IEnumerator JumpCoroutine()
 		{
+			HopSound.Play();
 			Animator.SetTrigger(_walk);
 			Animator.speed = 2;
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Jumping);
@@ -147,6 +150,7 @@ namespace BBR.Movement
 				ParticleSystem bumpParticles = _bumpParticles.Get();
 				bumpParticles.transform.position = _bumpTransform.position;
 				bumpParticles.Play();
+				_hitSound.Play();
 				CameraShakeEvent cameraShakeEvent = new(1, new[] { _playerId, otherPlayer._playerId });
 				EventBus.Fire(cameraShakeEvent);
 				otherPlayer.Bump(transform.forward);

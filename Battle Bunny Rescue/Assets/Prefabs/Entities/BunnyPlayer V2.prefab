@@ -401,6 +401,7 @@ MonoBehaviour:
   DustParticlePool:
     _parent: {fileID: 2684991271876753949}
     _prefab: {fileID: 7098037057617871963, guid: c5908276e6ae0644ca2e08d288e5ec6a, type: 3}
+  HopSound: {fileID: 11400000, guid: 179df34d91062c84d92364e029773c21, type: 2}
   _jumpMultiplier: 4
   _staminaTimeSeconds: 4
   _staminaRecoveryRatePerSecond: 0.1
@@ -410,6 +411,7 @@ MonoBehaviour:
   _bumpParticles:
     _parent: {fileID: 2684991271876753949}
     _prefab: {fileID: 2185074986693843572, guid: 4fcbac40393937a409a1c1439b00c3a0, type: 3}
+  _hitSound: {fileID: 11400000, guid: 23361d12785917142a7c6c65e659dd2f, type: 2}
 --- !u!1 &5842750473313713650
 GameObject:
   m_ObjectHideFlags: 0

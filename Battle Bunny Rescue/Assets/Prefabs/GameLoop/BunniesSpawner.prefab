@@ -78,3 +78,4 @@ MonoBehaviour:
     _prefab: {fileID: 6649065898354293794, guid: eeb3276692a7ada4aae6395e90fd5cb2, type: 3}
   _cameraOffset: {x: 0, y: 10, z: 0}
   _eventDurationSeconds: 2
+  _pickupWhoosh: {fileID: 11400000, guid: 087583df2bb41804892fb2079b4d6d0c, type: 2}

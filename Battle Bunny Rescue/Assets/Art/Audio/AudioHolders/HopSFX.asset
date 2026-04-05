@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70f7e6c1f56407a9cefdb487665bc7e, type: 3}
+  m_Name: HopSFX
+  m_EditorClassIdentifier: BBR.AudioPlayer::BBR.AudioPlayer.AudioHolder
+  _audioClips:
+  - {fileID: 8300000, guid: d1d5af53489292d4eafcf3dd0bcaae79, type: 3}
+  - {fileID: 8300000, guid: 157322b1661e6a447a1acd91bb314a5c, type: 3}
+  - {fileID: 8300000, guid: 8c8624542409f7e4e90474cfc42f5970, type: 3}
+  _minPitch: 0.95
+  _maxPitch: 1.05
+  _volume: 5
