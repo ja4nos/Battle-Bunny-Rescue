@@ -15,12 +15,13 @@ namespace Pool.Pool
 
 		private readonly List<T> _pool = new();
 
-		public T Get()
+		public T Get(Transform parent = null)
 		{
 			foreach(T item in _pool)
 			{
 				if(!item.gameObject.activeSelf)
 				{
+					item.transform.SetParent(parent);
 					item.gameObject.SetActive(true);
 					return item;
 				}
@@ -83,7 +84,10 @@ namespace Pool.Pool
 		{
 			for(int i = _pool.Count - 1; i >= 0; i--)
 			{
-				Object.Destroy(_pool[i].gameObject);
+				if(_pool[i])
+				{
+					Object.Destroy(_pool[i].gameObject);
+				}
 			}
 
 			_pool.Clear();

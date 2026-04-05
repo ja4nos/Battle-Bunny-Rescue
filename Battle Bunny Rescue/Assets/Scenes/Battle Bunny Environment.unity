@@ -862,8 +862,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Battle Bunny Lighting
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2197383364967078693, guid: a0bee59fe6d30564fa0b1d5a033e6a8a, type: 3}
+    m_RemovedComponents: [{fileID: 2197383364967078693, guid: a0bee59fe6d30564fa0b1d5a033e6a8a, type: 3}]
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -925,6 +924,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ce9f30ccf4380a429db6418da0630f8, type: 3}
+--- !u!1001 &8201455830565772553
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775532203612340712, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7189426666316840742, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
+      propertyPath: m_Name
+      value: EventSounds
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4bc5e32a418070040994d2ed3366ba1e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -938,3 +994,4 @@ SceneRoots:
   - {fileID: 579079967}
   - {fileID: 781726147}
   - {fileID: 1807784666}
+  - {fileID: 8201455830565772553}

@@ -1,4 +1,7 @@
 ﻿{
   "name": "BBR.AudioPlayer",
-  "rootNamespace": "BBR"
+  "rootNamespace": "BBR",
+  "references": [
+    "GUID:1de26128b2b34b5690adcb93404f4c89"
+  ]
 }

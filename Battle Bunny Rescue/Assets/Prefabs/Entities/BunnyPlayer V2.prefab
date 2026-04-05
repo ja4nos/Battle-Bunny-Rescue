@@ -334,6 +334,9 @@ MonoBehaviour:
   - {fileID: 7383318963253279154}
   - {fileID: 4619940692899586637}
   - {fileID: 2502590462742939220}
+  _deliveryParticles:
+    _parent: {fileID: 0}
+    _prefab: {fileID: 2285534338450117496, guid: 70880ea0b601a1849b0a1bd686253929, type: 3}
 --- !u!114 &454103876346734649
 MonoBehaviour:
   m_ObjectHideFlags: 0
