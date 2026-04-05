@@ -9,6 +9,8 @@ namespace BBR.GameLoop
 {
 	public class BunnyPlayer : MonoBehaviour
 	{
+		public int PlayerId { get; private set; }
+		public int SavedBunniesCount { get; private set; }
 		public bool IsStunned => _stunTimeRemainingSeconds > 0f;
 		public bool IsFull => _availableSpots.Count == 0;
 
@@ -17,9 +19,7 @@ namespace BBR.GameLoop
 		[SerializeField] private ParticlePool _deliveryParticles;
 
 		private Transform _playerBase;
-		private int _playerId;
 		private int _capturedBunniesCount;
-		private int _savedBunniesCount;
 		private float _stunTimeRemainingSeconds;
 		private CapturedBunniesEvent _capturedBunniesEvent;
 		private SavedBunniesEvent _savedBunniesEvent;
@@ -34,8 +34,8 @@ namespace BBR.GameLoop
 				_availableSpots.Add(location);
 			}
 
-			_capturedBunniesEvent = new CapturedBunniesEvent(_playerId);
-			_savedBunniesEvent = new SavedBunniesEvent(_playerId);
+			_capturedBunniesEvent = new CapturedBunniesEvent(PlayerId);
+			_savedBunniesEvent = new SavedBunniesEvent(PlayerId);
 
 			EventBus.Register<PlayerBumpedEvent>(LoseBunnies);
 		}
@@ -43,7 +43,7 @@ namespace BBR.GameLoop
 		public void Init(int playerId, Transform playerBase)
 		{
 			_playerBase = playerBase;
-			_playerId = playerId;
+			PlayerId = playerId;
 			PlayerHelper.SetPlayerColor(gameObject, playerId);
 		}
 
@@ -73,7 +73,7 @@ namespace BBR.GameLoop
 
 		private void LoseBunnies(PlayerBumpedEvent evt)
 		{
-			if(evt.PlayerId == _playerId && _capturedBunnies.Count > 0)
+			if(evt.PlayerId == PlayerId && _capturedBunnies.Count > 0)
 			{
 				_stunTimeRemainingSeconds = _stunTimeSeconds;
 
@@ -108,12 +108,12 @@ namespace BBR.GameLoop
 					ParticleSystem particles = _deliveryParticles.Get(other.transform.parent);
 					particles.transform.position = capturedBunny.transform.position;
 					particles.Play();
-					_savedBunniesCount++;
+					SavedBunniesCount++;
 				}
 
 				if(_capturedBunniesCount > 0)
 				{
-					_savedBunniesEvent.SavedBunniesCount = _savedBunniesCount;
+					_savedBunniesEvent.SavedBunniesCount = SavedBunniesCount;
 					EventBus.Fire(_savedBunniesEvent);
 					CameraShakeEvent cameraShakeEvent = new(0.1f * _capturedBunniesCount, new[] { _playerId });
 					EventBus.Fire(cameraShakeEvent);
