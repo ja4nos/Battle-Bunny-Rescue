@@ -1,3 +1,4 @@
+using BBR.AudioPlayer;
 using BBR.Events;
 using BBR.Movement;
 using Pool.Pool;
@@ -22,6 +23,7 @@ namespace BBR.GameLoop
 		private Vector3 _cameraOffset = new(0f, 10f, 0f);
 
 		[SerializeField] private float _eventDurationSeconds = 2f;
+		[SerializeField] private AudioHolder _pickupWhoosh;
 
 		private int _spawnedBunnies;
 		private float _elapsedTime;
@@ -82,6 +84,7 @@ namespace BBR.GameLoop
 				Destroy(bunny.GetComponent<Collider>());
 				Destroy(bunny.GetComponent<Rigidbody>());
 				player.AddBunny(bunny.gameObject);
+				_pickupWhoosh.Play();
 
 				_pool.Release(capturedBunny);
 			}
