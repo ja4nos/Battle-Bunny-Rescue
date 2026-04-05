@@ -183,6 +183,12 @@ namespace BBR.Movement
 				{
 					transform.position = new Vector3(transform.position.x, maxHitPoint.Value, transform.position.z);
 
+					if(!CurrentState.HasFlag(MovementStatus.Jumping) && CurrentState.HasFlag(MovementStatus.InJump))
+					{
+						HopSound.Play();
+						MovementHelper.RemoveState(ref CurrentState, MovementStatus.InJump);
+					}
+
 					if(CurrentState.HasFlag(MovementStatus.Bumped) && !CurrentState.HasFlag(MovementStatus.Recoil))
 					{
 						MovementHelper.RemoveState(ref CurrentState, MovementStatus.Bumped);
@@ -199,7 +205,7 @@ namespace BBR.Movement
 			_accelerationInput = inputVector.y;
 
 			if(CurrentState != MovementStatus.Bumped && !MovementHelper.IsAirborne(CurrentState)
-													&& (_accelerationInput != 0 || _steeringInput != 0))
+				&& (_accelerationInput != 0 || _steeringInput != 0))
 			{
 				if(HopCoroutine != null)
 				{

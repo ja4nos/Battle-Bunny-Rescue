@@ -121,6 +121,7 @@ namespace BBR.Movement
 			Animator.SetTrigger(_walk);
 			Animator.speed = _jumpAnimationSpeed;
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Jumping);
+			MovementHelper.AddState(ref CurrentState, MovementStatus.InJump);
 
 			float elapsed = 0f;
 			float jumpHeight = HopHeight * _jumpMultiplier;
@@ -202,6 +203,7 @@ namespace BBR.Movement
 		protected override void OnPlayerStoppedBumping()
 		{
 			base.OnPlayerStoppedBumping();
+			HopSound.Play();
 			EventBus.Fire(new PlayerBumpedEvent(_playerId));
 		}
 

@@ -11,6 +11,7 @@ namespace BBR.Movement.Enums
 		Sprinting = 1 << 2,
 		Bumped = 1 << 3,
 		Recoil = 1 << 4,
+		InJump = 1 << 5,
 		AnyAirborne = Jumping | Hopping
 	}
 }
