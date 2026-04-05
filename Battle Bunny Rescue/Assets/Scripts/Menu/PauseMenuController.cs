@@ -19,6 +19,8 @@ namespace Project.Menu
 		[Inject] private InputController _inputController;
 
 		private InputCallback _inputCallback;
+		private Button _resumeButton;
+		private bool _shown;
 
 		private void Awake()
 		{
@@ -28,18 +30,22 @@ namespace Project.Menu
 				return;
 			}
 
-			Button resumeButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "resume-button");
+			_inputCallback = new InputCallback { PlayerId = null, PerformedCallback = _ => ToggleUIShown() };
+			_inputController.SubscribeAction("Cancel", "UI", _inputCallback);
+			_shown = false;
+		}
+
+		private void OnEnable()
+		{
+			_resumeButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "resume-button");
 			Button optionsButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "options-button");
 			Button exitButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "exit-button");
 
-			resumeButton.clicked += OnResumeClicked;
+			_resumeButton.clicked += OnResumeClicked;
 			optionsButton.clicked += OnOptionsClicked;
 			exitButton.clicked += OnExitClicked;
 
-			_inputCallback = new InputCallback { PlayerId = null, PerformedCallback = _ => ToggleUIShown() };
-			_inputController.SubscribeAction("Cancel", "UI", _inputCallback);
-
-			SetUIShown(false);
+			SetUIShown(_shown);
 		}
 
 		private void OnResumeClicked()
@@ -49,12 +55,19 @@ namespace Project.Menu
 
 		private void ToggleUIShown()
 		{
-			SetUIShown(_menuUIDocument.rootVisualElement.resolvedStyle.display == DisplayStyle.None);
+			SetUIShown(!_shown);
 		}
 
 		private void SetUIShown(bool shown)
 		{
+			_shown = shown;
 			_menuUIDocument.rootVisualElement.style.display = shown ? DisplayStyle.Flex : DisplayStyle.None;
+			Time.timeScale = shown ? 0 : 1;
+
+			if(shown)
+			{
+				_resumeButton.Focus();
+			}
 		}
 
 		private static void OnOptionsClicked()

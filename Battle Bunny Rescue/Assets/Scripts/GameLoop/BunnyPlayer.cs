@@ -7,6 +7,8 @@ namespace BBR.GameLoop
 {
 	public class BunnyPlayer : MonoBehaviour
 	{
+		public int PlayerId { get; private set; }
+		public int SavedBunniesCount { get; private set; }
 		public bool IsStunned => _stunTimeRemainingSeconds > 0f;
 		public bool IsFull => _availableSpots.Count == 0;
 
@@ -14,9 +16,7 @@ namespace BBR.GameLoop
 		[SerializeField] private Transform[] _smallBunniesLocations;
 
 		private Transform _playerBase;
-		private int _playerId;
 		private int _capturedBunniesCount;
-		private int _savedBunniesCount;
 		private float _stunTimeRemainingSeconds;
 		private CapturedBunniesEvent _capturedBunniesEvent;
 		private SavedBunniesEvent _savedBunniesEvent;
@@ -31,8 +31,8 @@ namespace BBR.GameLoop
 				_availableSpots.Add(location);
 			}
 
-			_capturedBunniesEvent = new CapturedBunniesEvent(_playerId);
-			_savedBunniesEvent = new SavedBunniesEvent(_playerId);
+			_capturedBunniesEvent = new CapturedBunniesEvent(PlayerId);
+			_savedBunniesEvent = new SavedBunniesEvent(PlayerId);
 
 			EventBus.Register<PlayerBumpedEvent>(LoseBunnies);
 		}
@@ -40,7 +40,7 @@ namespace BBR.GameLoop
 		public void Init(int playerId, Transform playerBase)
 		{
 			_playerBase = playerBase;
-			_playerId = playerId;
+			PlayerId = playerId;
 			PlayerHelper.SetPlayerColor(gameObject, playerId);
 		}
 
@@ -70,7 +70,7 @@ namespace BBR.GameLoop
 
 		private void LoseBunnies(PlayerBumpedEvent evt)
 		{
-			if(evt.PlayerId == _playerId && _capturedBunnies.Count > 0)
+			if(evt.PlayerId == PlayerId && _capturedBunnies.Count > 0)
 			{
 				_stunTimeRemainingSeconds = _stunTimeSeconds;
 
@@ -102,7 +102,7 @@ namespace BBR.GameLoop
 					float sign = other.bounds.center.y < 0 ? -1 : 1;
 					capturedBunny.transform.position = new Vector3(Random.Range(other.bounds.center.x - other.bounds.extents.x, other.bounds.center.x + other.bounds.extents.x), other.bounds.center.y - other.bounds.extents.y * sign, Random.Range(other.bounds.center.z - other.bounds.extents.z, other.bounds.center.z + other.bounds.extents.z));
 					capturedBunny.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-					_savedBunniesCount++;
+					SavedBunniesCount++;
 				}
 
 				_capturedBunniesCount = 0;
@@ -114,7 +114,7 @@ namespace BBR.GameLoop
 					_availableSpots.Add(location);
 				}
 
-				_savedBunniesEvent.SavedBunniesCount = _savedBunniesCount;
+				_savedBunniesEvent.SavedBunniesCount = SavedBunniesCount;
 				EventBus.Fire(_savedBunniesEvent);
 
 				_capturedBunniesEvent.CapturedBunniesCount = _capturedBunniesCount;

@@ -14,26 +14,30 @@ namespace Project.Menu
 	public class PlayerVisualsRenderer : IDisposable
 	{
 		public Color PlayerColor { get; private set; }
+		public VisualElement RootElement { get; private set; }
 
 		private readonly GameObject _playerVisualsPrefab;
 		private readonly Transform _parentTransform;
 		private readonly int _playerId;
 
 		private bool _initialized;
+		private bool _spin;
 		private Image _rendererImage;
 		private GameObject _playerVisualsInstance;
 		private Camera _playerRendererCamera;
 		private RenderTexture _playerRenderTexture;
 
-		public PlayerVisualsRenderer(GameObject playerVisualsPrefab, Transform parentTransform, int playerId)
+		public PlayerVisualsRenderer(GameObject playerVisualsPrefab, Transform parentTransform, int playerId, bool spin)
 		{
 			_playerVisualsPrefab = playerVisualsPrefab;
 			_parentTransform = parentTransform;
 			_playerId = playerId;
+			_spin = spin;
 		}
 
 		public void OnEnable(VisualElement root)
 		{
+			RootElement = root;
 			_rendererImage = root.Q<Image>(name: "player-render-image");
 			_rendererImage.RegisterCallback<GeometryChangedEvent>(OnRenderImageGeometryChanged);
 		}
@@ -91,7 +95,9 @@ namespace Project.Menu
 
 			_initialized = true;
 
-			SetNextAvailablePlayerColor();
+			PlayerColor = PlayerHelper.GetPlayerColor(_playerId);
+			PlayerHelper.RegisterPlayerColor(_playerId, PlayerColor);
+			PlayerHelper.SetPlayerColor(_playerVisualsInstance, _playerId);
 		}
 
 		public void SetNextAvailablePlayerColor()
@@ -176,7 +182,7 @@ namespace Project.Menu
 
 				_playerVisualsInstance.transform.DOLocalRotate(new Vector3(0, angleDifference, 0), spinDuration + duration, RotateMode.LocalAxisAdd).SetEase(Ease.OutElastic).SetId(_playerVisualsInstance);
 			}
-			else
+			else if(_spin)
 			{
 				_playerVisualsInstance.transform.DOLocalRotate(new Vector3(0, 360, 0), 8f, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental).SetId(_playerVisualsInstance);
 			}

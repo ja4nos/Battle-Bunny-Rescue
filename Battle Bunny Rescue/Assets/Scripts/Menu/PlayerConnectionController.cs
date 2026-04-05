@@ -33,7 +33,7 @@ namespace Project.Menu
 
 		public PlayerConnectionController(GameObject playerVisualsPrefab, Transform parentTransform, int playerId)
 		{
-			_playerVisualsRenderer = new PlayerVisualsRenderer(playerVisualsPrefab, parentTransform, playerId);
+			_playerVisualsRenderer = new PlayerVisualsRenderer(playerVisualsPrefab, parentTransform, playerId, spin: true);
 			_disconnectCallback = new InputCallback { PerformedCallback = OnDisconnect };
 			_readyCallback = new InputCallback { PerformedCallback = OnReady };
 			_navigateCallback = new InputCallback { StartedCallback = OnNavigate, PerformedCallback = OnNavigate };
