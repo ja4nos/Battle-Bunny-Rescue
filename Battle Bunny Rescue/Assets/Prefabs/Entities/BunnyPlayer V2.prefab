@@ -411,6 +411,7 @@ MonoBehaviour:
   _bumpParticles:
     _parent: {fileID: 2684991271876753949}
     _prefab: {fileID: 2185074986693843572, guid: 4fcbac40393937a409a1c1439b00c3a0, type: 3}
+  _hitSound: {fileID: 11400000, guid: 23361d12785917142a7c6c65e659dd2f, type: 2}
 --- !u!1 &5842750473313713650
 GameObject:
   m_ObjectHideFlags: 0
