@@ -106,6 +106,10 @@ namespace Project.Menu
 			DestroyComponents<PlayerCinemachineInputProvider>();
 			DestroyComponents<BunnyMovementPlayer>();
 			BunnyPlayer[] players = DestroyComponents<BunnyPlayer>();
+			foreach(BunnyPlayer bunnyPlayer in players)
+			{
+				Destroy(bunnyPlayer.GetComponent<Rigidbody>());
+			}
 
 			List<IGrouping<int, (int PlayerId, int SavedBunniesCount)>> playerScores = players
 				.Select(bp => (bp.PlayerId, bp.SavedBunniesCount + bp.CapturedBunniesCount))
