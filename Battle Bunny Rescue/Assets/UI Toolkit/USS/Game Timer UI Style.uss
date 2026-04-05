@@ -1,3 +1,20 @@
+#panel {
+    justify-content: center;
+    background-color: #2e913d;
+    border-width: 12px;
+    border-color: #d8e1d9;
+    padding: 60px;
+}
+
+.unity-text-element {
+    -unity-text-align: middle-center;
+    color: #d8e1d9;
+    font-size: 120px;
+    -unity-font-style: bold;
+    white-space: normal;
+    margin: 0 0 40px 0;
+}
+
 .unity-progress-bar__container {
     min-height: auto;
     max-height: auto;
@@ -5,7 +22,11 @@
 
 .unity-progress-bar__background {
     height: 100px;
+    border-width: 0;
+    border-radius: 16px;
+    background-color: #1b6e28;
 }
 
 .unity-progress-bar__progress {
+    border-radius: 18px;
 }

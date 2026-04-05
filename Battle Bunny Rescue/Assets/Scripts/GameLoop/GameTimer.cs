@@ -11,12 +11,12 @@ namespace BBR.GameLoop
 	{
 		[SerializeField] private UIDocument _uiDocument;
 		[SerializeField] private double _matchLengthSeconds;
-		[SerializeField] private Color _startColor;
-		[SerializeField] private Color _endColor;
+		[SerializeField] private Gradient _gradient;
 
 		private Stopwatch _stopwatch;
 		private ProgressBar _progressBar;
 		private VisualElement _fill;
+		private bool _countdownStarted;
 
 		private void Awake()
 		{
@@ -34,11 +34,17 @@ namespace BBR.GameLoop
 
 		private void Update()
 		{
-			float elapsedPercentage = (float) Math.Min(_stopwatch.Elapsed.TotalSeconds / _matchLengthSeconds, 1);
-			Color color = Color.Lerp(_startColor, _endColor, elapsedPercentage);
+			float remainingPercentage = 1 - (float) Math.Min(_stopwatch.Elapsed.TotalSeconds / _matchLengthSeconds, 1);
+			Color color = _gradient.Evaluate(remainingPercentage);
 
-			_progressBar.value = 1 - elapsedPercentage;
+			_progressBar.value = remainingPercentage;
 			_fill.style.backgroundColor = color;
+
+			if(!_countdownStarted && _matchLengthSeconds - _stopwatch.Elapsed.TotalSeconds <= 10)
+			{
+				_countdownStarted = true;
+				//EventBus.Fire(new countdo);
+			}
 
 			if(_stopwatch.Elapsed.TotalSeconds >= _matchLengthSeconds)
 			{

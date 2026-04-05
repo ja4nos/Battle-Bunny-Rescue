@@ -1,5 +1,7 @@
-﻿using BBR.Events;
+﻿using BBR.CameraController;
+using BBR.Events;
 using BBR.GameLoop;
+using BBR.Movement;
 using DG.Tweening;
 using Project.Input;
 using Project.Utilities;
@@ -81,49 +83,73 @@ namespace Project.Menu
 
 			if(shown)
 			{
-				BunnyPlayer[] players = FindObjectsByType<BunnyPlayer>();
-				List<IGrouping<int, (int PlayerId, int SavedBunniesCount)>> playerScores = players.Select(bp => (bp.PlayerId, bp.SavedBunniesCount)).GroupBy(kvp => kvp.SavedBunniesCount).OrderByDescending(group => group.Key).ToList();
+				SetupScreen();
+			}
+		}
 
-				for(int i = 0; i < _playerRenderers.Count; i++)
-				{
-					PlayerVisualsRenderer playerVisualsRenderer = _playerRenderers[i];
-					playerVisualsRenderer.RootElement.SetEnabled(_inputController.PlayerToDeviceLookup.ContainsKey(i));
-				}
+		private static T[] DestroyComponents<T>() where T : Component
+		{
+			T[] components = FindObjectsByType<T>();
 
-				int c = 0;
-				foreach(IGrouping<int, (int playerId, int savedBunniesCount)> grouping in playerScores)
+			foreach(T component in components)
+			{
+				Destroy(component);
+			}
+
+			return components;
+		}
+
+		private void SetupScreen()
+		{
+			DestroyComponents<PlayerCinemachineInputProvider>();
+			DestroyComponents<BunnyMovementPlayer>();
+			BunnyPlayer[] players = DestroyComponents<BunnyPlayer>();
+
+			List<IGrouping<int, (int PlayerId, int SavedBunniesCount)>> playerScores = players
+				.Select(bp => (bp.PlayerId, bp.SavedBunniesCount))
+				.GroupBy(kvp => kvp.SavedBunniesCount)
+				.OrderByDescending(group => group.Key)
+				.ToList();
+
+			for(int i = 0; i < _playerRenderers.Count; i++)
+			{
+				PlayerVisualsRenderer playerVisualsRenderer = _playerRenderers[i];
+				playerVisualsRenderer.RootElement.SetEnabled(_inputController.PlayerToDeviceLookup.ContainsKey(i));
+			}
+
+			int c = 0;
+			foreach(IGrouping<int, (int playerId, int savedBunniesCount)> grouping in playerScores)
+			{
+				foreach((int playerId, int savedBunniesCount) in grouping)
 				{
-					foreach((int playerId, int savedBunniesCount) in grouping)
+					PlayerVisualsRenderer playerVisualsRenderer = _playerRenderers[playerId];
+					Label scoreLabel = playerVisualsRenderer.RootElement.Q<Label>(name: "score-text");
+					scoreLabel.text = $"x{savedBunniesCount}";
+
+					if(_podiumClasses.Count > c)
 					{
-						PlayerVisualsRenderer playerVisualsRenderer = _playerRenderers[playerId];
-						Label scoreLabel = playerVisualsRenderer.RootElement.Q<Label>(name: "score-text");
-						scoreLabel.text = $"x{savedBunniesCount}";
-
-						if(_podiumClasses.Count > c)
-						{
-							playerVisualsRenderer.RootElement.AddToClassList(_podiumClasses[c]);
-						}
-
-						if(c == 0)
-						{
-							DOTween.To
-								(
-									getter: () => playerVisualsRenderer.RootElement.resolvedStyle.translate.y,
-									setter: y => playerVisualsRenderer.RootElement.style.translate = new StyleTranslate(new Translate(0, y)),
-									endValue: -35f,
-									duration: 0.51f
-								)
-								.SetEase(_jumpAnimationCurve)
-								.SetLoops(-1)
-								.SetId(playerVisualsRenderer);
-						}
+						playerVisualsRenderer.RootElement.AddToClassList(_podiumClasses[c]);
 					}
 
-					c++;
+					if(c == 0)
+					{
+						DOTween.To
+							(
+								getter: () => playerVisualsRenderer.RootElement.resolvedStyle.translate.y,
+								setter: y => playerVisualsRenderer.RootElement.style.translate = new StyleTranslate(new Translate(0, y)),
+								endValue: -35f,
+								duration: 0.51f
+							)
+							.SetEase(_jumpAnimationCurve)
+							.SetLoops(-1)
+							.SetId(playerVisualsRenderer);
+					}
 				}
 
-				_exitButton.Focus();
+				c++;
 			}
+
+			_exitButton.Focus();
 		}
 
 		private void OnExitClicked()
@@ -143,6 +169,11 @@ namespace Project.Menu
 
 		private void OnDestroy()
 		{
+			foreach(PlayerVisualsRenderer playerVisualsRenderer in _playerRenderers)
+			{
+				DOTween.Kill(playerVisualsRenderer);
+			}
+
 			EventBus.Unregister<GameEndEvent>(OnGameEnd);
 		}
 	}
