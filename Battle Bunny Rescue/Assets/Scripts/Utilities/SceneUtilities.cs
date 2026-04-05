@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿#if UNITY_EDITOR
+using JetBrains.Annotations;
 using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -121,3 +122,4 @@ namespace Project.Utilities
 		}
 	}
 }
+#endif

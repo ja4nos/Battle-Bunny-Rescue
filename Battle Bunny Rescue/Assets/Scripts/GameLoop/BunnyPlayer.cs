@@ -38,6 +38,9 @@ namespace BBR.GameLoop
 			_savedBunniesEvent = new SavedBunniesEvent(PlayerId);
 
 			EventBus.Register<PlayerBumpedEvent>(LoseBunnies);
+
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
 		}
 
 		public void Init(int playerId, Transform playerBase)
@@ -137,6 +140,8 @@ namespace BBR.GameLoop
 		{
 			_deliveryParticles.Dispose();
 			EventBus.Unregister<PlayerBumpedEvent>(LoseBunnies);
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
 		}
 	}
 }

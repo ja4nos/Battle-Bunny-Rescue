@@ -48,6 +48,8 @@ namespace BBR.Movement
 			_inputController.SubscribeAction("Jump", "Player", _jumpInput);
 
 			_remainingStamina = _staminaTimeSeconds;
+
+			EventBus.Register<SavedBunniesEvent>(OnSavedBunniesChanged);
 		}
 
 		protected override void Start()
@@ -208,10 +210,17 @@ namespace BBR.Movement
 			EventBus.Fire(new PlayerBumpedEvent(_playerId));
 		}
 
+		private void OnSavedBunniesChanged(SavedBunniesEvent obj)
+		{
+			_remainingStamina = _staminaTimeSeconds;
+			EventBus.Fire(_staminaChangedEvent);
+		}
+
 		protected override void OnDestroy()
 		{
 			_inputController.UnsubscribeAction("Jump", "Player", _jumpInput);
 			_bumpParticles.Dispose();
+			EventBus.Unregister<SavedBunniesEvent>(OnSavedBunniesChanged);
 			base.OnDestroy();
 		}
 	}
