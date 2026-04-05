@@ -84,7 +84,6 @@ namespace Project.Menu
 		{
 			if(_staminaMask != null && _playerId == evt.PlayerId)
 			{
-				Debug.Log($"Stamina percentage: {evt.StaminaPercentage}");
 				_staminaMask.style.height = new StyleLength(new Length(evt.StaminaPercentage, LengthUnit.Percent));
 			}
 		}
