@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c9a71a80c3cc6f34093611799c44b722
+guid: eaa67cd0a10dd2e4488833a41a4b0876
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Wheat
-    second: {fileID: 2100000, guid: d6336bd9eb5dc534f8a07d0475ae1c24, type: 2}
+      name: Material.001
+    second: {fileID: 2100000, guid: dcfaa5ab28e646c40a3fcc1256493bf4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

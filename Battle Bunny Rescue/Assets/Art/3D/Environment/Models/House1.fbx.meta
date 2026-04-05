@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c9a71a80c3cc6f34093611799c44b722
+guid: 3eb28692b3c04ef41932e988e799c9ac
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,8 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Wheat
-    second: {fileID: 2100000, guid: d6336bd9eb5dc534f8a07d0475ae1c24, type: 2}
+      name: Brick
+    second: {fileID: 2100000, guid: 160a6d57910b4154b9d089d6cfd3586c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window
+    second: {fileID: 2100000, guid: 025baf979ef03bf43812d4207033b294, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: 460bfeb9649692046b900f9f6b258ddc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Zenject;
+using Cursor = UnityEngine.Cursor;
 
 namespace Project.Menu
 {
@@ -76,6 +77,13 @@ namespace Project.Menu
 			if(shown)
 			{
 				_resumeButton.Focus();
+				Cursor.visible = true;
+				Cursor.lockState = CursorLockMode.None;
+			}
+			else
+			{
+				Cursor.visible = false;
+				Cursor.lockState = CursorLockMode.Locked;
 			}
 		}
 
@@ -102,6 +110,7 @@ namespace Project.Menu
 		private void OnDestroy()
 		{
 			_inputController.UnsubscribeAction("Cancel", "UI", _inputCallback);
+			Time.timeScale = 1;
 		}
 	}
 }

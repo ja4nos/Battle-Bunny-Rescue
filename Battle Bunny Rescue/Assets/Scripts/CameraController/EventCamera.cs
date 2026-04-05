@@ -2,7 +2,6 @@
 using BBR.Events.Camera;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,11 +15,11 @@ namespace BBR.CameraController
 		[SerializeField] private Vector2Int _size = new(512, 512);
 		[SerializeField] private AnimationCurve _showCurve;
 		[SerializeField] private AnimationCurve _hideCurve;
+		[SerializeField] private Vector2 _offset;
 
 		public RenderTexture RenderTexture { get; private set; }
 
 		private Camera _camera;
-		private CinemachineCamera _cinemachineCamera;
 		private RectTransform _canvasTransform;
 		private Transform _defaultFollowTransform;
 
@@ -45,9 +44,6 @@ namespace BBR.CameraController
 			_canvasTransform.anchoredPosition = positionOnScreen;
 			_canvasTransform.gameObject.SetActive(false);
 			enabled = false;
-
-			_cinemachineCamera = Instantiate(_cinemachineCameraPrefab, transform).GetComponent<CinemachineCamera>();
-
 		}
 
 		private void OnCameraShow(CameraShowEvent args)
@@ -70,8 +66,8 @@ namespace BBR.CameraController
 
 		private void Show(Transform focusTransform, float time)
 		{
-			_cinemachineCamera.Follow = focusTransform;
-			_cinemachineCamera.GetComponent<CinemachinePositionComposer>().ForceCameraPosition(focusTransform.position, focusTransform.rotation);
+			_camera.transform.position = focusTransform.position - focusTransform.forward * _offset.x + Vector3.up * _offset.y;
+			_camera.transform.LookAt(focusTransform);
 			_showTime = time;
 			ShowDelay().Forget();
 		}
@@ -103,8 +99,6 @@ namespace BBR.CameraController
 
 		private void Update()
 		{
-			_defaultFollowTransform.RotateAround(_defaultFollowTransform.position, Vector3.up, _rotationSpeed * Time.deltaTime);
-
 			_showTime -= Time.deltaTime;
 			if(_showTime <= 0)
 			{

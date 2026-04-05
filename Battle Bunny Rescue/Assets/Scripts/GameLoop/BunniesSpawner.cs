@@ -77,8 +77,8 @@ namespace BBR.GameLoop
 			{
 				BunnyMovementRandom bunny = Instantiate(capturedBunny);
 				bunny.VisualTransform.localPosition = Vector3.zero;
-				ParticleSystem rescueParticle = _bunnyRescueParticlePool.Get();
-				rescueParticle.transform.position = player.transform.position;
+				ParticleSystem rescueParticle = _bunnyRescueParticlePool.Get(player.transform);
+				rescueParticle.transform.position = capturedBunny.transform.position;
 				rescueParticle.Play();
 				Destroy(bunny);
 				Destroy(bunny.GetComponent<Collider>());
