@@ -84,7 +84,10 @@ namespace Pool.Pool
 		{
 			for(int i = _pool.Count - 1; i >= 0; i--)
 			{
-				Object.Destroy(_pool[i].gameObject);
+				if(_pool[i])
+				{
+					Object.Destroy(_pool[i].gameObject);
+				}
 			}
 
 			_pool.Clear();
