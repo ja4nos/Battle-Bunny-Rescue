@@ -35,6 +35,8 @@ namespace BBR.AudioPlayer
 		private void Awake()
 		{
 			Set(Resources.Load<AudioMixer>("Mixer"), _minimumVolume, _maximumVolume, _volumeChangeSpeed);
+			float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1);
+			SetVolume("MasterVolume", masterVolume, instant: true);
 			PlayMusic(_music, "MusicVolume", volume: _musicVolume);
 		}
 
@@ -224,6 +226,9 @@ namespace BBR.AudioPlayer
 		{
 			float range = _maxVolume - _minVolume;
 
+			PlayerPrefs.SetFloat(volumeLabel, volume);
+			PlayerPrefs.Save();
+
 			if(instant)
 			{
 				_mixer.SetFloat(volumeLabel, _minVolume + range * volume);
@@ -246,6 +251,12 @@ namespace BBR.AudioPlayer
 			_mixer.GetFloat(volumeLabel, out float currentVolume);
 			_tweens[volumeLabel] = DOVirtual.Float(currentVolume, _minVolume + range * volume, _volumeSpeed, val => _mixer.SetFloat(volumeLabel, val))
 				.OnComplete(() => callback?.Invoke());
+		}
+
+		public static float GetVolume(string label)
+		{
+			float notNormalized = _mixer.GetFloat(label, out float volume) ? volume : -1;
+			return 1 - notNormalized / (_maxVolume - _minVolume);
 		}
 	}
 }

@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="options-menu" style="position: absolute; width: 100%; height: 100%;">
+        <ui:VisualElement name="panel">
+            <ui:Label text="Options" name="title"/>
+            <ui:Slider label="Volume" value="0.5" high-value="1"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

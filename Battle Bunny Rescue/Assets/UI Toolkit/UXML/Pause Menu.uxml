@@ -1,9 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="Options Menu" src="project://database/Assets/UI%20Toolkit/UXML/Options%20Menu.uxml?fileID=9197481963319205126&amp;guid=b8a004dcb8a3bdd4591e24e70d141723&amp;type=3#Options Menu"/>
     <ui:VisualElement name="pause-menu" style="flex-grow: 1;">
         <ui:VisualElement name="button-panel" style="flex-grow: 1;">
             <ui:Button text="Resume" name="resume-button"/>
-            <ui:Button text="Options" name="options-button" enabled="false"/>
+            <ui:Button text="Options" name="options-button"/>
             <ui:Button text="Exit" name="exit-button"/>
         </ui:VisualElement>
+        <ui:Instance template="Options Menu" picking-mode="Ignore" style="position: absolute; height: 100%; width: 100%; top: 0; left: 0;"/>
     </ui:VisualElement>
 </ui:UXML>

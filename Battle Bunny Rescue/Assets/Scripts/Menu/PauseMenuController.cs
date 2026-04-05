@@ -3,7 +3,6 @@ using BBR.GameLoop;
 using Project.Input;
 using Project.Input.Models;
 using Project.Utilities;
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -20,6 +19,7 @@ namespace Project.Menu
 
 		[Inject] private InputController _inputController;
 
+		private OptionsMenuController _optionsMenuController;
 		private InputCallback _inputCallback;
 		private Button _resumeButton;
 		private bool _shown;
@@ -36,10 +36,13 @@ namespace Project.Menu
 			_inputCallback = new InputCallback { PlayerId = null, PerformedCallback = _ => ToggleUIShown() };
 			_inputController.SubscribeAction("Cancel", "UI", _inputCallback);
 			_shown = false;
+
+			_optionsMenuController = new OptionsMenuController();
 		}
 
 		private void OnEnable()
 		{
+			_optionsMenuController.OnEnable(_menuUIDocument.rootVisualElement.Q<VisualElement>(name: "options-menu"));
 			_resumeButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "resume-button");
 			Button optionsButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "options-button");
 			Button exitButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "exit-button");
@@ -76,9 +79,9 @@ namespace Project.Menu
 			}
 		}
 
-		private static void OnOptionsClicked()
+		private void OnOptionsClicked()
 		{
-			throw new NotImplementedException();
+			_optionsMenuController.SetShown(true);
 		}
 
 		private void OnExitClicked()

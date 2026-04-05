@@ -1,5 +1,4 @@
 ﻿using BBR.AudioPlayer;
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -11,6 +10,8 @@ namespace Project.Menu
 		[SerializeField] private UIDocument _menuUIDocument;
 		[SerializeField] private AudioHolder _clickSfx;
 
+		private OptionsMenuController _optionsMenuController;
+
 		private void Awake()
 		{
 			if(_menuUIDocument == null)
@@ -18,10 +19,13 @@ namespace Project.Menu
 				Debug.LogError($"No main menu UI document has been assigned to {nameof(MainMenuController)}!", this);
 				Destroy(this);
 			}
+
+			_optionsMenuController = new OptionsMenuController();
 		}
 
 		private void OnEnable()
 		{
+			_optionsMenuController.OnEnable(_menuUIDocument.rootVisualElement.Q<VisualElement>(name: "options-menu"));
 			Button playButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "play-button");
 			Button optionsButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "options-button");
 			Button exitButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "exit-button");
@@ -42,9 +46,9 @@ namespace Project.Menu
 			SceneManager.LoadSceneAsync("Player Selection Menu", LoadSceneMode.Additive);
 		}
 
-		private static void OnOptionsClicked()
+		private void OnOptionsClicked()
 		{
-			throw new NotImplementedException();
+			_optionsMenuController.SetShown(true);
 		}
 
 		private static void OnExitClicked() => Application.Quit();
