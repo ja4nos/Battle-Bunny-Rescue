@@ -24,6 +24,7 @@ namespace BBR.Movement
 		[SerializeField] private Transform _bumpTransform;
 		[SerializeField] private ParticlePool _bumpParticles;
 		[SerializeField] private AudioHolder _hitSound;
+		[SerializeField] private AudioHolder _jumpSound;
 
 		[Inject] private InputController _inputController;
 
@@ -117,7 +118,7 @@ namespace BBR.Movement
 
 		private IEnumerator JumpCoroutine()
 		{
-			HopSound.Play();
+			_jumpSound.Play();
 			Animator.SetTrigger(_walk);
 			Animator.speed = _jumpAnimationSpeed;
 			MovementHelper.AddState(ref CurrentState, MovementStatus.Jumping);

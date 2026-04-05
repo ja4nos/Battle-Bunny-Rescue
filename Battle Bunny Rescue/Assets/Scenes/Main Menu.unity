@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BBR.Menu.MainMenuController
   _menuUIDocument: {fileID: 366609267}
-  _gameSceneGroup: {fileID: 11400000, guid: e254f28d0627e3241bf43d7d8f09490c, type: 2}
+  _clickSfx: {fileID: 11400000, guid: 36f10340790787440b42e05a83f7caff, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -617,7 +617,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Battle Bunny Lighting
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2197383364967078693, guid: a0bee59fe6d30564fa0b1d5a033e6a8a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

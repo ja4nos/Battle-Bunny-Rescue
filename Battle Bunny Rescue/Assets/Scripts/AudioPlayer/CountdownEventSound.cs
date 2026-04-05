@@ -1,4 +1,6 @@
-﻿namespace BBR.AudioPlayer
+﻿using BBR.Events;
+
+namespace BBR.AudioPlayer
 {
-	public class CountdownEventSound : EventSoundPlayerBase<CountdownEventSound> { }
+	public class CountdownEventSound : EventSoundPlayerBase<StartCountdownEvent> { }
 }

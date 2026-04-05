@@ -1,4 +1,5 @@
-﻿using BBR.GameLoop;
+﻿using BBR.AudioPlayer;
+using BBR.GameLoop;
 using BBR.GameLoop.Models;
 using Cysharp.Threading.Tasks;
 using Project.Input;
@@ -20,6 +21,7 @@ namespace Project.Menu
 		[SerializeField] private SceneGroup _gameSceneGroup;
 		[SerializeField] private SceneGroup _playerSelectionMenuSceneGroup;
 		[SerializeField] private GameObject _playerVisualsPrefab;
+		[SerializeField] private AudioHolder _clickSfx;
 
 		[Inject] private InputController _inputController;
 		[Inject] private DiContainer _diContainer;
@@ -36,10 +38,10 @@ namespace Project.Menu
 
 			InputSystem.onAnyButtonPress.Call(OnDeviceButtonPress);
 
-			_playerConnections.Add(0, new PlayerConnectionController(_playerVisualsPrefab, transform, 0));
-			_playerConnections.Add(1, new PlayerConnectionController(_playerVisualsPrefab, transform, 1));
-			_playerConnections.Add(2, new PlayerConnectionController(_playerVisualsPrefab, transform, 2));
-			_playerConnections.Add(3, new PlayerConnectionController(_playerVisualsPrefab, transform, 3));
+			_playerConnections.Add(0, new PlayerConnectionController(_playerVisualsPrefab, transform, 0, _clickSfx));
+			_playerConnections.Add(1, new PlayerConnectionController(_playerVisualsPrefab, transform, 1, _clickSfx));
+			_playerConnections.Add(2, new PlayerConnectionController(_playerVisualsPrefab, transform, 2, _clickSfx));
+			_playerConnections.Add(3, new PlayerConnectionController(_playerVisualsPrefab, transform, 3, _clickSfx));
 
 			foreach(PlayerConnectionController controller in _playerConnections.Values)
 			{
@@ -58,6 +60,11 @@ namespace Project.Menu
 			{
 				foreach((InputDevice device, int playerId) in _inputController.DeviceToPlayerLookup.ToList())
 				{
+					if(device is Mouse)
+					{
+						continue;
+					}
+
 					ConnectWithDevice(device, playerId);
 				}
 			}
@@ -93,6 +100,8 @@ namespace Project.Menu
 			_inputController.RegisterDeviceForPlayer(playerId, device);
 			_playerConnections[playerId].SetConnection(playerId);
 			UpdateStartEnabled();
+
+			_clickSfx.Play();
 		}
 
 		private void OnPlayerDisconnected(int playerId)
@@ -107,24 +116,32 @@ namespace Project.Menu
 			{
 				BackToMenu();
 			}
+
+			_clickSfx.Play();
 		}
 
 		private void OnPlayerNotReady(int playerId)
 		{
 			_playerConnections[playerId].SetReady(false);
 			UpdateStartEnabled();
+
+			_clickSfx.Play();
 		}
 
 		private void OnPlayerReady(int playerId)
 		{
 			_playerConnections[playerId].SetReady(true);
 			UpdateStartEnabled();
+
+			_clickSfx.Play();
 		}
 
 		private void OnPlayerStartRequested(int _)
 		{
 			if(ReadyToStart())
 			{
+				_clickSfx.Play();
+
 				PlayerInfo[] playerInfo = _playerConnections.Values
 					.Where(conn => conn.PlayerId.HasValue)
 					.Select(conn => new PlayerInfo { Id = conn.PlayerId.Value, Color = conn.PlayerColor })

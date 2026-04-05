@@ -17,6 +17,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Tree
+    second: {fileID: 2100000, guid: a1a4963520b80e54ab361b3ae4a56fc7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Tree_CWC_leaves
     second: {fileID: 2100000, guid: 4c3eb23edaae96e44be78fa9c314afc9, type: 2}
   materials:

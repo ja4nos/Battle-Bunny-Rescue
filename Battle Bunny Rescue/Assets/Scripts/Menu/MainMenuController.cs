@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BBR.AudioPlayer;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -8,15 +9,19 @@ namespace Project.Menu
 	public class MainMenuController : MonoBehaviour
 	{
 		[SerializeField] private UIDocument _menuUIDocument;
+		[SerializeField] private AudioHolder _clickSfx;
 
 		private void Awake()
 		{
 			if(_menuUIDocument == null)
 			{
 				Debug.LogError($"No main menu UI document has been assigned to {nameof(MainMenuController)}!", this);
-				return;
+				Destroy(this);
 			}
+		}
 
+		private void OnEnable()
+		{
 			Button playButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "play-button");
 			Button optionsButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "options-button");
 			Button exitButton = _menuUIDocument.rootVisualElement.Q<Button>(name: "exit-button");
@@ -26,6 +31,9 @@ namespace Project.Menu
 			exitButton.clicked += OnExitClicked;
 
 			playButton.Focus();
+
+			_menuUIDocument.rootVisualElement.RegisterCallback<FocusEvent>(_ => { _clickSfx.Play(); }, TrickleDown.TrickleDown);
+			_menuUIDocument.rootVisualElement.RegisterCallback<NavigationSubmitEvent>(_ => { _clickSfx.Play(); }, TrickleDown.TrickleDown);
 		}
 
 		private static void OnPlayClicked()
