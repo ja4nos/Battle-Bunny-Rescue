@@ -422,7 +422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Project.GameLoop::BBR.GameLoop.GameTimer
   _cameraTarget: {fileID: 241494239}
   _uiDocument: {fileID: 1251624693}
-  _matchLengthSeconds: 10
+  _matchLengthSeconds: 180
   _gradient:
     serializedVersion: 2
     key0: {r: 0.8962264, g: 0.13950695, b: 0.13950695, a: 1}
